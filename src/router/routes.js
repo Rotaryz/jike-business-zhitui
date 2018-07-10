@@ -1,6 +1,18 @@
 module.exports = [
   {
-    path: '/pages/example/example',
-    name: 'Example'
+    path: '/pages/card/card', // 名片
+    name: 'Card'
+  },
+  {
+    path: '/pages/product/product', // 产品
+    name: 'Product'
+  },
+  {
+    path: '/pages/dynamic/dynamic', // 动态
+    name: 'Dynamic'
+  },
+  {
+    path: '/pages/official/official', // 官网
+    name: 'Official'
   }
 ]
