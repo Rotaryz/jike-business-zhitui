@@ -1,6 +1,5 @@
 // 将所有的接口请求都通过这个统一输出
-import example from './example'
+import im from './im'
 
-export default {
-  ...example
-}
+// im相关接口
+export const Im = im
