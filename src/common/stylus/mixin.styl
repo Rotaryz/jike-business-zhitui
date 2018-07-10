@@ -1,0 +1,70 @@
+border-none()
+  &:before
+    display: none
+  &:after
+    display: none
+
+flex-fix()
+  -ms-flex: 1 1 0.000000001px
+  -webkit-box-flex: 1
+  -webkit-flex: 1
+  flex: 1
+  -webkit-flex-basis: 0.000000001px
+  flex-basis: 0.000000001px
+  width: 1%
+
+touch-active(type = orange)
+  if (type == orange)
+    &:active
+      color: #fcc1a6
+      background-color: rgba(250, 143, 84, .04)
+  else
+    &:active
+      color: #c6c6c6
+      background-color: rgba(0, 0, 0, .04)
+
+hide-scrollbar()
+  &::-webkit-scrollbar
+    width: 0
+    height: 0
+
+vendor(prop, args)
+  -webkit-{prop} args
+  -moz-{prop} args
+  {prop} args
+
+transition()
+  vendor('transition', arguments)
+
+transform()
+  vendor('transform', arguments)
+
+// 不换行
+no-wrap()
+  text-overflow: ellipsis
+  overflow: hidden
+  white-space: nowrap
+
+//  水平居中
+row-center()
+  left: 50%
+  transform: translateX(-50%)
+
+//垂直居中
+col-center()
+  top: 50%
+  transform: translateY(-50%)
+
+//  全居中
+all-center()
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+//布局
+layout($direction = column, $inline = block, $wrap = wrap)
+  display: $inline == block ? flex:inline-flex
+  flex-direction: $direction
+  flex-wrap: $wrap
+
+
