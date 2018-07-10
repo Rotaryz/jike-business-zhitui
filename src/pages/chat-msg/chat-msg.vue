@@ -23,7 +23,7 @@
             </div>
             <div class="chat-msg-goods" v-if="item == 1">
               <img :src="item.url" class="goods-img">
-              <p class="goods-title">{{item.title}}sdsdsdsdssdsdsadsadasdsadsadsadasdsdsdsdssasdasdasdas</p>
+              <p class="goods-title">sdsdsdsdssdsdsadsadasdsadsadsadasdsdsdsdssasdasdasdas</p>
             </div>
             <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJBB7iadHLcSzFWsjVIrdPr0NTNKibn9wJPfDV69Bav3QhNsPUxQKBDibTIqia1qc8UyVhUOgj7WSLj3w/132" class="avatar">
           </div>
@@ -32,7 +32,7 @@
     </scroll-view>
     <div class="chat-input border-top-1px">
       <div class="input-container" ref="textBox">
-        <textarea class="textarea" type="text" ref="inputTxt" v-model="inputMsg" rows="1"></textarea>
+        <textarea auto-height="true" fixed="true" class="textarea"></textarea>
       </div>
       <div class="submit-btn" @click="sendMsg">发送</div>
     </div>
@@ -64,10 +64,6 @@
       })
     },
     mounted() {
-      this.textareaDom = this.$refs.inputTxt
-      this.textBoxDom = this.$refs.textBox
-      this.chatDom = this.$refs.chat
-      this.listDom = this.$refs.list
       document.title = this.currentMsg.nickName
       webimHandler.getC2CMsgList(this.currentMsg.nickName) // 消息已读处理
       this.setUnreadCount(this.currentMsg.nickName) // vuex
@@ -77,14 +73,6 @@
       this.setNowChat([])
     },
     methods: {
-      textHeight() {
-        let timer = setTimeout(() => {
-          this.textareaDom.style.height = 'auto'
-          this.textareaDom.style.height = this.textareaDom.scrollHeight + 'px'
-          this.textBoxDom.scrollTop = this.textareaDom.scrollHeight
-          clearTimeout(timer)
-        }, 20)
-      },
       onPullingDown() {
         if (this.noMore) return
         let data = {
@@ -155,11 +143,6 @@
     },
     components: {
       Toast
-    },
-    watch: {
-      inputMsg() {
-        this.textHeight()
-      }
     }
   }
 </script>
@@ -204,8 +187,8 @@
               padding: 13px 15px
               border-radius: 8px
               line-height: 19px
-              font-size: $font-size-medium
-              font-family: $font-family-meddle
+              font-size: $font-size-14
+              font-family: $font-family-medium
               word-wrap: break-word
               word-break: break-all
             .chat-msg-content.other
@@ -267,7 +250,7 @@
               height: 120px
             .goods-title
               line-height: 30px
-              font-size: $font-size-small
+              font-size: $font-size-12
               font-family: $font-family-regular
               padding: 0 10px
               overflow: hidden
@@ -295,7 +278,7 @@
         background: $color-white
         text-align: center
         line-height: 36px
-        font-size: $font-size-medium
+        font-size: $font-size-14
         font-family: $font-family-meddle
         margin-left: 5px
       .input-container
@@ -303,21 +286,14 @@
         min-height: 28px
         border: 1px solid rgba(0,0,0,0.10)
         background: $color-white
-        max-height: 100px
         overflow-y: auto
         padding: 8px 10px 0
         .textarea
           width: 100%
-          height: auto
+          max-height: 100px
           padding: 0
           margin: 0
-          resize: none
           border: 0 none
-          outline: none
-          overflow-y: visible
-          display: block
-          font-size: $font-size-medium
-
-
+          font-size: $font-size-14
 
 </style>
