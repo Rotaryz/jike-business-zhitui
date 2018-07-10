@@ -1,4 +1,4 @@
-import request from 'common/js/request'
+// import request from 'common/js/request'
 
 export default {
 }

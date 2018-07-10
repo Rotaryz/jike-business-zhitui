@@ -1,5 +1,8 @@
 module.exports = [
   {
+    path: '/pages/card-list/card-list', // 名片
+    name: 'CardList'
+  }, {
     path: '/pages/card/card', // 名片
     name: 'Card'
   },
