@@ -1,6 +1,29 @@
 <template>
   <div class="card-list">
-    dsfsfdsd
+    <div class="card-item">
+      <p class="card-come">2018年7月3日 12:00 来自Peter的转发</p>
+      <div class="card-box">
+        <img src="./bg-cardholder@2x.png" class="bg-img">
+        <div class="bg-img shield">此名片已屏蔽</div>
+        <div class="card-left">
+          <p class="card-buss">广州集客网络科技有限公司</p>
+          <p class="card-name">张三丰</p>
+          <p class="card-position">产品经理</p>
+          <p class="card-phone"><img class="icon card-phone-icon" src="./icon-telephone@2x.png">159-2057-1999</p>
+          <p class="card-times">浏览 9次</p>
+        </div>
+        <div class="card-right">
+          <img src="" class="card-header" src="./icon-telephone@2x.png">
+          <div class="card-icon-box">
+            <img src="" class="card-icon" src="./icon-more@2x.png">
+            <div class="card-use">
+              <img src="" class="icon card-use-icon" src="./icon-screen@2x.png">
+              <span class="card-use-text">屏蔽名片</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -9,13 +32,125 @@
 
   export default {
     name: 'card-list',
-    components: {
-    }
+    data () {
+      return {}
+    },
+    components: {}
   }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .card-list
-    position: fixed
+    height: 100vh
+    background: $color-background
+
+  .icon
+    width: 14px
+    height: 14px
+
+  .card-item
+    line-height: 1
+    box-sizing: border-box
+    padding: 0 4vw
+    .card-come
+      color: $color-888888
+      font-family: $font-family-regular
+      font-size: $font-size-14
+      padding: 4vw 0 10.5px
+    .card-box
+      justify-content: space-between
+      position: relative
+      display: flex
+      height: 169px
+      box-sizing: border-box
+      padding: 15px 14.5px
+      font-family: $font-family-medium
+      background: $color-white
+      .bg-img
+        left: 0
+        top: 0
+        height: 100%
+        width: 100%
+        position: absolute
+      .shield
+        z-index: 5
+        text-align :center
+        line-height: 169px
+        color :$color-white
+        font-family :$font-family-regular
+        font-size: $font-size-16
+        background: rgba(32,32,46,.8)
+      .shield-disable
+        z-index: 100
+    .card-buss
+      color: $color-888888
+      font-size: $font-size-14
+    .card-name
+      margin-top: 15px
+      color: $color-text
+      font-size: $font-size-24
+    .card-position
+      margin-top: 10px
+      color: $color-text
+      font-size: $font-size-14
+    .card-phone
+      display: flex
+      align-items: center
+      color: $color-56
+      font-size: $font-size-16
+      margin-top: 15px
+      .card-phone-icon
+        margin-right: 5px
+    .card-times
+      margin-top: 20px
+      color: $color-888888
+      font-size: $font-size-12
+    .card-right
+      position: relative
+      .card-header
+        width: 60px
+        height: 60px
+        background: $color-white
+      .card-icon-box
+        width: 30px
+        height: 40px
+        bottom: 0
+        right: 0
+        display: flex
+        z-index: 10
+        justify-content: flex-end
+        align-items: flex-end
+        position: absolute
+        .card-icon
+          width: 20px
+          height: 6px
+        .card-use
+          bottom: -45px
+          right: 0
+          height: 40px
+          width: 0
+          display: flex
+          justify-content: center
+          align-items: center
+          color: $color-text
+          font-size: $font-size-14
+          border: 0.5px solid rgba(32, 32, 46, 0.10)
+          box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
+          background: $color-white
+          position: absolute
+          z-index: -1
+          overflow: hidden
+          opacity: 0
+          transition: all 0.3s
+          .card-use-text
+            white-space: nowrap
+            margin-left: 5px
+        .card-use-active
+          opacity: 1
+          transition: all 0.3s
+          z-index: 10
+          width: 105px
+
+
 </style>

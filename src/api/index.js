@@ -1,6 +1,11 @@
 // 将所有的接口请求都通过这个统一输出
-import example from './example'
+// import example from './example'
+// 动态
+import dynamic from './dynamic'
+import website from './customer'
 
-export default {
-  ...example
-}
+// 动态
+export const Dynamic = dynamic
+
+// 官网
+export const Website = website

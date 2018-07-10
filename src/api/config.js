@@ -1,7 +1,7 @@
 const env = process.env.NODE_ENV
 
 const DEV = {
-  api: 'dev'
+  api: 'https://business-api.jerryf.cn'
 }
 
 const TEST = {
