@@ -212,7 +212,7 @@
           this.$refs.scroll.forceUpdate()
           return
         }
-        Dynamic.dynamicList().then((res) => {
+        Dynamic.liveLogs().then((res) => {
           if (res.error === ERR_OK) {
             wechat.hideLoading()
             if (this.page === 1) {

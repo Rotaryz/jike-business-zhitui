@@ -13,6 +13,7 @@ module.exports = [
     path: '/pages/product/product', // 产品
     name: 'Product',
     config: {
+      onReachBottomDistance: 50,
       navigationBarTitleText: '产品'
     }
   },
@@ -32,14 +33,7 @@ module.exports = [
     }
   },
   {
-    path: '/pages/official-network/official-network', // 官网
-    name: 'OfficialNetwork',
-    config: {
-      navigationBarTitleText: '产品'
-    }
-  },
-  {
-    path: '/pages/dynamic-list/dynamic-list', // 官网
+    path: '/pages/dynamic-list/dynamic-list', // 动态列表
     name: 'DynamicList',
     config: {
       navigationBarTitleText: '动态'

@@ -1,41 +1,117 @@
 <template>
   <div class="card-list">
-    <div class="card-item">
-      <p class="card-come">2018年7月3日 12:00 来自Peter的转发</p>
+    <div class="card-item" v-for="(item, index) in cardList" :key="index">
+      <p class="card-come">{{item.created_at}} {{item.from_name}}</p>
       <div class="card-box">
         <img src="./bg-cardholder@2x.png" class="bg-img">
-        <div class="bg-img shield">此名片已屏蔽</div>
+        <div v-if="item.status !== 0" class="bg-img shield">此名片已屏蔽</div>
         <div class="card-left">
-          <p class="card-buss">广州集客网络科技有限公司</p>
-          <p class="card-name">张三丰</p>
-          <p class="card-position">产品经理</p>
+          <p class="card-buss">{{item.employee.department}}</p>
+          <p class="card-name">{{item.employee.name}}</p>
+          <p class="card-position">{{item.employee.position}}</p>
           <p class="card-phone"><img class="icon card-phone-icon" src="./icon-telephone@2x.png">159-2057-1999</p>
-          <p class="card-times">浏览 9次</p>
+          <p class="card-times">浏览 {{item.click_count}}次</p>
         </div>
         <div class="card-right">
-          <img src="" class="card-header" src="./icon-telephone@2x.png">
+          <img src="" class="card-header" :src="item.employee.avatar">
           <div class="card-icon-box">
-            <img src="" class="card-icon" src="./icon-more@2x.png">
-            <div class="card-use">
+            <img src="" class="card-icon" src="./icon-more@2x.png" @click="_showLong(index)">
+            <div class="card-use" :class="{'card-use-active': item.show}" @click="_cardHolderDoClose(item.id, item.status)">
               <img src="" class="icon card-use-icon" src="./icon-screen@2x.png">
-              <span class="card-use-text">屏蔽名片</span>
+              <span class="card-use-text">{{item.status === 0 ? '屏蔽名片' : '开启名片'}}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <toast ref="toast"></toast>
+
   </div>
 </template>
 
 <script>
   // import { ERR_OK } from 'api/config'
+  import { Card } from 'api'
+  import { ERR_OK } from '../../api/config'
+  import * as wechat from 'common/js/wechat'
+  import Toast from 'components/toast/toast'
 
   export default {
     name: 'card-list',
     data () {
-      return {}
+      return {
+        page: 1,
+        cardList: [],
+        loadMore: true
+      }
     },
-    components: {}
+    onLoad () {
+      this._getCardList()
+    },
+    // 下拉刷新
+    onReachBottom () {
+      if (!this.loadMore) {
+        return
+      }
+      this.page++
+      this._getCardList()
+    },
+    methods: {
+      _showLong (index) {
+        this.cardList[index].show = !this.cardList[index].show
+      },
+      _getCardList () {
+        Card.cardHolderList({ page: this.page }).then((res) => {
+          if (res.error === ERR_OK) {
+            if (res.data.length) {
+              res = res.data.map((item) => {
+                item.show = false
+                return item
+              })
+            } else {
+              this.loadMore = false
+            }
+            wechat.hideLoading()
+            if (this.page === 1) {
+              this.cardList = res
+              return
+            }
+            this.cardList = this.cardList.concat(res)
+            console.log(this.cardList)
+          }
+        })
+      },
+      _cardHolderDoClose (id, status) {
+        switch (status) {
+          case 0:
+            Card.cardHolderDoClose({ card_holder_id: id }).then((res) => {
+              if (res.error === ERR_OK) {
+                let index = this.cardList.findIndex(item => item.id === id)
+                this.cardList[index].status = 1
+              }
+              wechat.hideLoading()
+              console.log(res)
+            })
+            break
+          case 1:
+            Card.cardHolderCancelClose({ card_holder_id: id }).then((res) => {
+              if (res.error === ERR_OK) {
+                let index = this.cardList.findIndex(item => item.id === id)
+                this.cardList[index].status = 0
+              } else {
+                this.$refs.toast.show(res.message)
+              }
+              wechat.hideLoading()
+              console.log(res)
+            })
+            break
+        }
+      }
+      //   名片详情跳转
+    },
+    components: {
+      Toast
+    }
   }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -75,12 +151,12 @@
         position: absolute
       .shield
         z-index: 5
-        text-align :center
+        text-align: center
         line-height: 169px
-        color :$color-white
-        font-family :$font-family-regular
+        color: $color-white
+        font-family: $font-family-regular
         font-size: $font-size-16
-        background: rgba(32,32,46,.8)
+        background: rgba(32, 32, 46, .8)
       .shield-disable
         z-index: 100
     .card-buss
@@ -139,7 +215,6 @@
           box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
           background: $color-white
           position: absolute
-          z-index: -1
           overflow: hidden
           opacity: 0
           transition: all 0.3s
