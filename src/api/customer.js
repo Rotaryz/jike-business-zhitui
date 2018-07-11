@@ -1,5 +1,5 @@
 import request from 'common/js/request'
-import {baseURL} from './config'
+import { baseURL } from './config'
 
 export default {
   /**
@@ -11,11 +11,19 @@ export default {
     return request.get(url)
   },
   /**
-   * 官网
+   * 商品列表
    * @returns {*}
    */
-  goodsLists () {
+  goodsLists (data) {
     let url = `${baseURL.api}/api/customer/goods-lists`
+    return request.get(url, data)
+  },
+  /**
+   * 商品列表
+   * @returns {*}
+   */
+  goodsDetail (id) {
+    let url = `${baseURL.api}/api/customer/goods/${id}`
     return request.get(url)
   }
 

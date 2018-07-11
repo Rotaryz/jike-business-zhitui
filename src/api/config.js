@@ -5,11 +5,11 @@ const DEV = {
 }
 
 const TEST = {
-  api: 'test'
+  api: 'https://business-api.jkweixin.net'
 }
 
 const PROD = {
-  api: 'prod'
+  api: 'https://business-api.jkweixin.com'
 }
 
 export const baseURL = env === 'production' ? PROD : env === 'test' ? TEST : DEV

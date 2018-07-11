@@ -21,12 +21,12 @@
 
   export default {
     name: 'official-network',
-    data() {
+    data () {
       return {
         network: {}
       }
     },
-    created () {
+    onLoad () {
       this._getWebsite()
     },
     methods: {

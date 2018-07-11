@@ -4,6 +4,14 @@ import * as types from './mutation-types'
 //   commit(types.TEST_TYPE, test)
 // }
 
-export const saveRole = ({commit, state}, role) => {
-  commit(types.ROLE_TYPE, role)
+export const setTargetPage = ({commit, state}, page) => {
+  commit(types.SET_TARGET_PAGE, page)
+}
+
+export const setCurrentMsg = ({commit, state}, info) => {
+  commit(types.SET_CURRENT_MSG, info)
+}
+
+export const setScene = ({commit, state}, scene) => {
+  commit(types.SET_SCENE, scene)
 }

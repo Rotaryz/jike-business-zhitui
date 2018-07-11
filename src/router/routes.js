@@ -21,6 +21,7 @@ module.exports = [
     path: '/pages/product/product', // 产品
     name: 'Product',
     config: {
+      onReachBottomDistance: 50,
       navigationBarTitleText: '产品'
     }
   },
@@ -40,20 +41,6 @@ module.exports = [
     }
   },
   {
-    path: '/pages/official-network/official-network', // 官网
-    name: 'OfficialNetwork',
-    config: {
-      navigationBarTitleText: '产品'
-    }
-  },
-  {
-    path: '/pages/dynamic-list/dynamic-list', // 官网
-    name: 'DynamicList',
-    config: {
-      navigationBarTitleText: '动态'
-    }
-  },
-  {
     path: '/pages/chat-msg/chat-msg', // 聊天
     name: 'Chat',
     config: {
@@ -62,6 +49,31 @@ module.exports = [
       backgroundTextStyle: 'light',
       navigationBarTitleText: '聊天',
       backgroundColor: '#F0F2F5'
+    }
+  },
+  {
+    path: '/pages/loading/loading', // 登录
+    name: 'Loading',
+    config: {
+      navigationBarBackgroundColor: '#20202E',
+      navigationBarTextStyle: 'light',
+      backgroundTextStyle: 'light',
+      navigationBarTitleText: '授权',
+      backgroundColor: '#F0F2F5'
+    }
+  },
+  {
+    path: '/pages/goods-detail/goods-detail', // 产品详情
+    name: 'GoodsDetail',
+    config: {
+      navigationBarTitleText: '产品'
+    }
+  },
+  {
+    path: '/pages/dynamic-list/dynamic-list', // 动态列表
+    name: 'DynamicList',
+    config: {
+      navigationBarTitleText: '动态'
     }
   }
 ]

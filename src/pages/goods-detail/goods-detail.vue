@@ -1,11 +1,11 @@
 <template>
   <div class="goods-detail">
     <div class="cover-box">
-      <img src="./Snip20180707_18.png" class="cover" mode="widthFix">
+      <img :src="goods.image_url" class="cover" mode="widthFix">
     </div>
     <div class="goods-title">
-      <p class="goods-content">sadhaksjd</p>
-      <p class="content-reason">sadasda</p>
+      <p class="goods-content">{{goods.title}}</p>
+      <p class="content-reason">{{goods.subtitle}}</p>
     </div>
     <div class="goods-icon">
       <span class="goods-small-box goods-small-tall"></span>
@@ -21,7 +21,9 @@
 </template>
 
 <script>
-  // import { ERR_OK } from 'api/config'
+  import { ERR_OK } from 'api/config'
+  import { Website } from 'api'
+  import * as wechat from 'common/js/wechat'
 
   export default {
     name: 'goods-detail',
@@ -30,18 +32,18 @@
         goods: {}
       }
     },
-    created () {
+    onLoad () {
       this._goods()
     },
     methods: {
       _goods () {
-        // let id = this.$route.query.id
-        // console.log(id)
-        // Goods.doogsDetail(id).then((res) => {
-        //   if (res.error === ERR_OK) {
-        //     this.goods = res.data
-        //   }
-        // })
+        let id = this.$route.query.id
+        Website.goodsDetail(id).then((res) => {
+          if (res.error === ERR_OK) {
+            this.goods = res.data
+          }
+          wechat.hideLoading()
+        })
       }
     }
   }
@@ -49,7 +51,8 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
-
+  .goods-detail
+    padding-bottom: 60px
   .cover-box
     overflow: hidden
     height: 230px
@@ -98,8 +101,8 @@
     display: block
 
   .btn
-    display:flex
-    text-align :center
+    display: flex
+    text-align: center
     position: fixed
     width: 100vw
     height: 45px
@@ -107,16 +110,17 @@
     bottom: 0
     .btn-item
       line-height: 45px
-      color :$color-white
-      font-family :$font-family-medium
-      font-size :$font-size-16
-      border-radius :0
+      color: $color-white
+      font-family: $font-family-medium
+      font-size: $font-size-16
+      border-radius: 0
       &:after
-          border:none
+        border: none
     .btn-left
       flex: 6
-      background :$color-text
+      background: $color-text
+
   .btn-right
-      flex: 4
-      background :$color-56
+    flex: 4
+    background: $color-56
 </style>

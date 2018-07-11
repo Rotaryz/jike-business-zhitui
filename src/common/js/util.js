@@ -49,3 +49,38 @@ export function formatTimeYMD (date = now, str = '-') {
 
   return `${t1}`
 }
+
+/**
+ * 记录当前页面栈
+ */
+
+export function setPagePath(url, options) {
+  // 拼接url的参数
+  let urlWithArgs = '/' + url + '?'
+  for (let key in options) {
+    let value = options[key]
+    if (value) {
+      urlWithArgs += key + '=' + value + '&'
+    }
+  }
+  urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length - 1)
+  return urlWithArgs
+}
+
+// 判断是否是tab页面 返回布尔值
+export function chackTabPage(path) {
+  const reg = /(pages\/card\/card)|(pages\/product\/product)|(pages\/dynamic\/dynamic)|(pages\/official\/official)/
+  return reg.test(path)
+}
+
+export function getParams(scene) {
+  if (!scene) {
+    return {}
+  }
+  let params = {}
+  let strs = scene.split('&')
+  for (let i = 0; i < strs.length; i++) {
+    params[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
+  }
+  return params
+}

@@ -1,5 +1,6 @@
 import Fly from 'flyio'
 import { showLoading, hideLoading } from './wechat'
+import wx from './wx'
 import { baseURL, TIME_OUT, ERR_OK, ERR_NO } from 'api/config'
 
 const fly = new Fly()
@@ -11,8 +12,9 @@ const COMMON_HEADER = () => {
 
 // 请求拦截器
 fly.interceptors.request.use((request) => {
-  request.headers['Authorization'] = 'b20915301b40861e6241d3cb1623789e5e30421d'
-  request.headers['Current-Merchant'] = '10'
+  request.headers['Authorization'] = wx.getStorageSync('token')
+  request.headers['Current-Merchant'] = 10
+  request.headers['Current-Employee'] = wx.getStorageSync('EmployeeId')
   return request
 })
 
@@ -54,6 +56,11 @@ function checkCode (res) {
   // 如果网络请求成功，而提交的数据，或者是后端的一些未知错误所导致的，可以根据实际情况进行捕获异常
   if (res.data && (res.data.code !== ERR_OK)) {
     // 可以进行switch操作，根据返回的code进行相对应的操作，然后抛异常
+    switch (res.data.code) {
+      case 10000:
+        wx.reLaunch({url: `/pages/loading/loading`})
+        break
+    }
     console.warn(res.data.message)
     throw requestException(res)
   }
