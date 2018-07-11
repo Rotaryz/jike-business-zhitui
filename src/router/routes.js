@@ -32,5 +32,16 @@ module.exports = [
       navigationBarTitleText: '聊天',
       backgroundColor: '#F0F2F5'
     }
+  },
+  {
+    path: '/pages/loading/loading', // 登录
+    name: 'Loading',
+    config: {
+      navigationBarBackgroundColor: '#20202E',
+      navigationBarTextStyle: 'light',
+      backgroundTextStyle: 'light',
+      navigationBarTitleText: '授权',
+      backgroundColor: '#F0F2F5'
+    }
   }
 ]

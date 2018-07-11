@@ -1,6 +1,8 @@
 const state = {
   // test: {},
-  role: null
+  targetPage: null,
+  currentMsg: {},
+  scene: ''
 }
 
 export default state

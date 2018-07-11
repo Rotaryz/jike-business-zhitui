@@ -138,7 +138,7 @@
       .bc-img-box
         width: 100vw
         height: 0
-        padding-bottom: 82.6%
+        padding-bottom: 66%
         position: relative
         .bc-img
           width: 100%
@@ -157,7 +157,7 @@
             height: 100%
       .card-box
         padding: 0 15px
-        margin-top: -17.3vw
+        margin-top: -20vw
         .card-box-content
           height: 0
           padding-bottom: 73.9%

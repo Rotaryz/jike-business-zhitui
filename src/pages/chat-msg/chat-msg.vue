@@ -31,8 +31,8 @@
       </div>
     </scroll-view>
     <div class="chat-input border-top-1px">
-      <div class="input-container" ref="textBox">
-        <textarea auto-height="true" fixed="true" class="textarea"></textarea>
+      <div class="input-container" :class="system === 'android' ? 'android' : ''" ref="textBox">
+        <textarea auto-height="true" fixed="true" class="textarea" maxlength="-1"></textarea>
       </div>
       <div class="submit-btn" @click="sendMsg">发送</div>
     </div>
@@ -46,9 +46,17 @@
   import webimHandler from 'common/js/webim_handler'
   import {Im} from 'api'
   import {ERR_OK} from 'api/config'
+  import wx from 'common/js/wx'
   export default {
     name: 'Chat',
     created() {
+      let phoneInfo = wx.getSystemInfoSync()
+      let system = phoneInfo.system
+      if (system.indexOf('IOS') !== -1) {
+        this.system = 'iphone'
+      } else {
+        this.system = 'android'
+      }
       this.id = 1
       let data = {
         page: this.page,
@@ -283,11 +291,11 @@
         margin-left: 5px
       .input-container
         flex: 1
-        min-height: 28px
+        min-height: 36px
         border: 1px solid rgba(0,0,0,0.10)
         background: $color-white
         overflow-y: auto
-        padding: 8px 10px 0
+        padding: 0 10px
         .textarea
           width: 100%
           max-height: 100px
@@ -295,5 +303,7 @@
           margin: 0
           border: 0 none
           font-size: $font-size-14
-
+      .android.input-container
+        min-height: 28px
+        padding-top: 8px
 </style>

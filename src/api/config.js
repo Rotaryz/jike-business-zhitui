@@ -1,15 +1,15 @@
 const env = process.env.NODE_ENV
 
 const DEV = {
-  api: 'dev'
+  api: 'https://business-api.jerryf.cn'
 }
 
 const TEST = {
-  api: 'test'
+  api: 'https://business-api.jkweixin.net'
 }
 
 const PROD = {
-  api: 'prod'
+  api: 'https://business-api.jkweixin.com'
 }
 
 export const baseURL = env === 'production' ? PROD : env === 'test' ? TEST : DEV
