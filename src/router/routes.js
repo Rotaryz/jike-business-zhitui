@@ -1,5 +1,11 @@
 module.exports = [
   {
+    path: '/pages/card-list/card-list', // 名片夹
+    name: 'CardList',
+    config: {
+      navigationBarTitleText: '名片'
+    }
+  }, {
     path: '/pages/card/card', // 名片
     name: 'Card',
     config: {
@@ -12,7 +18,11 @@ module.exports = [
   },
   {
     path: '/pages/product/product', // 产品
-    name: 'Product'
+    name: 'Product',
+    config: {
+      onReachBottomDistance: 50,
+      navigationBarTitleText: '产品'
+    }
   },
   {
     path: '/pages/dynamic/dynamic', // 动态
@@ -42,6 +52,20 @@ module.exports = [
       backgroundTextStyle: 'light',
       navigationBarTitleText: '授权',
       backgroundColor: '#F0F2F5'
+    }
+  },
+  {
+    path: '/pages/goods-detail/goods-detail', // 产品详情
+    name: 'GoodsDetail',
+    config: {
+      navigationBarTitleText: '产品'
+    }
+  },
+  {
+    path: '/pages/dynamic-list/dynamic-list', // 动态列表
+    name: 'DynamicList',
+    config: {
+      navigationBarTitleText: '动态'
     }
   }
 ]
