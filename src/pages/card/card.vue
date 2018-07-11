@@ -111,17 +111,53 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {Im} from 'api'
+  import {mapGetters} from 'vuex'
+  import * as wechat from 'common/js/wechat'
+  const shareArr = [1007, 1008, 1036, 1044, 1073, 1074]
+  const qrCordArr = [1047, 1048, 1049, 1011, 1012, 1013]
   export default {
     data() {
       return {
       }
+    },
+    async onLoad() {
+      console.log(this.scene)
+      let isShare = shareArr.indexOf(this.scene * 1)
+      let isQrcord = qrCordArr.indexOf(this.scene * 1)
+      let source = isShare !== -1 ? 1 : isQrcord !== -1 ? 2 : 0
+      let data = {
+        employee_id: this.currentMsg.employeeId,
+        from_type: this.currentMsg.fromType,
+        from_id: this.currentMsg.fromId,
+        source
+      }
+      await Promise.all([
+        this.getCardDetail(data),
+        this.getGoodsList()
+      ])
+      wechat.hideLoading()
     },
     methods: {
       toChat() {
         let id = 1
         let url = `/pages/chat-msg/chat-msg?id=${id}`
         wx.navigateTo({url})
+      },
+      async getCardDetail(data) {
+        let res = await Im.getCardDetail(data)
+        console.log(res, 1)
+      },
+      async getGoodsList() {
+        let res = await Im.getGoodsList()
+        console.log(res, 2)
       }
+    },
+    computed: {
+      ...mapGetters([
+        'currentMsg',
+        'scene'
+      ])
     }
   }
 </script>
