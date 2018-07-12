@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <scroll-view scroll-y class="chat-container">
+    <scroll-view scroll-y class="chat-container" @scrolltoupper="loadMore">
       <div class="chat-list">
         <div class="chat-item" v-for="(item, index) in [1, 2, 3, 4]" :key="index">
           <div class="chat-content" v-if="true">
@@ -42,7 +42,7 @@
 
 <script>
   import Toast from 'components/toast/toast'
-//  import {mapActions, mapGetters} from 'vuex'
+  import {mapActions, mapGetters} from 'vuex'
   import webimHandler from 'common/js/webim_handler'
   import {Im} from 'api'
   import {ERR_OK} from 'api/config'
@@ -50,6 +50,16 @@
   export default {
     name: 'Chat',
     created() {
+    },
+    mounted() {
+      webimHandler.getC2CMsgList(this.currentMsg.nickName) // 消息已读处理
+      this.setUnreadCount(this.currentMsg.nickName) // vuex
+    },
+    beforeDestroy() {
+      this.setCurrent({})
+      this.setNowChat([])
+    },
+    onLoad() {
       let phoneInfo = wx.getSystemInfoSync()
       let system = phoneInfo.system
       if (system.indexOf('IOS') !== -1) {
@@ -62,7 +72,7 @@
         page: this.page,
         limit: 30,
         customer_id: this.id,
-        employee_id: this.imInfo.im_account
+        employee_id: this.currentMsg.employee.im_account
       }
       Im.getMsgList(data).then((res) => {
         if (res.error === ERR_OK) {
@@ -71,23 +81,17 @@
         }
       })
     },
-    mounted() {
-      document.title = this.currentMsg.nickName
-      webimHandler.getC2CMsgList(this.currentMsg.nickName) // 消息已读处理
-      this.setUnreadCount(this.currentMsg.nickName) // vuex
-    },
-    beforeDestroy() {
-      this.setCurrent({})
-      this.setNowChat([])
-    },
     methods: {
-      onPullingDown() {
+      ...mapActions([
+        'setNowChat'
+      ]),
+      loadMore() {
         if (this.noMore) return
         let data = {
           page: this.page++,
           limit: 30,
           customer_id: this.id,
-          employee_id: this.imInfo.im_account
+          employee_id: this.currentMsg.employee.im_account
         }
         Im.getMsgList(data).then((res) => {
           if (res.error === ERR_OK) {
@@ -151,6 +155,12 @@
     },
     components: {
       Toast
+    },
+    computed: {
+      ...mapGetters([
+        'currentMsg',
+        'nowChat'
+      ])
     }
   }
 </script>

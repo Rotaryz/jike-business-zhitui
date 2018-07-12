@@ -12,6 +12,9 @@ const mutations = {
   },
   [types.SET_SCENE](state, scene) {
     state.scene = scene
+  },
+  [types.SET_NOW_CHAT](state, nowChat) {
+    state.nowChat = nowChat
   }
 }
 

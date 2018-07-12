@@ -5,6 +5,7 @@
         <img :src="cardMsg.avatar ? cardMsg.avatar : defaultImg" class="bc-img" mode="aspectFill">
         <div class="cards-link" @click="toCards">
           <img src="./icon-change@2x.png" class="cards-link-icon">
+          <div class="red-dot"></div>
         </div>
       </div>
       <div class="card-box">
@@ -182,6 +183,7 @@
         let id = 1
         let url = `/pages/chat-msg/chat-msg?id=${id}`
         wx.navigateTo({url})
+        this.behaviorMsg(50001)
       },
       toCards() {
         wx.reLaunch({
@@ -337,6 +339,15 @@
           .cards-link-icon
             width: 100%
             height: 100%
+          .red-dot
+            width: 8px
+            height: 8px
+            background: $color-F9543C
+            border: 1px solid $color-white
+            border-radius: 50%
+            position: absolute
+            right: 2px
+            top: 1px
       .card-box
         padding: 0 15px
         margin-top: -20vw

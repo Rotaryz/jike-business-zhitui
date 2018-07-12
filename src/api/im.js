@@ -51,5 +51,10 @@ export default {
       card_holder_id: id
     }
     return request.post(url, data, loading)
+  },
+  // 聊天记录
+  getMsgList(data, loading = true) {
+    const url = `/api/employee/message-logs`
+    return request.post(url, data, loading)
   }
 }

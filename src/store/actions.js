@@ -15,3 +15,7 @@ export const setCurrentMsg = ({commit, state}, info) => {
 export const setScene = ({commit, state}, scene) => {
   commit(types.SET_SCENE, scene)
 }
+
+export const setNowChat = ({commit, state}, nowChat) => {
+  commit(types.SET_NOW_CHAT, nowChat)
+}
