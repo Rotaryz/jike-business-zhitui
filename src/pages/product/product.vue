@@ -27,8 +27,8 @@
     onLoad () {
       this._getWebsite()
     },
-    onShow() {
-      console.log(this.$route)
+    onShow(option) {
+      console.log(this.$router)
     },
     // 下拉刷新
     onReachBottom () {
@@ -57,6 +57,11 @@
       _goDetail (id) {
         let url = `/pages/goods-detail/goods-detail?id=${id}`
         this.$router.push(url)
+      }
+    },
+    watch: {
+      $route(from, to) {
+        console.log(from, to)
       }
     }
   }
