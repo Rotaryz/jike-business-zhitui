@@ -36,6 +36,7 @@ export const getCardList = ({ commit, state }, page) => {
       wechat.hideLoading()
       res = res.data.map((item) => {
         item.show = false
+        item.unReadMsgCount = 0
         return item
       })
       if (page === 1) {
