@@ -297,9 +297,7 @@
         })
       },
       async getCardDetail (data) {
-        console.log(data, 'aaaaa')
         let res = await Im.getCardDetail(data)
-        console.log(res, 'bbbbbb')
         if (res.error === ERR_OK) {
           this.cardMsg = res.data
           this.isLike = this.cardMsg.is_like
@@ -390,7 +388,6 @@
         }
         let account = this.currentMsg.employee.im_account
         webimHandler.onSendCustomMsg(option, account).then(res => {
-          console.log(res)
         })
       }
     },
