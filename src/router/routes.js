@@ -5,7 +5,8 @@ module.exports = [
     config: {
       navigationBarTitleText: '名片'
     }
-  }, {
+  },
+  {
     path: '/pages/card/card', // 名片
     name: 'Card',
     config: {
@@ -36,6 +37,13 @@ module.exports = [
     name: 'Official',
     config: {
       navigationBarTextStyle: '官网'
+    }
+  },
+  {
+    path: '/pages/goods-detail/goods-detail', // 产品详情
+    name: 'GoodsDetail',
+    config: {
+      navigationBarTitleText: '产品'
     }
   },
   {

@@ -7,6 +7,7 @@ import card from './card'
 
 // im相关接口
 export const Im = im
+
 // 动态
 export const Dynamic = dynamic
 

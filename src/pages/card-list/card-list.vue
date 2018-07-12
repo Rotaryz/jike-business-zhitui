@@ -50,8 +50,8 @@
     },
     onLoad () {
       this._getCardList()
-      let {employeeId, fromType, fromId} = this.currentMsg
-      this.setCurrentMsg({employeeId, fromType, fromId})
+      let { employeeId, fromType, fromId } = this.currentMsg
+      this.setCurrentMsg({ employeeId, fromType, fromId })
     },
     // 下拉刷新
     onReachBottom () {
@@ -156,13 +156,16 @@
       .shield-disable
         z-index: 100
     .card-buss
+      height: $font-size-14
       color: $color-888888
       font-size: $font-size-14
     .card-name
+      height: $font-size-14
       margin-top: 15px
       color: $color-text
       font-size: $font-size-24
     .card-position
+      height: $font-size-14
       margin-top: 10px
       color: $color-text
       font-size: $font-size-14
