@@ -1,6 +1,6 @@
 <template>
   <div class="card-list">
-    <div class="card-item" v-for="(item, index) in cardList" :key="index">
+    <div class="card-item" v-if="cardList.length" v-for="(item, index) in cardList" :key="index">
       <p class="card-come">{{item.created_at}} {{item.from_name}}</p>
       <div class="card-box">
         <img src="./bg-cardholder@2x.png" class="bg-img">

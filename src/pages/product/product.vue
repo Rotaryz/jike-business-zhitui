@@ -61,7 +61,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   .production
-    height: 100vh
+    min-height: 100vh
     padding: 4vw
     background: $color-background
 
