@@ -2,6 +2,7 @@ import * as types from './mutation-types'
 import { Card } from 'api'
 import { ERR_OK } from 'api/config'
 import * as wechat from 'common/js/wechat'
+import webimHandler from 'common/js/webim_handler'
 
 // export const saveTest = function ({commit, state}, test) {
 //   commit(types.TEST_TYPE, test)
@@ -27,7 +28,7 @@ export const setCardList = ({ commit, state }, cardList) => {
 }
 // 获取名片夹列表
 export const getCardList = ({ commit, state }, page) => {
-  Card.cardHolderList({ page: page }).then((res) => {
+  Card.cardHolderList({ page: page }).then(async (res) => {
     if (res.error === ERR_OK) {
       if (!res.data.length) {
         wechat.hideLoading()
@@ -36,9 +37,11 @@ export const getCardList = ({ commit, state }, page) => {
       wechat.hideLoading()
       res = res.data.map((item) => {
         item.show = false
-        item.unReadMsgCount = 0
         return item
       })
+      if (res.length) {
+        res = await webimHandler.initUnread(res)
+      }
       if (page === 1) {
         commit(types.CARD_LIST, res)
         return
@@ -103,4 +106,10 @@ export const setImIng = ({commit, state}, boolean) => {
 
 export const setCustomCount = ({commit, state}, id) => {
   commit(types.SET_CUSTOM_COUNT, id)
+}
+export const addNowChat = ({commit, state}, msg) => {
+  commit(types.ADD_NOW_CHAT, msg)
+}
+export const setNowCount = ({commit, state}, type) => {
+  commit(types.SET_NOW_COUNT, type)
 }

@@ -19,3 +19,7 @@ export const CARD_LIST_SHOW = 'CARD_LIST_SHOW'
 export const SET_IMING = 'SET_IMING'
 
 export const SET_CUSTOM_COUNT = 'SET_CUSTOM_COUNT'
+
+export const ADD_NOW_CHAT = 'ADD_NOW_CHAT'
+
+export const SET_NOW_COUNT = 'SET_NOW_COUNT' // 设置当前对象未读数

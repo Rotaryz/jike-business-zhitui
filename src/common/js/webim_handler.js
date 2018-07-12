@@ -85,7 +85,7 @@ export default class webimHandler {
   static async initUnread (data) {
     let sessMap = await this.getUnread()
     data.forEach((item) => {
-      let name = 'C2C' + item.sessionId
+      let name = 'C2C' + item.employee.im_account
       if (sessMap[name]) {
         item.unReadMsgCount = sessMap[name].unread() <= 99 ? sessMap[name].unread() : '99+'
       } else {
@@ -159,7 +159,6 @@ export default class webimHandler {
               // webim.c2CMsgReaded(opts)
               let customer = await this.getCustomerMsg(fromAccount)
               let data = Object.assign({}, { fromAccount, fromAccountNick, avatar: customer.avatar, isSelfSend, time: msg.getTime() }, content, seq, random)
-              console.log(data)
               resolve(data)
               console.error('收到一条c2c消息(好友消息或者全员推送消息): 发送人=' + fromAccountNick + ', 内容=' + content)
               break

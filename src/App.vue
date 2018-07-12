@@ -40,7 +40,9 @@
         'setTargetPage',
         'setCurrentMsg',
         'setScene',
-        'setCustomCount'
+        'setCustomCount',
+        'setNowCount',
+        'addNowChat'
       ]),
       async loginIm() {
         let userInfo = wx.getStorageSync('userInfo')
@@ -64,8 +66,14 @@
               }, // 选填
               'onMsgNotify': async (msg) => {
                 let res = await webimHandler.onMsgNotify(msg)
-                console.log(res)
                 this.setCustomCount(res.fromAccount)
+                if (this.currentMsg.employee && (res.fromAccount === this.currentMsg.employee.im_account)) {
+                  if (!this.imIng) {
+                    this.setNowCount('add')
+                  } else {
+                    this.addNowChat(res)
+                  }
+                }
               }, // 监听新消息(私聊(包括普通消息和全员推送消息)，普通群(非直播聊天室)消息)事件，必填
               'onGroupSystemNotifys': (msg) => {
               } // 监听（多终端同步）群系统消息事件，必填
@@ -84,7 +92,8 @@
     },
     computed: {
       ...mapGetters([
-        'currentMsg'
+        'currentMsg',
+        'imIng'
       ])
     }
   }
