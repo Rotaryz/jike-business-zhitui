@@ -27,14 +27,14 @@
               <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click="_showLong(index, item.show)">
               <div class="share" :class="{'share-active': item.show}">
                 <div class="share-item comment">
-                  <img class="find-icon" src="./icon-spot2@2x.png" mode="widthFix">
+                  <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
                   <div class="find-num">
                     评论
                   </div>
                 </div>
                 <!--{{find.is_like ? 'thumbs-up' : ''}}-->
                 <div class="share-item" @click="_goodLike(index)">
-                  <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
+                  <img class="find-icon" src="./icon-spot2@2x.png" mode="widthFix">
                   <div class="find-num">
                     赞
                   </div>
@@ -43,11 +43,14 @@
             </div>
           </div>
           <div class="likes-peo" v-if="item.live_log_like.length">
-            <img src="./pic-zan_trends@2x.png" class="likes-peo-bg" mode="widthFix">
-            <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
-            <div class="like-name">
-              <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+            <img src="./pic-trends_zan1@2x.png" class="likes-peo-bg" mode="widthFix">
+            <div class="peo-big-box">
+              <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
+              <div class="like-name">
+                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+              </div>
             </div>
+            <img src="./pic-trends_zan3@2x.png" class="likes-peo-bg" mode="widthFix">
           </div>
         </div>
       </div>
@@ -75,14 +78,14 @@
               <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click="_showLong(index, item.show)">
               <div class="share" :class="{'share-active': item.show}">
                 <div class="share-item comment">
-                  <img class="find-icon" src="./icon-spot2@2x.png" mode="widthFix">
+                  <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
                   <div class="find-num">
                     评论
                   </div>
                 </div>
                 <!--{{find.is_like ? 'thumbs-up' : ''}}-->
                 <div class="share-item" @click="_goodLike(index)">
-                  <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
+                  <img class="find-icon" src="./icon-spot2@2x.png" mode="widthFix">
                   <div class="find-num">
                     赞
                   </div>
@@ -91,11 +94,14 @@
             </div>
           </div>
           <div class="likes-peo" v-if="item.live_log_like.length">
-            <img src="./pic-zan_trends@2x.png" class="likes-peo-bg" mode="widthFix">
-            <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
-            <div class="like-name">
-              <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+            <img src="./pic-trends_zan1@2x.png" class="likes-peo-bg" mode="widthFix">
+            <div class="peo-big-box">
+              <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
+              <div class="like-name">
+                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+              </div>
             </div>
+            <img src="./pic-trends_zan3@2x.png" class="likes-peo-bg" mode="widthFix">
           </div>
         </div>
       </div>
@@ -124,14 +130,14 @@
               <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click="_showLong(index, item.show)">
               <div class="share" :class="{'share-active': item.show}">
                 <div class="share-item comment">
-                  <img class="find-icon" src="./icon-spot2@2x.png" mode="widthFix">
+                  <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
                   <div class="find-num">
                     评论
                   </div>
                 </div>
                 <!--{{find.is_like ? 'thumbs-up' : ''}}-->
                 <div class="share-item" @click="_goodLike(index)">
-                  <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
+                  <img class="find-icon" src="./icon-spot2@2x.png" mode="widthFix">
                   <div class="find-num">
                     赞
                   </div>
@@ -140,11 +146,14 @@
             </div>
           </div>
           <div class="likes-peo" v-if="item.live_log_like.length">
-            <img src="./pic-zan_trends@2x.png" class="likes-peo-bg" mode="widthFix">
-            <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
-            <div class="like-name">
-              <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+            <img src="./pic-trends_zan1@2x.png" class="likes-peo-bg" mode="widthFix">
+            <div class="peo-big-box">
+              <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
+              <div class="like-name">
+                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+              </div>
             </div>
+            <img src="./pic-trends_zan3@2x.png" class="likes-peo-bg" mode="widthFix">
           </div>
         </div>
       </div>
@@ -166,7 +175,7 @@
       return {
         dynamicList: [],
         page: 1,
-        loadMore: true
+        loadMoreDy: true
       }
     },
     onLoad () {
@@ -189,7 +198,7 @@
         })
       },
       _getList () {
-        if (!this.loadMore) {
+        if (!this.loadMoreDy) {
           return
         }
         Dynamic.liveLogs({ page: this.page }).then((res) => {
@@ -201,7 +210,7 @@
                 return item
               })
             } else {
-              this.loadMore = false
+              this.loadMoreDy = false
               return
             }
             if (this.page === 1) {
@@ -220,6 +229,7 @@
             wechat.hideLoading()
             this.dynamicList[index].is_like = !this.dynamicList[index].is_like
             this.dynamicList[index].show = !this.dynamicList[index].show
+            this.dynamicList[index].live_log_like = res.data
             // 点赞之后加入
             return
           }
@@ -343,17 +353,22 @@
             transition: all 0.3s
       .likes-peo
         margin-top: 5px
-        display: flex
         position: relative
         width: 79.73vw
         height: 10.67vw
         box-sizing: border-box
         .likes-peo-bg
-          position: absolute
+          display :block
           width: 100%
-          height: 200%
+        .peo-big-box
+          width: 100%
+          display :flex
+          box-sizing :border-box
+          border-right-1px(rgba(0,0,0,0.10))
+          border-left-1px(rgba(0,0,0,0.10))
+          background: #F9F9F9
+          padding:10px 0
         .like-icon
-          margin-top: 18.5px
           margin-left: 10px
           position: relative
           z-index: 10
@@ -361,7 +376,6 @@
         .like-name
           font-size: $font-size-12
           color: #7C7C8F
-          margin-top: 18.5px
           margin-left: 5px
           z-index: 10
           position: relative

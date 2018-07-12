@@ -27,11 +27,17 @@ module.exports = [
   },
   {
     path: '/pages/dynamic/dynamic', // 动态
-    name: 'Dynamic'
+    name: 'Dynamic',
+    config: {
+      navigationBarTextStyle: '动态'
+    }
   },
   {
     path: '/pages/official/official', // 官网
-    name: 'Official'
+    name: 'Official',
+    config: {
+      navigationBarTextStyle: '官网'
+    }
   },
   {
     path: '/pages/goods-detail/goods-detail', // 产品详情
@@ -67,13 +73,6 @@ module.exports = [
     name: 'GoodsDetail',
     config: {
       navigationBarTitleText: '产品'
-    }
-  },
-  {
-    path: '/pages/dynamic-list/dynamic-list', // 动态列表
-    name: 'DynamicList',
-    config: {
-      navigationBarTitleText: '动态'
     }
   }
 ]

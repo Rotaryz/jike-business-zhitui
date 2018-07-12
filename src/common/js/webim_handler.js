@@ -5,7 +5,7 @@ export default class webimHandler {
   static selSess = '' // 当前会话
   static selType = 'C2C' // 会话类型，暂时默认C2C
   // sdk登录
-  static sdkLogin(userInfo, listeners, options, avatar) {
+  static sdkLogin (userInfo, listeners, options, avatar) {
     // web sdk 登录
     return new Promise((resolve, reject) => {
       webim.login(userInfo, listeners, options, async identifierNick => {
@@ -14,14 +14,14 @@ export default class webimHandler {
         this.loginInfo = userInfo
         await this.setProfilePortrait({
           'ProfileItem': [
-            {'Tag': 'Tag_Profile_IM_Nick', 'Value': userInfo.identifierNick},
-            {'Tag': 'Tag_Profile_IM_Image', 'Value': avatar}
+            { 'Tag': 'Tag_Profile_IM_Nick', 'Value': userInfo.identifierNick },
+            { 'Tag': 'Tag_Profile_IM_Image', 'Value': avatar }
           ]
         })
         resolve()
         webim.Log.info('webim登录成功')
       },
-      function (err) {
+      function(err) {
         console.error(err.ErrorInfo)
         reject(err)
       })
@@ -29,7 +29,7 @@ export default class webimHandler {
   }
 
   // 修改帐号名称和头像
-  static setProfilePortrait(options) {
+  static setProfilePortrait (options) {
     return new Promise((resolve, reject) => {
       webim.setProfilePortrait(options,
         res => {
@@ -44,7 +44,7 @@ export default class webimHandler {
   }
 
   // 获取最近联系人列表
-  static getRecentContact(num = 10) {
+  static getRecentContact (num = 10) {
     return new Promise((resolve, reject) => {
       webim.getRecentContactList({
         'Count': num // 最近的会话数 ,最大为 100
@@ -82,12 +82,12 @@ export default class webimHandler {
   }
 
   // 初始化未读数
-  static async initUnread(data) {
+  static async initUnread (data) {
     let sessMap = await this.getUnread()
     data.forEach((item) => {
-      let name = 'C2C' + item.sessionId
+      let name = 'C2C' + item.employee.im_account
       if (sessMap[name]) {
-        item.unReadMsgCount = sessMap[name].unread()
+        item.unReadMsgCount = sessMap[name].unread() <= 99 ? sessMap[name].unread() : '99+'
       } else {
         item.unReadMsgCount = 0
       }
@@ -98,7 +98,7 @@ export default class webimHandler {
   }
 
   // 获取未读会话数据
-  static getUnread() {
+  static getUnread () {
     return new Promise((resolve, reject) => {
       webim.syncMsgs(() => {
         let sessMap = webim.MsgStore.sessMap()
@@ -118,7 +118,7 @@ export default class webimHandler {
   }
 
   // 处理消息（私聊(包括普通消息和全员推送消息)，普通群(非直播聊天室)消息）
-  static handlderMsg(msg) {
+  static handlderMsg (msg) {
     let fromAccount, fromAccountNick, sessType, subType, content, isSelfSend, seq, random
     return new Promise(async (resolve, reject) => {
       fromAccount = msg.getFromAccount()
@@ -158,8 +158,7 @@ export default class webimHandler {
               // }
               // webim.c2CMsgReaded(opts)
               let customer = await this.getCustomerMsg(fromAccount)
-              let data = Object.assign({}, {fromAccount, fromAccountNick, avatar: customer.avatar, isSelfSend, time: msg.getTime()}, content, seq, random)
-              console.log(data)
+              let data = Object.assign({}, { fromAccount, fromAccountNick, avatar: customer.avatar, isSelfSend, time: msg.getTime() }, content, seq, random)
               resolve(data)
               console.error('收到一条c2c消息(好友消息或者全员推送消息): 发送人=' + fromAccountNick + ', 内容=' + content)
               break
@@ -170,7 +169,7 @@ export default class webimHandler {
   }
 
   // 解析消息
-  static parseMsg(msg) {
+  static parseMsg (msg) {
     return new Promise(async (resolve, reject) => {
       let data
       let elems = msg.getElems() // 获取消息包含的元素数组
@@ -200,7 +199,7 @@ export default class webimHandler {
   }
 
   // 读取用户资料 昵称 头像
-  static getCustomerMsg(fromAccount) {
+  static getCustomerMsg (fromAccount) {
     let ops = {
       'To_Account': [fromAccount],
       'TagList': ['Tag_Profile_IM_Nick', 'Tag_Profile_IM_Image']
@@ -214,7 +213,7 @@ export default class webimHandler {
         let nickAvatar = arr.filter((item) => {
           return item.Tag === 'Tag_Profile_IM_Image'
         })[0]
-        resolve({name: nickName.Value, avatar: nickAvatar.Value})
+        resolve({ name: nickName.Value, avatar: nickAvatar.Value })
       }, (err) => {
         reject(err)
       })
@@ -222,7 +221,7 @@ export default class webimHandler {
   }
 
   // 发送消息
-  static sendMsg(msg) {
+  static sendMsg (msg) {
     return new Promise((resolve, reject) => {
       webim.sendMsg(msg, resp => {
         if (this.selType === webim.SESSION_TYPE.C2C) {
@@ -237,7 +236,7 @@ export default class webimHandler {
   }
 
   // 发送消息(聊天消息)
-  static onSendMsg(msg, msgToId) {
+  static onSendMsg (msg, msgToId) {
     let msgtosend = msg
     let msgLen = webim.Tool.getStrBytes(msg)
     return new Promise(async (resolve, reject) => {
@@ -298,8 +297,9 @@ export default class webimHandler {
   }
 
   // 发送自定义消息
-  static onSendCustomMsg(ops, msgToId) {
+  static onSendCustomMsg (ops, msgToId) {
     return new Promise((resolve, reject) => {
+      console.log(78686768)
       if (!this.selSess || this.selSess.id !== msgToId) {
         this.selSess = new webim.Session(this.selType, msgToId)
       }
@@ -311,6 +311,7 @@ export default class webimHandler {
       let msg = new webim.Msg(this.selSess, isSend, seq, random, msgTime, this.loginInfo.identifier, subType, this.loginInfo.identifierNick)
       let customObj = new webim.Msg.Elem.Custom(ops.data, ops.desc, ops.ext)
       msg.addCustom(customObj)
+      console.log(msg)
       this.sendMsg(msg).then(res => {
         resolve(res)
       }, err => {
@@ -321,7 +322,7 @@ export default class webimHandler {
 
   // 获取C2C历史消息并设成已读状态
   // id 要拉取的好友id
-  static getC2CMsgList(id) {
+  static getC2CMsgList (id) {
     let options = {
       'Peer_Account': id, // 好友帐号
       'MaxCnt': 1, // 拉取消息条数
@@ -348,7 +349,7 @@ export default class webimHandler {
   }
 
   // 监听连接状态回调变化事件
-  static onConnNotify(resp) {
+  static onConnNotify (resp) {
     switch (resp.ErrorCode) {
       case webim.CONNECTION_STATUS.ON:
         webim.Log.warn('连接状态正常...')

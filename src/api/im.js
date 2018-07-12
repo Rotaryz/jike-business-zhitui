@@ -19,9 +19,42 @@ export default {
     const url = `/api/customer/card-holder-detail`
     return request.get(url, data, loading)
   },
-  // 名片详情
-  getGoodsList(loading = true) {
+  // 主推产品列表
+  getGoodsList(page = 1, limit = 10, loading = true) {
     const url = `/api/customer/goods-lists`
-    return request.get(url, {}, loading)
+    const data = {
+      page,
+      limit
+    }
+    return request.get(url, data, loading)
+  },
+  // 点赞
+  lickZan(id, loading = true) {
+    const url = `/api/customer/card-holder-do-like`
+    const data = {
+      card_holder_id: id
+    }
+    return request.post(url, data, loading)
+  },
+  // 点赞
+  clearZan(id, loading = true) {
+    const url = `/api/customer/card-holder-cancel-like`
+    const data = {
+      card_holder_id: id
+    }
+    return request.post(url, data, loading)
+  },
+  // 获取二维码
+  getQrCodeImg(id, loading = true) {
+    const url = `/api/customer/card-holder-qrcode`
+    const data = {
+      card_holder_id: id
+    }
+    return request.get(url, data, loading)
+  },
+  // 聊天记录
+  getMsgList(data, loading = true) {
+    const url = `/api/customer/message-logs`
+    return request.post(url, data, loading)
   }
 }

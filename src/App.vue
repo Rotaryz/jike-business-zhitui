@@ -39,7 +39,10 @@
       ...mapActions([
         'setTargetPage',
         'setCurrentMsg',
-        'setScene'
+        'setScene',
+        'setCustomCount',
+        'setNowCount',
+        'addNowChat'
       ]),
       async loginIm() {
         let userInfo = wx.getStorageSync('userInfo')
@@ -63,7 +66,14 @@
               }, // 选填
               'onMsgNotify': async (msg) => {
                 let res = await webimHandler.onMsgNotify(msg)
-                console.log(res)
+                this.setCustomCount(res.fromAccount)
+                if (this.currentMsg.employee && (res.fromAccount === this.currentMsg.employee.im_account)) {
+                  if (!this.imIng) {
+                    this.setNowCount('add')
+                  } else {
+                    this.addNowChat(res)
+                  }
+                }
               }, // 监听新消息(私聊(包括普通消息和全员推送消息)，普通群(非直播聊天室)消息)事件，必填
               'onGroupSystemNotifys': (msg) => {
               } // 监听（多终端同步）群系统消息事件，必填
@@ -71,7 +81,7 @@
 
             let options = {
               'isAccessFormalEnv': true, // 是否访问正式环境，默认访问正式，选填
-              'isLogOn': false// 是否开启控制台打印日志,默认开启，选填
+              'isLogOn': true// 是否开启控制台打印日志,默认开启，选填
             }
 
             let avatar = userInfo.avatar
@@ -82,7 +92,8 @@
     },
     computed: {
       ...mapGetters([
-        'currentMsg'
+        'currentMsg',
+        'imIng'
       ])
     }
   }

@@ -5,7 +5,7 @@ const DEV = {
 }
 
 const TEST = {
-  api: 'https://business-api.jkweixin.net'
+  api: 'https://business-api.jerryf.cn'
 }
 
 const PROD = {

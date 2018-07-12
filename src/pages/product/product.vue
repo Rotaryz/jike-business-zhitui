@@ -14,6 +14,8 @@
   import { ERR_OK } from 'api/config'
   import { Website } from 'api'
   import * as wechat from 'common/js/wechat'
+  import { mapActions, mapGetters } from 'vuex'
+  import webimHandler from 'common/js/webim_handler'
 
   export default {
     data () {
@@ -23,8 +25,34 @@
         loadMore: true
       }
     },
+    computed: {
+      ...mapGetters([
+        'productSendMsg',
+        'descMsg',
+        'currentMsg'
+      ])
+    },
     onLoad () {
       this._getWebsite()
+    },
+    onShow () {
+      if (this.productSendMsg) {
+        this.setProductSendMsg(false)
+        return false
+      }
+      let desc = Object.assign({}, this.descMsg, { type: 1 })
+      let data = ''
+      let ext = '20001'
+      let option = {
+        data,
+        desc,
+        ext
+      }
+      // let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+      let account = 'philly'
+      webimHandler.onSendCustomMsg(option, account).then(res => {
+        // console.log(res)
+      })
     },
     // 下拉刷新
     onReachBottom () {
@@ -35,6 +63,7 @@
       this._getWebsite()
     },
     methods: {
+      ...mapActions(['setProductSendMsg']),
       _getWebsite () {
         Website.goodsLists({ page: this.page }).then((res) => {
           if (res.error === ERR_OK) {
@@ -54,6 +83,11 @@
         let url = `/pages/goods-detail/goods-detail?id=${id}`
         this.$router.push(url)
       }
+    },
+    watch: {
+      $route (from, to) {
+        console.log(from, to)
+      }
     }
   }
 </script>
@@ -61,7 +95,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   .production
-    height: 100vh
+    min-height: 100vh
     padding: 4vw
     background: $color-background
 
