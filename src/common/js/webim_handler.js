@@ -91,6 +91,7 @@ export default class webimHandler {
       } else {
         item.unReadMsgCount = 0
       }
+      item.show = false
     })
     return new Promise((resolve, reject) => {
       resolve(data)

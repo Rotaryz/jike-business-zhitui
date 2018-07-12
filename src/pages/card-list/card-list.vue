@@ -13,9 +13,11 @@
           <p class="card-times">浏览 {{item.click_count}}次</p>
         </div>
         <div class="card-right">
-          <img src="" class="card-header" :src="item.employee.avatar">
+          <image src="" class="card-header" :src="item.employee.avatar">
+            <span class="content-count" v-if="item.unReadMsgCount">{{item.unReadMsgCount}}</span>
+          </image>
           <div class="card-icon-box">
-            <img src="" class="card-icon" src="./icon-more@2x.png" @click="_showLong(index)">
+            <img src="" class="card-icon" src="./icon-more@2x.png" @click.stop="_showLong(index)">
             <div class="card-use" :class="{'card-use-active': item.show}" @click="_cardHolderDoClose(item.id, item.status)">
               <img src="" class="icon card-use-icon" src="./icon-screen@2x.png">
               <span class="card-use-text">{{item.status === 0 ? '屏蔽名片' : '开启名片'}}</span>
@@ -78,22 +80,19 @@
       _getCardList () {
         Card.cardHolderList({ page: this.page }).then((res) => {
           if (res.error === ERR_OK) {
-            let json = webimHandler.initUnread(res.data)
-            console.log(json)
-            // if (res.data.length) {
-            //   res = res.data.map((item) => {
-            //     item.show = false
-            //     return item
-            //   })
-            // } else {
-            //   this.loadMore = false
-            // }
-            // wechat.hideLoading()
-            // if (this.page === 1) {
-            //   this.cardList = res
-            //   return
-            // }
-            // this.cardList = this.cardList.concat(res)
+            if (res.data.length) {
+              wechat.hideLoading()
+              webimHandler.initUnread(res.data).then((json) => {
+                if (this.page === 1) {
+                  this.cardList = json
+                  return
+                }
+                this.cardList = this.cardList.concat(json)
+              })
+            } else {
+              this.loadMore = false
+            }
+            wechat.hideLoading()
           }
         })
       },
@@ -203,6 +202,22 @@
         width: 60px
         height: 60px
         background: $color-white
+        position: relative
+        overflow :visible
+        .content-count
+          position: absolute
+          right: -7.5px
+          top: -7.5px
+          min-width: 15px
+          height: 15px
+          border-radius: 50%
+          background: $color-F9543C
+          border: 1px solid $color-white
+          line-height: 15px
+          font-size: $font-size-12
+          color: $color-white
+          font-family: $font-family-medium
+          text-align: center
       .card-icon-box
         width: 30px
         height: 40px
