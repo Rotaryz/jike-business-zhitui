@@ -14,6 +14,7 @@
   import { ERR_OK } from 'api/config'
   import { Website } from 'api'
   import * as wechat from 'common/js/wechat'
+  // import webimHandler from 'common/js/webim_handler'
 
   export default {
     data () {
@@ -25,6 +26,9 @@
     },
     onLoad () {
       this._getWebsite()
+    },
+    onShow() {
+      console.log(this.$route)
     },
     // 下拉刷新
     onReachBottom () {

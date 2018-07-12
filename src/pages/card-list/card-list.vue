@@ -4,7 +4,7 @@
       <p class="card-come">{{item.created_at}} {{item.from_name}}</p>
       <div class="card-box" v-if="item.employee">
         <img src="./bg-cardholder@2x.png" class="bg-img">
-        <div v-if="item.status !== 0" class="bg-img shield" :class="item.status === 0 ? 'shield-disable' : 'shield'">{{item.status === 1 ? '此名片已屏蔽' : '此名片已删除'}}</div>
+        <div v-if="item.status !== 0" class="bg-img shield" :class="item.status === 2 ? 'shield-disable' : 'shield'">{{item.status === 1 ? '此名片已屏蔽' : '此名片已删除'}}</div>
         <div class="card-left">
           <p class="card-buss">{{item.employee.department}}</p>
           <p class="card-name">{{item.employee.name}}</p>
@@ -14,7 +14,7 @@
         </div>
         <div class="card-right">
           <image src="" class="card-header" :src="item.employee.avatar">
-            <span class="content-count" v-if="item.unReadMsgCount">{{item.unReadMsgCount}}</span>
+            <span class="content-count" v-if="item.unReadMsgCount" @click.stop="_goChat(item)">{{item.unReadMsgCount}}</span>
           </image>
           <div class="card-icon-box">
             <img src="" class="card-icon" src="./icon-more@2x.png" @click.stop="_showLong(index)">
@@ -62,17 +62,30 @@
     },
     methods: {
       ...mapActions(['setCurrentMsg', 'setDescMsg']),
-      _goCard (item) {
-        if (item.status !== 0) {
-          return
-        }
+      _setMsg (item) {
         //  存id
         wx.setStorageSync('EmployeeId', item.employee.id)
         let user = wx.getStorageSync('userInfo')
         let data = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
         this.setCurrentMsg(item)
         this.setDescMsg(data)
+      },
+      _goCard (item) {
+        if (item.status !== 0) {
+          return
+        }
+        this._setMsg(item)
         this.$router.push({ path: '/pages/card/card', isTab: true })
+      },
+      _goChat (item) {
+        if (item.status !== 0) {
+          return
+        }
+        if (item.unReadMsgCount <= 0) {
+          return
+        }
+        this._setMsg(item)
+        this.$router.push('/pages/chat-msg/chat-msg')
       },
       _showLong (index) {
         this.cardList[index].show = !this.cardList[index].show
@@ -203,7 +216,7 @@
         height: 60px
         background: $color-white
         position: relative
-        overflow :visible
+        overflow: visible
         .content-count
           position: absolute
           right: -7.5px
