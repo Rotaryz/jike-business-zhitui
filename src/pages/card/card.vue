@@ -140,13 +140,15 @@
       }
     },
     onShareAppMessage(res) {
-      let title = ` `
+      let title = '我推荐的， 相当靠谱'
+      let fromId = wx.getStorageSync('userInfo').id
       if (res.from === 'button') {
         // 来自页面内转发按钮
       }
       return {
         title: title,
-        path: ''
+        path: `/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.cardMsg.employee.id}`,
+        imageUrl: this.cardMsg.employee.avatar
       }
     },
     async onLoad() {

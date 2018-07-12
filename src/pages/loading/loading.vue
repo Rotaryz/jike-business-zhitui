@@ -16,7 +16,9 @@
   import {ERR_OK} from 'api/config'
   import {mapGetters} from 'vuex'
   import {chackTabPage} from 'common/js/util'
+  import base from 'common/mixins/base'
   export default {
+    mixins: [base],
     name: 'Loading',
     data() {
       return {
@@ -35,11 +37,13 @@
           encryptedData,
           code
         }
-        Im.getToken(data).then((resData) => {
+        Im.getToken(data).then(async (resData) => {
           if (resData.error === ERR_OK) {
             let resMsg = resData.data
             wx.setStorageSync('userInfo', resMsg.customer_info)
             wx.setStorageSync('token', resMsg.access_token)
+            console.log(this)
+            await this.loginIm()
             if (chackTabPage(this.targetPage)) {
               wx.switchTab({url: this.targetPage})
             } else {
