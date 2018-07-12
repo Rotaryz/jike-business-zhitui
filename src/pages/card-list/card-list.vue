@@ -50,6 +50,7 @@
     },
     onShow () {
       this._getCardList()
+      console.log(this.cardList)
       let { employeeId, fromType, fromId } = this.currentMsg
       this.setCurrentMsg({ employeeId, fromType, fromId })
     },

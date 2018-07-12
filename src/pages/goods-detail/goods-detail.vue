@@ -31,7 +31,8 @@
     name: 'goods-detail',
     data () {
       return {
-        goods: {}
+        goods: {},
+        id: null
       }
     },
     computed: {
@@ -49,14 +50,15 @@
     onShareAppMessage() {
       return {
         title: this.goods.title,
-        path: this.goods.image_url
+        imageUrl: this.goods.image_url,
+        path: `/pages/goods-detail/goods-detail?id=${this.id}`
       }
     },
     methods: {
       ...mapActions(['setProductSendMsg']),
       _goods () {
-        let id = this.$route.query.id
-        Website.goodsDetail(id).then((res) => {
+        this.id = this.$route.query.id
+        Website.goodsDetail(this.id).then((res) => {
           if (res.error === ERR_OK) {
             this.goods = res.data
           }
@@ -73,8 +75,8 @@
           desc,
           ext
         }
-        // let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
-        let account = 'philly'
+        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+        // let account = 'philly'
         webimHandler.onSendCustomMsg(option, account).then(res => {
           // console.log(res)
         })

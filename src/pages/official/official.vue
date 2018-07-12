@@ -32,7 +32,7 @@
     onShareAppMessage() {
       return {
         title: this.network.introduction,
-        path: this.network.merchant_image[0].url
+        imageUrl: this.network.merchant_image[0].url
       }
     },
     methods: {
