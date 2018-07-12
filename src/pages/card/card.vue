@@ -11,7 +11,10 @@
     </div>
     <div class="card-box">
       <div class="card-container">
-        <p class="name-tel"><text class="nametxt">{{cardMsg.employee ? cardMsg.employee.name : ''}}</text><text class="tel">{{cardMsg.employee ? cardMsg.employee.business_card_mobile : ''}}</text></p>
+        <p class="name-tel">
+          <text class="nametxt">{{cardMsg.employee ? cardMsg.employee.name : ''}}</text>
+          <text class="tel">{{cardMsg.employee ? cardMsg.employee.business_card_mobile : ''}}</text>
+        </p>
         <p class="job-title">{{cardMsg.employee ? cardMsg.employee.position : ''}}</p>
         <p class="company">{{cardMsg.employee ? cardMsg.employee.department : ''}}</p>
         <div class="sig-txt">
@@ -110,7 +113,7 @@
     </div>
     <div class="bottom-box" :class="showCover ? 'show' : ''">
       <button open-type="share" hover-class="none" class="share-item" @click="behaviorMsg(10009)">发给好友</button>
-      <div class="share-item border-top-1px" @click="qrCordImg">生成图片 保存分享</div>
+      <div class="share-item border-top-1px" @click="_generatePicture">生成图片 保存分享</div>
       <div class="share-item last" @click="closeCover">取消</div>
     </div>
     <canvas canvas-id="target" class="canvas"></canvas>
@@ -118,16 +121,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {Im} from 'api'
-  import {mapGetters} from 'vuex'
+  import { Im } from 'api'
+  import { mapGetters } from 'vuex'
   import * as wechat from 'common/js/wechat'
-  import {ERR_OK} from 'api/config'
+  import { ERR_OK } from 'api/config'
   import webimHandler from 'common/js/webim_handler'
 
   const shareArr = [1007, 1008, 1036, 1044, 1073, 1074]
   const qrCordArr = [1047, 1048, 1049, 1011, 1012, 1013]
   export default {
-    data() {
+    data () {
       return {
         cardMsg: {},
         defaultImg: '../../static/img/pic-none@2x.png',
@@ -136,10 +139,13 @@
         noMore: false,
         isLike: false,
         lickCount: '',
-        showCover: false
+        showCover: false,
+        qrCode: '',
+        mineImage: '',
+        userInfo: wx.getStorageSync('userInfo')
       }
     },
-    onShareAppMessage(res) {
+    onShareAppMessage (res) {
       let title = ` `
       if (res.from === 'button') {
         // 来自页面内转发按钮
@@ -149,7 +155,20 @@
         path: ''
       }
     },
-    async onLoad() {
+    async onShow () {
+      this.userInfo = wx.getStorageSync('userInfo')
+      console.log(this.userInfo.avatar)
+      await Promise.all([
+        wx.downloadFile({
+          url: this.userInfo.avatar,
+          success: (res) => {
+            this.mineImage = res.tempFilePath
+          }
+        }),
+        this._qrCode()
+      ])
+    },
+    async onLoad () {
       let isShare = shareArr.indexOf(this.scene * 1)
       let isQrcord = qrCordArr.indexOf(this.scene * 1)
       let source = isShare !== -1 ? 1 : isQrcord !== -1 ? 2 : 0
@@ -165,7 +184,7 @@
       ])
       wechat.hideLoading()
     },
-    async onReachBottom() {
+    async onReachBottom () {
       if (this.noMore) return
       this.page++
       let res = await Im.getGoodsList(this.page)
@@ -180,18 +199,99 @@
       }
     },
     methods: {
-      toChat() {
+      async _qrCode () {
+        // this.currentMsg.employeeId
+        let res = await Im.getQrCodeImg(this.currentMsg.id)
+        wechat.hideLoading()
+        if (res.error === ERR_OK) {
+          let url = res.data.qrcode
+          wx.downloadFile({
+            url: url,
+            success: (res) => {
+              this.qrCode = res.tempFilePath
+            }
+          })
+        }
+      },
+      _drawImg () {
+        let ctx = wx.createCanvasContext('target')
+        ctx.setFillStyle('#ffffff')
+        ctx.fillRect(100, 0, 1420, 1740)
+        // 姓名
+        ctx.setFillStyle('#20202E')
+        ctx.setFontSize(96)
+        ctx.fillText(this.cardMsg.employee.name, this._getLeft(this.cardMsg.employee.name.length, 96), 150)
+        // ctx.fillText('张三丰', this._getLeft(3, 96), 150) // 调试
+        // 职位
+        ctx.setFillStyle('#20202E')
+        ctx.setFontSize(56)
+        // ctx.fillText(this.cardMsg.employee.name, 20, 20)
+        ctx.fillText('产品经理', this._getLeft(4, 56), 286) // 调试
+        // 公司
+        ctx.setFillStyle('#888888')
+        ctx.setFontSize(56)
+        ctx.fillText(this.cardMsg.employee.department, this._getLeft(this.cardMsg.employee.department.length, 56), 402)
+        // ctx.fillText('广州集客网络科技有限公司', this._getLeft(12, 56), 402) // 调试
+        // 二维码
+        // 线条
+        ctx.setFillStyle('rgba(0, 0, 0, .1)')
+        ctx.beginPath()
+        ctx.setLineWidth(0.5)
+        ctx.moveTo(100, 1496)
+        ctx.lineTo(1620, 1496)
+        ctx.stroke()
+        // 二维码
+        ctx.drawImage(this.qrCode, (1620 - 780) / 2, 488, 780, 780)
+        // 用户头像
+        ctx.drawImage(this.mineImage, 220, 1540, 160, 160)
+        // 用户推荐
+        // 职位
+        ctx.setFillStyle('#20202E')
+        ctx.setFontSize(56)
+        ctx.fillText(`${this.userInfo.nickname}的推荐，相当靠谱`, 418, 1640)
+        // ctx.fillText('产品经理的推荐，相当靠谱', 418, 1640) // 调试
+        ctx.draw()
+        console.log(ctx)
+      },
+      _getLeft (length, size) {
+        let left = (1620 - length * size) / 2
+        return left
+      },
+      _generatePicture () {
+        this._drawImg()
+        wechat.showLoading('生成中')
+        if (this.allPic) {
+          wx.canvasToTempFilePath({
+            x: 0,
+            y: 0,
+            width: 1620,
+            height: 1740,
+            destWidth: 1620,
+            destHeight: 1740,
+            canvasId: 'target',
+            success: (res) => {
+              this.closeCover()
+              wechat.hideLoading()
+              wx.previewImage({ urls: [res.tempFilePath] })
+            },
+            fail () {
+              console.log('no')
+            }
+          })
+        }
+      },
+      toChat () {
         let id = 1
         let url = `/pages/chat-msg/chat-msg?id=${id}`
-        wx.navigateTo({url})
+        wx.navigateTo({ url })
         this.behaviorMsg(50001)
       },
-      toCards() {
+      toCards () {
         wx.reLaunch({
           url: '/pages/card-list/card-list'
         })
       },
-      async getCardDetail(data) {
+      async getCardDetail (data) {
         let res = await Im.getCardDetail(data)
         if (res.error === ERR_OK) {
           this.cardMsg = res.data
@@ -199,20 +299,20 @@
           this.likeCount = this.cardMsg.like_count
         }
       },
-      async getGoodsList() {
+      async getGoodsList () {
         let res = await Im.getGoodsList(this.page, 3)
         if (res.error === ERR_OK) {
           this.goodsList = res.data
         }
       },
-      getQrCordImg() {
+      getQrCordImg () {
         Im.getQrCodeImg(this.currentMsg.id).then((res) => {
           if (res.error === ERR_OK) {
             this.qrCordMsg = res.data
           }
         })
       },
-      async dianzan() {
+      async dianzan () {
         let id = this.cardMsg.id
         let res
         if (this.isLike) {
@@ -232,23 +332,23 @@
         }
         wechat.hideLoading()
       },
-      callPhone() {
+      callPhone () {
         wx.makePhoneCall({
           phoneNumber: this.cardMsg.employee.business_card_mobile
         })
         this.behaviorMsg(10007)
       },
-      copyEmail() {
+      copyEmail () {
         wx.setClipboardData({
           data: this.cardMsg.employee.email
         })
         this.behaviorMsg(10003)
       },
-      showMap() {
-        wx.openLocation({name: this.cardMsg.employee.department, address: this.cardMsg.employee.address})
+      showMap () {
+        wx.openLocation({ name: this.cardMsg.employee.department, address: this.cardMsg.employee.address })
         this.behaviorMsg(10004)
       },
-      addContact() {
+      addContact () {
         wx.addPhoneContact({
           firstName: this.cardMsg.employee.name,
           organization: this.cardMsg.employee.department,
@@ -257,16 +357,13 @@
         })
         this.behaviorMsg(10008)
       },
-      shareCard() {
+      shareCard () {
         this.showCover = true
       },
-      closeCover() {
+      closeCover () {
         this.showCover = false
       },
-      qrCordImg() {
-
-      },
-      behaviorMsg(code, product) {
+      behaviorMsg (code, product) {
         let type = code * 1 === 20005 ? 2 : 1
         /** let descMsg = {
           'flow_id': this.currentMsg.flow_id,
@@ -307,7 +404,10 @@
       ...mapGetters([
         'currentMsg',
         'scene'
-      ])
+      ]),
+      allPic () {
+        return this.mineImage.length && this.qrCode.length
+      }
     }
   }
 </script>
@@ -316,6 +416,12 @@
   @import "~common/stylus/variable"
   @import "~common/stylus/base"
   @import "~common/stylus/mixin"
+  .canvas
+    width: 1620px
+    height: 1740px
+    transform: scale(.25) translateX(200%)
+    transform-origin: left top
+
   .card
     width: 100vw
     overflow: hidden
@@ -356,9 +462,9 @@
       position: relative
       .card-container
         background: $color-white
-        border: 0.5px solid rgba(32,32,46,0.10)
+        border: 0.5px solid rgba(32, 32, 46, 0.10)
         border-radius: 1px
-        box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+        box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
         width: 100%
         padding: 25px 8vw
         display: flex
@@ -393,7 +499,7 @@
             font-size: $font-size-14
             font-family: $font-family-medium
             width: 100%
-            overflow : hidden
+            overflow: hidden
             text-overflow: ellipsis
             display: -webkit-box
             -webkit-line-clamp: 2
@@ -414,7 +520,6 @@
               font-size: $font-size-12
               color: $color-text-88
               font-family: $font-family-medium
-
 
     .title-box
       margin-top: 10px
@@ -449,14 +554,13 @@
         &:before, &:after
           left: 0
 
-
     .msg-container
       padding: 0 15px
       .msg-detail
         background: $color-white
-        border: 0.5px solid rgba(32,32,46,0.10)
+        border: 0.5px solid rgba(32, 32, 46, 0.10)
         border-radius: 1px
-        box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+        box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
         .msg-item
           margin-left: 15px
           height: 60px
@@ -518,13 +622,13 @@
         width: 100%
         overflow: hidden
         background: $color-white
-        box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+        box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
         margin-top: 15px
         .goods-img-box
           width: 100%
           padding-bottom: 63.7%
           position: relative
-          box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+          box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
           .goods-img
             width: 100%
             height: 100%
@@ -598,7 +702,7 @@
       right: 0
       background: $color-F0F2F5
       transition: all .3s
-      box-shadow: 0 -4px 12px 0 rgba(43,43,145,0.07)
+      box-shadow: 0 -4px 12px 0 rgba(43, 43, 145, 0.07)
       .share-item
         width: 100%
         height: 44px

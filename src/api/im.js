@@ -46,11 +46,11 @@ export default {
   },
   // 获取二维码
   getQrCodeImg(id, loading = true) {
-    const url = `/api/customer/card-holder-cancel-like`
+    const url = `/api/customer/card-holder-qrcode`
     const data = {
       card_holder_id: id
     }
-    return request.post(url, data, loading)
+    return request.get(url, data, loading)
   },
   // 聊天记录
   getMsgList(data, loading = true) {
