@@ -1,10 +1,10 @@
 <template>
   <div class="card-list">
-    <div class="card-item" v-if="cardList.length" v-for="(item, index) in cardList" :key="index">
+    <div class="card-item" v-if="cardList.length" v-for="(item, index) in cardList" :key="index" @click="_goCard(item)">
       <p class="card-come">{{item.created_at}} {{item.from_name}}</p>
-      <div class="card-box">
+      <div class="card-box" v-if="item.employee">
         <img src="./bg-cardholder@2x.png" class="bg-img">
-        <div v-if="item.status !== 0" class="bg-img shield">此名片已屏蔽</div>
+        <div v-if="item.status !== 0" class="bg-img shield" :class="item.status === 0 ? 'shield-disable' : 'shield'">{{item.status === 1 ? '此名片已屏蔽' : '此名片已删除'}}</div>
         <div class="card-left">
           <p class="card-buss">{{item.employee.department}}</p>
           <p class="card-name">{{item.employee.name}}</p>
@@ -35,6 +35,8 @@
   import { ERR_OK } from '../../api/config'
   import * as wechat from 'common/js/wechat'
   import Toast from 'components/toast/toast'
+  import { mapActions } from 'vuex'
+  import webimHandler from 'common/js/webim_handler'
 
   export default {
     name: 'card-list',
@@ -57,27 +59,41 @@
       this._getCardList()
     },
     methods: {
+      ...mapActions(['setCurrentMsg', 'setDescMsg']),
+      _goCard (item) {
+        if (item.status !== 0) {
+          return
+        }
+        //  存id
+        wx.setStorageSync('EmployeeId', item.employee.id)
+        let user = wx.getStorageSync('userInfo')
+        let data = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
+        this.setCurrentMsg(item)
+        this.setDescMsg(data)
+        this.$router.push({ path: '/pages/card/card', isTab: true })
+      },
       _showLong (index) {
         this.cardList[index].show = !this.cardList[index].show
       },
       _getCardList () {
         Card.cardHolderList({ page: this.page }).then((res) => {
           if (res.error === ERR_OK) {
-            if (res.data.length) {
-              res = res.data.map((item) => {
-                item.show = false
-                return item
-              })
-            } else {
-              this.loadMore = false
-            }
-            wechat.hideLoading()
-            if (this.page === 1) {
-              this.cardList = res
-              return
-            }
-            this.cardList = this.cardList.concat(res)
-            console.log(this.cardList)
+            let json = webimHandler.initUnread(res.data)
+            console.log(json)
+            // if (res.data.length) {
+            //   res = res.data.map((item) => {
+            //     item.show = false
+            //     return item
+            //   })
+            // } else {
+            //   this.loadMore = false
+            // }
+            // wechat.hideLoading()
+            // if (this.page === 1) {
+            //   this.cardList = res
+            //   return
+            // }
+            // this.cardList = this.cardList.concat(res)
           }
         })
       },
@@ -102,7 +118,6 @@
                 this.$refs.toast.show(res.message)
               }
               wechat.hideLoading()
-              console.log(res)
             })
             break
         }

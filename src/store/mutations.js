@@ -4,17 +4,20 @@ const mutations = {
   // [types.TEST_TYPE](state, test) {
   //   state.test = test
   // },
-  [types.SET_TARGET_PAGE](state, page) {
+  [types.SET_TARGET_PAGE] (state, page) {
     state.targetPage = page
   },
-  [types.SET_CURRENT_MSG](state, info) {
+  [types.SET_CURRENT_MSG] (state, info) {
     state.currentMsg = Object.assign({}, state.currentMsg, info)
   },
-  [types.SET_SCENE](state, scene) {
+  [types.SET_SCENE] (state, scene) {
     state.scene = scene
   },
   [types.SET_NOW_CHAT](state, nowChat) {
     state.nowChat = nowChat
+  },
+  [types.DESC_MSG] (state, descMsg) {
+    state.descMsg = descMsg
   }
 }
 

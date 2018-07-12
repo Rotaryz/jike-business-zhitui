@@ -17,7 +17,6 @@ fly.interceptors.request.use((request) => {
   request.headers['Current-Merchant'] = 10
   // request.headers['Current-Employee'] = wx.getStorageSync('EmployeeId')
   request.headers['Current-Employee'] = 113
-  request.headers['Current-Employee'] = 113
   // request.headers['Current-Employee'] = wx.getStorageSync('EmployeeId')
   return request
 })

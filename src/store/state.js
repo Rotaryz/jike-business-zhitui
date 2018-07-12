@@ -3,7 +3,8 @@ const state = {
   targetPage: null,
   currentMsg: {},
   scene: '',
-  nowChat: []
+  nowChat: [],
+  descMsg: {}
 }
 
 export default state
