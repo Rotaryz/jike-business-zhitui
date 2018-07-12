@@ -2,7 +2,8 @@ const state = {
   // test: {},
   targetPage: null,
   currentMsg: {},
-  scene: ''
+  scene: '',
+  descMsg: {}
 }
 
 export default state
