@@ -60,12 +60,5 @@ module.exports = [
     config: {
       navigationBarTitleText: '产品'
     }
-  },
-  {
-    path: '/pages/dynamic-list/dynamic-list', // 动态列表
-    name: 'DynamicList',
-    config: {
-      navigationBarTitleText: '动态'
-    }
   }
 ]

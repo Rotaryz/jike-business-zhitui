@@ -12,9 +12,11 @@ const COMMON_HEADER = () => {
 
 // 请求拦截器
 fly.interceptors.request.use((request) => {
-  request.headers['Authorization'] = wx.getStorageSync('token')
+  // request.headers['Authorization'] = wx.getStorageSync('token')
+  request.headers['Authorization'] = 'b20915301b40861e6241d3cb1623789e5e30421d'
   request.headers['Current-Merchant'] = 10
-  request.headers['Current-Employee'] = wx.getStorageSync('EmployeeId')
+  request.headers['Current-Employee'] = 113
+  // request.headers['Current-Employee'] = wx.getStorageSync('EmployeeId')
   return request
 })
 
