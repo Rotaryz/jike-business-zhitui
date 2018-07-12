@@ -15,7 +15,7 @@
     <img :src="item.image_url" class="goods-img" v-for="(item, index) in goods.goods_images" :key="index" mode="widthFix">
     <div class="btn">
       <button class="btn-item btn-left" open-type="share">转发给朋友</button>
-      <button class="btn-item btn-right">咨询</button>
+      <button class="btn-item btn-right" @click="_send(goods)">咨询</button>
     </div>
   </div>
 </template>
@@ -24,6 +24,8 @@
   import { ERR_OK } from 'api/config'
   import { Website } from 'api'
   import * as wechat from 'common/js/wechat'
+  import { mapActions, mapGetters } from 'vuex'
+  import webimHandler from 'common/js/webim_handler'
 
   export default {
     name: 'goods-detail',
@@ -32,10 +34,26 @@
         goods: {}
       }
     },
+    computed: {
+      ...mapGetters([
+        'descMsg',
+        'currentMsg'
+      ])
+    },
     onLoad () {
       this._goods()
     },
+    onShow () {
+      this.setProductSendMsg(true)
+    },
+    onShareAppMessage() {
+      return {
+        title: this.goods.title,
+        path: this.goods.image_url
+      }
+    },
     methods: {
+      ...mapActions(['setProductSendMsg']),
       _goods () {
         let id = this.$route.query.id
         Website.goodsDetail(id).then((res) => {
@@ -43,6 +61,36 @@
             this.goods = res.data
           }
           wechat.hideLoading()
+        })
+      },
+      _send (item) {
+        // 产品点击咨询
+        let desc = Object.assign({}, this.descMsg, { type: 1 })
+        let data = ''
+        let ext = '20003'
+        let option = {
+          data,
+          desc,
+          ext
+        }
+        // let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+        let account = 'philly'
+        webimHandler.onSendCustomMsg(option, account).then(res => {
+          // console.log(res)
+        })
+        // {"flow_id":1,"merchant_id":1,"url":"hao123.com","goods_id":1,"title":"标题"}
+        // 发送产品信息
+        let descMsg = Object.assign({}, this.descMsg, { type: 2 })
+        let dataMsg = { url: item.image_url, goods_id: item.id, title: item.title, flow_id: this.descMsg.flow_id, merchant_id: this.descMsg.merchant_id }
+        let extMsg = '20005'
+        let optionMsg = {
+          data: dataMsg,
+          desc: descMsg,
+          ext: extMsg
+        }
+        webimHandler.onSendCustomMsg(optionMsg, account).then(res => {
+          this.$router.push('/pages/chat-msg/chat-msg')
+          // console.log(res)
         })
       }
     }
@@ -53,6 +101,7 @@
   @import '~common/stylus/mixin'
   .goods-detail
     padding-bottom: 60px
+
   .cover-box
     overflow: hidden
     height: 230px

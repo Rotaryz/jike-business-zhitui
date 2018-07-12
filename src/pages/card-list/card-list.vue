@@ -1,6 +1,6 @@
 <template>
   <div class="card-list">
-    <div class="card-item" v-if="cardList.length" v-for="(item, index) in cardList" :key="index" @click="_goCard(item)">
+    <div class="card-item" v-for="(item, index) in cardList" :key="index" @click="_goCard(item)">
       <p class="card-come">{{item.created_at}} {{item.from_name}}</p>
       <div class="card-box" v-if="item.employee">
         <img src="./bg-cardholder@2x.png" class="bg-img">
@@ -18,13 +18,16 @@
           </image>
           <div class="card-icon-box">
             <img src="" class="card-icon" src="./icon-more@2x.png" @click.stop="_showLong(index)">
-            <div class="card-use" :class="{'card-use-active': item.show}" @click="_cardHolderDoClose(item.id, item.status)">
+            <div class="card-use" :class="{'card-use-active': item.show}" @click.stop="_cardHolderDoClose(item.id, item.status)">
               <img src="" class="icon card-use-icon" src="./icon-screen@2x.png">
               <span class="card-use-text">{{item.status === 0 ? '屏蔽名片' : '开启名片'}}</span>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="down-box">
+      <img src="./pic-zanbozc@2x.png" class="sponsor">
     </div>
     <toast ref="toast"></toast>
 
@@ -33,19 +36,15 @@
 
 <script>
   // import { ERR_OK } from 'api/config'
-  import { Card } from 'api'
-  import { ERR_OK } from '../../api/config'
-  import * as wechat from 'common/js/wechat'
   import Toast from 'components/toast/toast'
-  import { mapActions } from 'vuex'
-  import webimHandler from 'common/js/webim_handler'
+  import { mapActions, mapGetters } from 'vuex'
+  // import webimHandler from 'common/js/webim_handler'
 
   export default {
     name: 'card-list',
     data () {
       return {
         page: 1,
-        cardList: [],
         loadMore: true
       }
     },
@@ -60,14 +59,19 @@
       this.page++
       this._getCardList()
     },
+    computed: {
+      ...mapGetters([
+        'cardList'
+      ])
+    },
     methods: {
-      ...mapActions(['setCurrentMsg', 'setDescMsg']),
+      ...mapActions(['setCurrentMsg', 'setDescMsg', 'setCardList', 'getCardList', 'showCardUse', 'cardHolderDoClose']),
       _setMsg (item) {
         //  存id
         wx.setStorageSync('EmployeeId', item.employee.id)
         let user = wx.getStorageSync('userInfo')
         let data = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
-        this.setCurrentMsg(Object.assign({}, item, {employeeId: item.employee.id}))
+        this.setCurrentMsg(Object.assign({}, item, { employeeId: item.employee.id }))
         this.setDescMsg(data)
       },
       _goCard (item) {
@@ -88,52 +92,13 @@
         this.$router.push('/pages/chat-msg/chat-msg')
       },
       _showLong (index) {
-        this.cardList[index].show = !this.cardList[index].show
+        this.showCardUse(index)
       },
       _getCardList () {
-        Card.cardHolderList({ page: this.page }).then((res) => {
-          if (res.error === ERR_OK) {
-            if (!res.data.length) {
-              this.loadMore = false
-              wechat.hideLoading()
-              return
-            }
-            wechat.hideLoading()
-            webimHandler.initUnread(res.data).then((json) => {
-              if (this.page === 1) {
-                this.cardList = json
-                return
-              }
-              this.cardList = this.cardList.concat(json)
-            })
-          }
-          wechat.hideLoading()
-        })
+        this.getCardList(this.page)
       },
       _cardHolderDoClose (id, status) {
-        switch (status) {
-          case 0:
-            Card.cardHolderDoClose({ card_holder_id: id }).then((res) => {
-              if (res.error === ERR_OK) {
-                let index = this.cardList.findIndex(item => item.id === id)
-                this.cardList[index].status = 1
-              }
-              wechat.hideLoading()
-              console.log(res)
-            })
-            break
-          case 1:
-            Card.cardHolderCancelClose({ card_holder_id: id }).then((res) => {
-              if (res.error === ERR_OK) {
-                let index = this.cardList.findIndex(item => item.id === id)
-                this.cardList[index].status = 0
-              } else {
-                this.$refs.toast.show(res.message)
-              }
-              wechat.hideLoading()
-            })
-            break
-        }
+        this.cardHolderDoClose({id, status})
       }
       //   名片详情跳转
     },
@@ -146,7 +111,7 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .card-list
-    height: 100vh
+    min-height: 100vh
     background: $color-background
 
   .icon
@@ -271,5 +236,14 @@
           z-index: 10
           width: 105px
 
+  .down-box
+    width: 100%
+    height: 82.5px
+    display: flex
+    align-items: center
+    justify-content: center
+    .sponsor
+      width: 95px
+      height: 33.5px
 
 </style>
