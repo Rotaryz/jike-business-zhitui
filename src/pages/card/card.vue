@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-top">
       <div class="bc-img-box">
-        <img :src="cardMsg.avatar ? cardMsg.avatar : defaultImg" class="bc-img" mode="aspectFill">
+        <img :src="cardMsg.employee ? cardMsg.employee.avatar ? cardMsg.employee.avatar : defaultImg : defaultImg" class="bc-img" mode="aspectFill">
         <div class="cards-link" @click="toCards">
           <img src="./icon-change@2x.png" class="cards-link-icon">
           <div class="red-dot" v-if="hasElseUnRead"></div>
