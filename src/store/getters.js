@@ -12,3 +12,5 @@ export const productSendMsg = state => state.productSendMsg // 产品列表触�
 export const descMsg = state => state.descMsg // im信息des数据
 
 export const cardList = state => state.cardList // 名片夹列表
+
+export const imIng = state => state.imIng // 是否正在对话(聊天页面)

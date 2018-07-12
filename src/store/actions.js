@@ -90,3 +90,11 @@ export const cardHolderDoClose = ({ commit, state }, obj) => {
 export const setNowChat = ({commit, state}, nowChat) => {
   commit(types.SET_NOW_CHAT, nowChat)
 }
+
+export const setImIng = ({commit, state}, boolean) => {
+  commit(types.SET_IMING, boolean)
+}
+
+export const setCustomCount = ({commit, state}, id) => {
+  commit(types.SET_CUSTOM_COUNT, id)
+}

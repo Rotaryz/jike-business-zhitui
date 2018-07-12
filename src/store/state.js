@@ -6,7 +6,8 @@ const state = {
   descMsg: {},
   productSendMsg: false,
   cardList: [],
-  nowChat: []
+  nowChat: [],
+  imIng: false
 }
 
 export default state

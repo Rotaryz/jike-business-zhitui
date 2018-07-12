@@ -24,6 +24,19 @@ const mutations = {
   },
   [types.CARD_LIST] (state, cardList) {
     state.cardList = cardList
+  },
+  [types.SET_IMING] (state, boolean) {
+    state.imIng = boolean
+  },
+  [types.SET_CUSTOM_COUNT] (state, id) {
+    state.cardList = state.cardList.map((item) => {
+      if (item.employee.im_account === id) {
+        if (item.employee.im_account !== state.currentMsg.employee.im_account) {
+          item.unreadMsgCount++
+        }
+        return item
+      }
+    })
   }
 }
 

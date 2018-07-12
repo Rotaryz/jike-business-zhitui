@@ -1,38 +1,38 @@
 <template>
   <div class="chat">
-    <scroll-view scroll-y class="chat-container" @scrolltoupper="loadMore">
+    <scroll-view scroll-y class="chat-container" :scroll-into-view="scrollId" @scrolltoupper="loadMore">
       <div class="chat-list">
-        <div class="chat-item" v-for="(item, index) in [1, 2, 3, 4]" :key="index">
-          <div class="chat-content" v-if="true">
-            <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJBB7iadHLcSzFWsjVIrdPr0NTNKibn9wJPfDV69Bav3QhNsPUxQKBDibTIqia1qc8UyVhUOgj7WSLj3w/132" class="avatar">
+        <div class="chat-item" v-for="(item, index) in nowChat" :key="index" :id="'item' + index">
+          <div class="chat-content" v-if="item.from_account_id !== imAccount">
+            <img :src="currentMsg.employee.avatar" class="avatar">
             <div class="chat-msg-box other" >
               <div class="arrow-box">
                 <div class="gray-arrow">
                   <div class="white-arrow"></div>
                 </div>
               </div>
-              <div class="chat-msg-content other">{{item.content}}sdsdsdsdsd</div>
+              <div class="chat-msg-content other">{{item.content}}</div>
             </div>
           </div>
-          <div class="chat-content mine" v-if="true">
-            <div class="chat-msg-box mine" v-if="item != 1">
-              <div class="chat-msg-content mine">{{item.content}}dsdsdsdsdsd</div>
+          <div class="chat-content mine" v-if="item.from_account_id === imAccount">
+            <div class="chat-msg-box mine" v-if="item.type * 1 === 1">
+              <div class="chat-msg-content mine">{{item.content}}</div>
               <div class="arrow-box">
                 <div class="green-arrow"></div>
               </div>
             </div>
-            <div class="chat-msg-goods" v-if="item == 1">
+            <div class="chat-msg-goods" v-if="item.type * 1 === 2">
               <img :src="item.url" class="goods-img">
-              <p class="goods-title">sdsdsdsdssdsdsadsadasdsadsadsadasdsdsdsdssasdasdasdas</p>
+              <p class="goods-title">{{item.title}}</p>
             </div>
-            <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJBB7iadHLcSzFWsjVIrdPr0NTNKibn9wJPfDV69Bav3QhNsPUxQKBDibTIqia1qc8UyVhUOgj7WSLj3w/132" class="avatar">
+            <img :src="userInfo.avatar" class="avatar">
           </div>
         </div>
       </div>
     </scroll-view>
     <div class="chat-input border-top-1px">
       <div class="input-container" :class="system === 'android' ? 'android' : ''" ref="textBox">
-        <textarea auto-height="true" fixed="true" class="textarea" maxlength="-1"></textarea>
+        <textarea auto-height="true" fixed="true" class="textarea" maxlength="-1" @input="textInput" :value="inputMsg"></textarea>
       </div>
       <div class="submit-btn" @click="sendMsg">发送</div>
     </div>
@@ -47,19 +47,21 @@
   import {Im} from 'api'
   import {ERR_OK} from 'api/config'
   import wx from 'common/js/wx'
+  import * as wechat from 'common/js/wechat'
   export default {
     name: 'Chat',
     created() {
     },
     mounted() {
       webimHandler.getC2CMsgList(this.currentMsg.nickName) // 消息已读处理
-      this.setUnreadCount(this.currentMsg.nickName) // vuex
+      // this.setUnreadCount(this.currentMsg.nickName) // vuex
     },
     beforeDestroy() {
       this.setCurrent({})
       this.setNowChat([])
     },
     onLoad() {
+      this.setImIng(true)
       let phoneInfo = wx.getSystemInfoSync()
       let system = phoneInfo.system
       if (system.indexOf('IOS') !== -1) {
@@ -67,30 +69,37 @@
       } else {
         this.system = 'android'
       }
-      this.id = 1
+      this.userInfo = wx.getStorageSync('userInfo')
+      this.imAccount = this.userInfo.im_account
       let data = {
         page: this.page,
         limit: 30,
-        customer_id: this.id,
-        employee_id: this.currentMsg.employee.im_account
+        customer_id: this.userInfo.id,
+        employee_id: this.currentMsg.employeeId
       }
       Im.getMsgList(data).then((res) => {
         if (res.error === ERR_OK) {
           let list = res.data.reverse()
           this.setNowChat(list)
+          this.scrollId = 'item' + (list.length - 1)
         }
+        wechat.hideLoading()
       })
+    },
+    onUnload() {
+      this.setImIng(false)
     },
     methods: {
       ...mapActions([
-        'setNowChat'
+        'setNowChat',
+        'setImIng'
       ]),
       loadMore() {
         if (this.noMore) return
         let data = {
           page: this.page++,
           limit: 30,
-          customer_id: this.id,
+          customer_id: this.userInfo.id,
           employee_id: this.currentMsg.employee.im_account
         }
         Im.getMsgList(data).then((res) => {
@@ -104,53 +113,48 @@
               this.page--
             }
           }
+          wechat.hideLoading()
         })
       },
       sendMsg() {
-        console.log(this.inputMsg)
         let value = this.inputMsg.trim()
         if (!value) {
           this.$refs.toast.show('发送消息不能为空')
           return
         }
-        webimHandler.onSendMsg(value, this.id).then(res => {
+        webimHandler.onSendMsg(value, 'philly').then(res => {
           let msg = {
-            from_account_id: this.imInfo.im_account,
+            from_account_id: this.userInfo.im_account,
             avatar: this.userInfo.avatar,
             content: value,
             time: res.MsgTime,
             msgTimeStamp: res.MsgTime,
-            nickName: this.userInfo.nickName,
-            sessionId: this.userInfo.account,
+            nickName: this.userInfo.nickname,
+            sessionId: this.userInfo.im_account,
             unreadMsgCount: 0,
             type: 1
           }
           let list = [...this.nowChat, msg]
           this.setNowChat(list)
-          let addMsg = {
-            text: value,
-            time: res.MsgTime,
-            msgTimeStamp: res.MsgTime,
-            fromAccount: this.id,
-            unreadMsgCount: 0,
-            avatar: msg.avatar
-          }
-          this.addListMsg(addMsg)
           this.inputMsg = ''
+          this.scrollId = 'item' + (list.length - 1)
         }, err => {
           this.$refs.toast.show(err)
         })
+      },
+      textInput(e) {
+        this.inputMsg = e.mp.detail.value
       }
     },
     data() {
       return {
-        textareaDom: '',
-        heightBoxDom: '',
-        txtHeight: '36px',
         inputMsg: '',
         list: [1, 2, 3, 4],
         id: '',
-        page: 1
+        page: 1,
+        userInfo: {},
+        imAccount: '',
+        scrollId: 'item0'
       }
     },
     components: {

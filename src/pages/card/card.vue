@@ -8,99 +8,100 @@
           <div class="red-dot"></div>
         </div>
       </div>
-      <div class="card-box">
-        <div class="card-container">
-          <p class="name-tel"><text class="name">{{cardMsg.employee.name}}</text><text class="tel">{{cardMsg.employee.business_card_mobile}}</text></p>
-          <p class="job-title">{{cardMsg.employee.position}}</p>
-          <p class="company">{{cardMsg.employee.department}}</p>
-          <div class="sig-txt">
-            <p class="sig-text-p" v-if="cardMsg.employee.signature">“ {{cardMsg.employee.signature}} ”</p>
+    </div>
+    <div class="card-box">
+      <div class="card-container">
+        <p class="name-tel"><text class="nametxt">{{cardMsg.employee ? cardMsg.employee.name : ''}}</text><text class="tel">{{cardMsg.employee ? cardMsg.employee.business_card_mobile : ''}}</text></p>
+        <p class="job-title">{{cardMsg.employee ? cardMsg.employee.position : ''}}</p>
+        <p class="company">{{cardMsg.employee ? cardMsg.employee.department : ''}}</p>
+        <div class="sig-txt">
+          <p class="sig-text-p" v-if="cardMsg.employee && cardMsg.employee.signature">“ {{cardMsg.employee ? cardMsg.employee.signature : ''}} ”</p>
+        </div>
+        <div class="btn-box">
+          <div class="btn-item">
+            <img src="./icon-hot@2x.png" class="btn-icon">
+            <div class="item-txt">人气 {{cardMsg.click_count}}</div>
           </div>
-          <div class="btn-box">
-            <div class="btn-item">
-              <img src="./icon-hot@2x.png" class="btn-icon">
-              <div class="item-txt">人气 {{cardMsg.click_count}}</div>
-            </div>
-            <div class="btn-item" @click="dianzan">
-              <img src="./icon-zan@2x.png" class="btn-icon" v-show="!isLike">
-              <img src="./icon-zan_select@2x.png" class="btn-icon" v-show="isLike">
-              <div class="item-txt">点赞 {{likeCount}}</div>
-            </div>
-            <div class="btn-item" @click="shareCard">
-              <img src="./icon-intransit@2x.png" class="btn-icon">
-              <div class="item-txt">转发 {{cardMsg.share_count}}</div>
-            </div>
+          <div class="btn-item" @click="dianzan">
+            <img src="./icon-zan@2x.png" class="btn-icon" v-show="!isLike">
+            <img src="./icon-zan_select@2x.png" class="btn-icon" v-show="isLike">
+            <div class="item-txt">点赞 {{likeCount}}</div>
+          </div>
+          <div class="btn-item" @click="shareCard">
+            <img src="./icon-intransit@2x.png" class="btn-icon">
+            <div class="item-txt">转发 {{cardMsg.share_count}}</div>
           </div>
         </div>
-      </div>
-      <div class="title-box">
-        <div class="left"></div>
-        <div class="title-txt">个人信息</div>
-        <div class="right"></div>
-      </div>
-      <div class="msg-container">
-        <div class="msg-detail">
-          <div class="msg-item border-bottom-1px">
-            <div class="left">
-              <div class="title">手机</div>
-              <div class="text">{{cardMsg.employee.business_card_mobile}}</div>
-            </div>
-            <div class="right">
-              <div class="line"></div>
-              <div class="icon-box" @click="callPhone">
-                <img src="./icon-tel@2x.png" class="icon-img">
-              </div>
-            </div>
-          </div>
-          <div class="msg-item border-bottom-1px">
-            <div class="left">
-              <div class="title">邮箱</div>
-              <div class="text">{{cardMsg.employee.email}}</div>
-            </div>
-            <div class="right">
-              <div class="line"></div>
-              <div class="icon-box" @click="copyEmail">
-                <img src="./icon-email@2x.png" class="icon-img">
-              </div>
-            </div>
-          </div>
-          <div class="msg-item border-bottom-1px">
-            <div class="left">
-              <div class="title">地址</div>
-              <div class="text">{{cardMsg.employee.address}}</div>
-            </div>
-            <div class="right">
-              <div class="line"></div>
-              <div class="icon-box" @click="showMap">
-                <img src="./icon-address@2x.png" class="icon-img">
-              </div>
-            </div>
-          </div>
-          <div class="last-item">
-            <div class="save-btn" @click="addContact">同步到通讯录</div>
-          </div>
-        </div>
-      </div>
-      <div class="title-box">
-        <div class="left"></div>
-        <div class="title-txt">主推产品</div>
-        <div class="right"></div>
-      </div>
-      <div class="goods-list">
-        <div class="goods-item" v-for="(item, index) in goodsList" :key="index">
-          <div class="goods-img-box">
-            <img :src="item.image_url" class="goods-img" mode="aspectFill">
-          </div>
-          <div class="goods-detail">
-            <div class="goods-title">{{item.title}}</div>
-            <div class="goods-desc">{{item.subtitle}}</div>
-          </div>
-        </div>
-      </div>
-      <div class="down-box">
-        <img src="./pic-zanbozc@2x.png" class="sponsor">
       </div>
     </div>
+    <div class="title-box" v-if="cardMsg.employee && (cardMsg.employee.business_card_mobile || cardMsg.employee.email || cardMsg.employee.address)">
+      <div class="left"></div>
+      <div class="title-txt">个人信息</div>
+      <div class="right"></div>
+    </div>
+    <div class="msg-container" v-if="cardMsg.employee && (cardMsg.employee.business_card_mobile || cardMsg.employee.email || cardMsg.employee.address)">
+      <div class="msg-detail">
+        <div class="msg-item border-bottom-1px" v-if="cardMsg.employee && cardMsg.employee.business_card_mobile">
+          <div class="left">
+            <div class="title">手机</div>
+            <div class="text">{{cardMsg.employee ? cardMsg.employee.business_card_mobile : ''}}</div>
+          </div>
+          <div class="right">
+            <div class="line"></div>
+            <div class="icon-box" @click="callPhone">
+              <img src="./icon-tel@2x.png" class="icon-img">
+            </div>
+          </div>
+        </div>
+        <div class="msg-item border-bottom-1px" v-if="cardMsg.employee && cardMsg.employee.email">
+          <div class="left">
+            <div class="title">邮箱</div>
+            <div class="text">{{cardMsg.employee ? cardMsg.employee.email : ''}}</div>
+          </div>
+          <div class="right">
+            <div class="line"></div>
+            <div class="icon-box" @click="copyEmail">
+              <img src="./icon-email@2x.png" class="icon-img">
+            </div>
+          </div>
+        </div>
+        <div class="msg-item border-bottom-1px" v-if="cardMsg.employee && cardMsg.employee.address">
+          <div class="left">
+            <div class="title">地址</div>
+            <div class="text">{{cardMsg.employee ? cardMsg.employee.address : ''}}</div>
+          </div>
+          <div class="right">
+            <div class="line"></div>
+            <div class="icon-box" @click="showMap">
+              <img src="./icon-address@2x.png" class="icon-img">
+            </div>
+          </div>
+        </div>
+        <div class="last-item">
+          <div class="save-btn" @click="addContact">同步到通讯录</div>
+        </div>
+      </div>
+    </div>
+    <div class="title-box">
+      <div class="left"></div>
+      <div class="title-txt">主推产品</div>
+      <div class="right"></div>
+    </div>
+    <div class="goods-list">
+      <div class="goods-item" v-for="(item, index) in goodsList" :key="index">
+        <div class="goods-img-box">
+          <img :src="item.image_url" class="goods-img" mode="aspectFill">
+        </div>
+        <div class="goods-detail">
+          <div class="goods-title">{{item.title}}</div>
+          <div class="goods-desc">{{item.subtitle}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="down-box">
+      <img src="./pic-zanbozc@2x.png" class="sponsor">
+    </div>
+
     <div class="msg-fix-box" @click="toChat">
       <img src="./icon-news@2x.png" class="msg-icon">
       <span class="msg-count">22</span>
@@ -129,7 +130,7 @@
     data() {
       return {
         cardMsg: {},
-        defaultImg: '',
+        defaultImg: '../../static/img/pic-none@2x.png',
         goodsList: [],
         page: 1,
         noMore: false,
@@ -153,7 +154,7 @@
       let isQrcord = qrCordArr.indexOf(this.scene * 1)
       let source = isShare !== -1 ? 1 : isQrcord !== -1 ? 2 : 0
       let data = {
-        employee_id: this.currentMsg.employeeId ? this.currentMsg.employeeId : 252,
+        employee_id: this.currentMsg.employeeId,
         from_type: this.currentMsg.fromType,
         from_id: this.currentMsg.fromId,
         source
@@ -281,7 +282,8 @@
           'card_holder_id': 1,
           'merchant_id': 1,
           'employee_id': 1,
-          'customer_id': 1
+          'customer_id': 1,
+          'customer_name': 'abc'
         }
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()
@@ -294,7 +296,8 @@
           data,
           ext
         }
-        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+        // let account = this.currentMsg.employee.im_account
+        let account = 'philly'
         webimHandler.onSendCustomMsg(option, account).then(res => {
           console.log(res)
         })
@@ -319,17 +322,14 @@
     background: $color-F0F2F5
     position: relative
     .card-top
+      position: relative
       .bc-img-box
         width: 100vw
-        height: 0
-        padding-bottom: 66%
+        height: 66vw
         position: relative
         .bc-img
           width: 100%
           height: 100%
-          position: absolute
-          left: 0
-          top: 0
         .cards-link
           position: absolute
           width: 40px
@@ -348,214 +348,217 @@
             position: absolute
             right: 2px
             top: 1px
-      .card-box
-        padding: 0 15px
-        margin-top: -20vw
-        .card-container
-          background: $color-white
-          border: 0.5px solid rgba(32,32,46,0.10)
-          border-radius: 1px
-          box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
-          width: 100%
-          padding: 25px 8vw
-          display: flex
-          flex-direction: column
-          justify-content: center
-          box-sizing: border-box
-          .name-tel
-            line-height: 28px
-            margin-bottom: 10px
-            .name
-              font-family: $font-family-semibold
-              font-size: 27px
-              letter-spacing: 1.2px
-              margin-right: 28px
-            .tel
-              font-family: $font-family-medium
-              font-size: $font-size-16
-              color: $color-56BA15
-          .job-title
-            font-family: $font-family-medium
-            font-size: $font-size-14
-            margin-bottom: 10px
-          .company
-            font-family: $font-family-medium
-            font-size: $font-size-12
-            color: $color-text-88
-          .sig-txt
-            width: 100%
-            padding: 15px 0
-            .sig-text-p
-              padding: 15px 0
-              font-size: $font-size-14
-              font-family: $font-family-medium
-              width: 100%
-              overflow : hidden
-              text-overflow: ellipsis
-              display: -webkit-box
-              -webkit-line-clamp: 2
-              -webkit-box-orient: vertical
-          .btn-box
-            display: flex
-            justify-content: space-between
-            .btn-item
-              display: flex
-              flex-direction: column
-              justify-content: center
-              align-items: center
-              .btn-icon
-                width: 25px
-                height: 25px
-                margin-bottom: 8px
-              .item-txt
-                font-size: $font-size-12
-                color: $color-text-88
-                font-family: $font-family-medium
-
-
-      .title-box
-        margin-top: 10px
-        height: 46px
+    .card-box
+      width: 100%
+      box-sizing: border-box
+      padding: 0 15px
+      margin-top: -20vw
+      position: relative
+      .card-container
+        background: $color-white
+        border: 0.5px solid rgba(32,32,46,0.10)
+        border-radius: 1px
+        box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+        width: 100%
+        padding: 25px 8vw
         display: flex
-        align-items: center
+        flex-direction: column
         justify-content: center
-        .title-txt
-          font-size: $font-size-16
-          font-family: $font-family-light
-          margin: 0 5px
-        .left, .right
-          width: 15px
-          height: 16px
-          position: relative
-          &:after, &:before
-            position: absolute
-            content: ""
-            display: block
-            height: 1px
-            background: $color-text
-          &:before
-            width: 15px
-            top: 7px
-          &:after
-            width: 10px
-            top: 11px
-        .left
-          &:before, &:after
-            right: 0
-        .right
-          &:before, &:after
-            left: 0
-
-
-      .msg-container
-        padding: 0 15px
-        .msg-detail
-          background: $color-white
-          border: 0.5px solid rgba(32,32,46,0.10)
-          border-radius: 1px
-          box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
-          .msg-item
-            margin-left: 15px
-            height: 60px
+        box-sizing: border-box
+        .name-tel
+          line-height: 28px
+          margin-bottom: 10px
+          .nametxt
+            font-family: $font-family-semibold
+            font-size: 27px
+            letter-spacing: 1.2px
+            margin-right: 28px
+          .tel
+            font-family: $font-family-medium
+            font-size: $font-size-16
+            color: $color-56BA15
+        .job-title
+          font-family: $font-family-medium
+          font-size: $font-size-14
+          margin-bottom: 10px
+        .company
+          font-family: $font-family-medium
+          font-size: $font-size-12
+          color: $color-text-88
+        .sig-txt
+          width: 100%
+          padding: 15px 0
+          .sig-text-p
+            padding: 15px 0
+            font-size: $font-size-14
+            font-family: $font-family-medium
+            width: 100%
+            overflow : hidden
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-line-clamp: 2
+            -webkit-box-orient: vertical
+        .btn-box
+          display: flex
+          justify-content: space-between
+          .btn-item
             display: flex
+            flex-direction: column
+            justify-content: center
             align-items: center
-            .left
+            .btn-icon
+              width: 25px
+              height: 25px
+              margin-bottom: 8px
+            .item-txt
+              font-size: $font-size-12
+              color: $color-text-88
+              font-family: $font-family-medium
+
+
+    .title-box
+      margin-top: 10px
+      height: 46px
+      display: flex
+      align-items: center
+      justify-content: center
+      .title-txt
+        font-size: $font-size-16
+        font-family: $font-family-light
+        margin: 0 5px
+      .left, .right
+        width: 15px
+        height: 16px
+        position: relative
+        &:after, &:before
+          position: absolute
+          content: ""
+          display: block
+          height: 1px
+          background: $color-text
+        &:before
+          width: 15px
+          top: 7px
+        &:after
+          width: 10px
+          top: 11px
+      .left
+        &:before, &:after
+          right: 0
+      .right
+        &:before, &:after
+          left: 0
+
+
+    .msg-container
+      padding: 0 15px
+      .msg-detail
+        background: $color-white
+        border: 0.5px solid rgba(32,32,46,0.10)
+        border-radius: 1px
+        box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+        .msg-item
+          margin-left: 15px
+          height: 60px
+          display: flex
+          align-items: center
+          .left
+            flex: 1
+            overflow: hidden
+            display: flex
+            .title
+              font-size: $font-size-14
+              color: $color-text-88
+              font-family: $font-family-medium
+              margin-right: 20px
+            .text
               flex: 1
               overflow: hidden
-              display: flex
-              .title
-                font-size: $font-size-14
-                color: $color-text-88
-                font-family: $font-family-medium
-                margin-right: 20px
-              .text
-                flex: 1
-                overflow: hidden
-                text-overflow: ellipsis
-                white-space: nowrap
-                font-family: $font-family-medium
-                font-size: $font-size-14
-            .right
-              width: 46px
-              padding-left: 20px
-              display: flex
-              align-items: center
-              .line
-                width: 1px
-                height: 17px
-                background: $color-ccc
-              .icon-box
-                width: 15px
-                height: 15px
-                padding: 15px
-                .icon-img
-                  width: 15px
-                  height: 15px
-          .last-item
-            height: 86px
-            width: 100%
+              text-overflow: ellipsis
+              white-space: nowrap
+              font-family: $font-family-medium
+              font-size: $font-size-14
+          .right
+            width: 46px
+            padding-left: 20px
             display: flex
             align-items: center
-            justify-content: center
-            .save-btn
-              width: 219px
-              height: 40px
-              background: $color-text
-              line-height: 40px
-              text-align: center
-              font-size: $font-size-14
-              color: $color-white
-              font-family: $font-family-medium
-              border-radius: 1px
-              margin-bottom: 15px
-
-      .goods-list
-        padding: 0 15px
-        .goods-item
+            .line
+              width: 1px
+              height: 17px
+              background: $color-ccc
+            .icon-box
+              width: 15px
+              height: 15px
+              padding: 15px
+              .icon-img
+                width: 15px
+                height: 15px
+        .last-item
+          height: 86px
           width: 100%
-          overflow: hidden
-          background: $color-white
-          box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
-          margin-top: 15px
-          .goods-img-box
-            width: 100%
-            padding-bottom: 63.7%
-            position: relative
-            box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
-            .goods-img
-              width: 100%
-              height: 100%
-              position: absolute
-              left: 0
-              top: 0
-          .goods-detail
-            height: 85px
-            padding: 0 15px
-            .goods-title
-              overflow: hidden
-              text-overflow: ellipsis
-              white-space: nowrap
-              font-size: $font-size-16
-              font-family: $font-family-medium
-              padding-top: 15px
-            .goods-desc
-              overflow: hidden
-              text-overflow: ellipsis
-              white-space: nowrap
-              font-size: $font-size-14
-              font-family: $font-family-regular
-              padding-top: 10px
-        .goods-item:first-child
-          margin-top: 0
-      .down-box
+          display: flex
+          align-items: center
+          justify-content: center
+          .save-btn
+            width: 219px
+            height: 40px
+            background: $color-text
+            line-height: 40px
+            text-align: center
+            font-size: $font-size-14
+            color: $color-white
+            font-family: $font-family-medium
+            border-radius: 1px
+            margin-bottom: 15px
+
+    .goods-list
+      padding: 0 15px
+      .goods-item
         width: 100%
-        height: 64.5px
-        display: flex
-        align-items: center
-        justify-content: center
-        .sponsor
-          width: 95px
-          height: 33.5px
+        overflow: hidden
+        background: $color-white
+        box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+        margin-top: 15px
+        .goods-img-box
+          width: 100%
+          padding-bottom: 63.7%
+          position: relative
+          box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
+          .goods-img
+            width: 100%
+            height: 100%
+            position: absolute
+            left: 0
+            top: 0
+        .goods-detail
+          height: 85px
+          padding: 0 15px
+          .goods-title
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
+            font-size: $font-size-16
+            font-family: $font-family-medium
+            padding-top: 15px
+          .goods-desc
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
+            font-size: $font-size-14
+            font-family: $font-family-regular
+            padding-top: 10px
+      .goods-item:first-child
+        margin-top: 0
+    .down-box
+      width: 100%
+      height: 64.5px
+      display: flex
+      align-items: center
+      justify-content: center
+      .sponsor
+        width: 95px
+        height: 33.5px
 
     .msg-fix-box
       position: fixed
@@ -586,7 +589,7 @@
       position: absolute
       left: 0
       top: 0
-      background: rgba(255, 255, 255, 0)
+      background: rgba(32, 32, 46, 0.8)
     .bottom-box
       position: fixed
       z-index: 100

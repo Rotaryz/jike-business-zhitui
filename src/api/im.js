@@ -54,7 +54,7 @@ export default {
   },
   // 聊天记录
   getMsgList(data, loading = true) {
-    const url = `/api/employee/message-logs`
+    const url = `/api/customer/message-logs`
     return request.post(url, data, loading)
   }
 }
