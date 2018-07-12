@@ -159,18 +159,6 @@
     },
     async onShow () {
       this.setProductSendMsg(false)
-      this.userInfo = wx.getStorageSync('userInfo')
-      await Promise.all([
-        wx.downloadFile({
-          url: this.userInfo.avatar,
-          success: (res) => {
-            this.mineImage = res.tempFilePath
-          }
-        }),
-        this._qrCode()
-      ])
-    },
-    async onLoad () {
       let isShare = shareArr.indexOf(this.scene * 1)
       let isQrcord = qrCordArr.indexOf(this.scene * 1)
       let source = isShare !== -1 ? 1 : isQrcord !== -1 ? 2 : 0
@@ -180,9 +168,17 @@
         from_id: this.currentMsg.fromId,
         source
       }
+      this.userInfo = wx.getStorageSync('userInfo')
       await Promise.all([
         this.getCardDetail(data),
-        this.getGoodsList()
+        this.getGoodsList(),
+        wx.downloadFile({
+          url: this.userInfo.avatar,
+          success: (res) => {
+            this.mineImage = res.tempFilePath
+          }
+        }),
+        this._qrCode()
       ])
       wechat.hideLoading()
     },
@@ -326,6 +322,7 @@
           if (res.error === ERR_OK) {
             this.isLike = false
             this.likeCount--
+            wechat.hideLoading()
             this.behaviorMsg(10002)
           }
         } else {
@@ -333,10 +330,10 @@
           if (res.error === ERR_OK) {
             this.isLike = true
             this.likeCount++
+            wechat.hideLoading()
             this.behaviorMsg(10001)
           }
         }
-        wechat.hideLoading()
       },
       callPhone () {
         wx.makePhoneCall({
@@ -697,7 +694,7 @@
       right: 0
       background: $color-F0F2F5
       transition: all .3s
-      box-shadow: 0 -4px 12px 0 rgba(43, 43, 145, 0.07)
+      box-shadow: 0 -4px 12px 0 rgba(43,43,145,0.07)
       .share-item
         width: 100%
         height: 44px
