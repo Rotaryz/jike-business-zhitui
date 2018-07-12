@@ -71,7 +71,7 @@
 
             let options = {
               'isAccessFormalEnv': true, // 是否访问正式环境，默认访问正式，选填
-              'isLogOn': false// 是否开启控制台打印日志,默认开启，选填
+              'isLogOn': true// 是否开启控制台打印日志,默认开启，选填
             }
 
             let avatar = userInfo.avatar

@@ -190,8 +190,6 @@
             overflow: hidden
             display: flex
             .chat-msg-content
-              flex: 1
-              overflow: hidden
               padding: 13px 15px
               border-radius: 8px
               line-height: 19px
