@@ -29,6 +29,12 @@
     onLoad () {
       this._getWebsite()
     },
+    onShareAppMessage() {
+      return {
+        title: this.network.introduction,
+        path: this.network.merchant_image[0].url
+      }
+    },
     methods: {
       _getWebsite () {
         Website.website().then((res) => {

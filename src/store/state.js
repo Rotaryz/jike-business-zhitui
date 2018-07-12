@@ -3,7 +3,9 @@ const state = {
   targetPage: null,
   currentMsg: {},
   scene: '',
-  descMsg: {}
+  descMsg: {},
+  productSendMsg: false,
+  cardList: []
 }
 
 export default state

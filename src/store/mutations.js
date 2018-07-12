@@ -15,6 +15,12 @@ const mutations = {
   },
   [types.DESC_MSG] (state, descMsg) {
     state.descMsg = descMsg
+  },
+  [types.PRODUCT_SEND_MSG] (state, productSendMsg) {
+    state.productSendMsg = productSendMsg
+  },
+  [types.CARD_LIST] (state, cardList) {
+    state.cardList = cardList
   }
 }
 
