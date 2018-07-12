@@ -2,7 +2,7 @@
   <div class="card-list">
     <div class="card-item" v-if="cardList.length" v-for="(item, index) in cardList" :key="index">
       <p class="card-come">{{item.created_at}} {{item.from_name}}</p>
-      <div class="card-box">
+      <div class="card-box" v-if="item.employee">
         <img src="./bg-cardholder@2x.png" class="bg-img">
         <div v-if="item.status !== 0" class="bg-img shield">此名片已屏蔽</div>
         <div class="card-left">
@@ -102,7 +102,6 @@
                 this.$refs.toast.show(res.message)
               }
               wechat.hideLoading()
-              console.log(res)
             })
             break
         }
