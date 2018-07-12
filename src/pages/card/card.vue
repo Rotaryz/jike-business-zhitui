@@ -5,7 +5,7 @@
         <img :src="cardMsg.avatar ? cardMsg.avatar : defaultImg" class="bc-img" mode="aspectFill">
         <div class="cards-link" @click="toCards">
           <img src="./icon-change@2x.png" class="cards-link-icon">
-          <div class="red-dot"></div>
+          <div class="red-dot" v-if="hasElseUnRead"></div>
         </div>
       </div>
     </div>
@@ -104,7 +104,7 @@
 
     <div class="msg-fix-box" @click="toChat">
       <img src="./icon-news@2x.png" class="msg-icon">
-      <span class="msg-count">22</span>
+      <span class="msg-count" v-if="currentUnRead">{{currentUnRead}}</span>
     </div>
     <div class="cover" v-show="showCover" @click="closeCover">
     </div>
@@ -267,24 +267,7 @@
 
       },
       behaviorMsg(code, product) {
-        let type = code * 1 === 20005 ? 2 : 1
-        /** let descMsg = {
-          'flow_id': this.currentMsg.flow_id,
-          'type': type,
-          'card_holder_id': this.currentMsg.id,
-          'merchant_id': wx.getStorageSync('merchantId'),
-          'employee_id': this.currentMsg.employee.id,
-          'customer_id': wx.getStorageSync('userInfo').id
-        }**/
-        let descMsg = {
-          'flow_id': 1,
-          'type': type,
-          'card_holder_id': 1,
-          'merchant_id': 1,
-          'employee_id': 1,
-          'customer_id': 1,
-          'customer_name': 'abc'
-        }
+        let descMsg = Object.assign({}, this.descMsg, {type: 1})
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()
         let data = ''
@@ -296,8 +279,7 @@
           data,
           ext
         }
-        // let account = this.currentMsg.employee.im_account
-        let account = 'philly'
+        let account = this.currentMsg.employee.im_account
         webimHandler.onSendCustomMsg(option, account).then(res => {
           console.log(res)
         })
@@ -306,7 +288,10 @@
     computed: {
       ...mapGetters([
         'currentMsg',
-        'scene'
+        'scene',
+        'currentUnRead',
+        'hasElseUnRead',
+        'descMsg'
       ])
     }
   }

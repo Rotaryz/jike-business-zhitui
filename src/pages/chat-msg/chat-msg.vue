@@ -53,7 +53,7 @@
     created() {
     },
     mounted() {
-      webimHandler.getC2CMsgList(this.currentMsg.nickName) // 消息已读处理
+      webimHandler.getC2CMsgList(this.currentMsg.employee.im_account) // 消息已读处理
       // this.setUnreadCount(this.currentMsg.nickName) // vuex
     },
     beforeDestroy() {
