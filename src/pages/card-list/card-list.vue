@@ -16,10 +16,10 @@
           <image src="" class="card-header" :src="item.employee.avatar">
             <span class="content-count" v-if="item.unReadMsgCount" @click.stop="_goChat(item)">{{item.unReadMsgCount}}</span>
           </image>
-          <div class="card-icon-box">
-            <img src="" class="card-icon" src="./icon-more@2x.png" @click.stop="_showLong(index)">
+          <div class="card-icon-box" @click.stop="_showLong(index)">
+            <img class="card-icon" :src="item.status === 1 ? '/static/icon-more_white@2x.png' : '/static/icon-more@2x.png'">
             <div class="card-use" :class="{'card-use-active': item.show}" @click.stop="_cardHolderDoClose(item.id, item.status)">
-              <img src="" class="icon card-use-icon" src="./icon-screen@2x.png">
+              <img class="icon card-use-icon" src="./icon-screen@2x.png">
               <span class="card-use-text">{{item.status === 0 ? '屏蔽名片' : '开启名片'}}</span>
             </div>
           </div>
@@ -101,7 +101,7 @@
         this.getCardList(this.page)
       },
       _cardHolderDoClose (id, status) {
-        this.cardHolderDoClose({id, status})
+        this.cardHolderDoClose({ id, status, vue: this })
       }
       //   名片详情跳转
     },
@@ -201,14 +201,14 @@
           font-family: $font-family-medium
           text-align: center
       .card-icon-box
-        width: 30px
+        width: 45px
         height: 40px
-        bottom: 0
-        right: 0
+        bottom: -15px
+        right: -15px
         display: flex
         z-index: 10
-        justify-content: flex-end
-        align-items: flex-end
+        justify-content: center
+        align-items: center
         position: absolute
         .card-icon
           width: 20px

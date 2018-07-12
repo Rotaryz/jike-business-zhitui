@@ -36,6 +36,7 @@ export const getCardList = ({ commit, state }, page) => {
       wechat.hideLoading()
       res = res.data.map((item) => {
         item.show = false
+        item.unReadMsgCount = 0
         return item
       })
       if (page === 1) {
@@ -59,29 +60,34 @@ export const showCardUse = ({ commit, state }, index) => {
 export const cardHolderDoClose = ({ commit, state }, obj) => {
   let id = obj.id
   let status = obj.status
+  let _this = obj.vue
   let arr = JSON.parse(JSON.stringify(state.cardList))
   console.log(status)
   switch (status) {
     case 0:
       Card.cardHolderDoClose({ card_holder_id: id }).then((res) => {
+        wechat.hideLoading()
         if (res.error === ERR_OK) {
           let index = arr.findIndex(item => item.id === id)
           arr[index].status = 1
           arr[index].show = false
           commit(types.CARD_LIST, arr)
+          return
         }
-        wechat.hideLoading()
+        _this.$refs.toast.show(res.message)
       })
       break
     case 1:
       Card.cardHolderCancelClose({ card_holder_id: id }).then((res) => {
+        wechat.hideLoading()
         if (res.error === ERR_OK) {
           let index = arr.findIndex(item => item.id === id)
           arr[index].status = 0
           arr[index].show = false
           commit(types.CARD_LIST, arr)
+          return
         }
-        wechat.hideLoading()
+        _this.$refs.toast.show(res.message)
       })
       break
   }
