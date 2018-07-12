@@ -5,7 +5,7 @@
     <div class="loading-txt">请微信授权登录后查看销售员名片</div>
     <div class="loading-txt">你的信息和数据将受到保护</div>
     <div class="btn-box">
-      <button open-type="getUserInfo" lang="zh_CN" @getuserinfo="onGotUserInfo" class="loading-btn">微信授权登录</button>
+      <button open-type="getUserInfo" lang="zh_CN" @getuserinfo="onGotUserInfo" class="loading-btn" hover-class="none">微信授权登录</button>
     </div>
   </div>
 </template>
@@ -97,4 +97,6 @@
         font-size: $font-size-14
         color: $color-white
         font-family: $font-family-regular
+        &:before, &:after
+          border: 0 none
 </style>

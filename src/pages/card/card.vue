@@ -2,35 +2,32 @@
   <div class="card">
     <div class="card-top">
       <div class="bc-img-box">
-        <img src="https://picsum.photos/800/800/?image=534" class="bc-img" mode="aspectFill">
-        <div class="cards-link">
+        <img :src="cardMsg.avatar ? cardMsg.avatar : defaultImg" class="bc-img" mode="aspectFill">
+        <div class="cards-link" @click="toCards">
           <img src="./icon-change@2x.png" class="cards-link-icon">
         </div>
       </div>
       <div class="card-box">
-        <div class="card-box-content">
-          <img src="./bg-cardholder@2x.png" class="card-box-bc">
-          <div class="card-container">
-            <p class="name-tel"><text class="name">张三丰</text><text class="tel">15920571999</text></p>
-            <p class="job-title">产品经理</p>
-            <p class="company">广州集客网络科技有限公司</p>
-            <div class="sig-txt">
-              <p class="sig-text-p">“ 生活，总是把我们打磨的光鲜圆润 ”</p>
+        <div class="card-container">
+          <p class="name-tel"><text class="name">{{cardMsg.employee.name}}</text><text class="tel">{{cardMsg.employee.business_card_mobile}}</text></p>
+          <p class="job-title">{{cardMsg.employee.position}}</p>
+          <p class="company">{{cardMsg.employee.department}}</p>
+          <div class="sig-txt">
+            <p class="sig-text-p" v-if="cardMsg.employee.signature">“ {{cardMsg.employee.signature}} ”</p>
+          </div>
+          <div class="btn-box">
+            <div class="btn-item">
+              <img src="./icon-hot@2x.png" class="btn-icon">
+              <div class="item-txt">人气 {{cardMsg.click_count}}</div>
             </div>
-            <div class="btn-box">
-              <div class="btn-item">
-                <img src="./icon-hot@2x.png" class="btn-icon">
-                <div class="item-txt">人气 856</div>
-              </div>
-              <div class="btn-item">
-                <img src="./icon-zan@2x.png" class="btn-icon" v-if="false">
-                <img src="./icon-zan_select@2x.png" class="btn-icon">
-                <div class="item-txt">点赞 856</div>
-              </div>
-              <div class="btn-item">
-                <img src="./icon-intransit@2x.png" class="btn-icon">
-                <div class="item-txt">转发 856</div>
-              </div>
+            <div class="btn-item" @click="dianzan">
+              <img src="./icon-zan@2x.png" class="btn-icon" v-show="!isLike">
+              <img src="./icon-zan_select@2x.png" class="btn-icon" v-show="isLike">
+              <div class="item-txt">点赞 {{likeCount}}</div>
+            </div>
+            <div class="btn-item" @click="shareCard">
+              <img src="./icon-intransit@2x.png" class="btn-icon">
+              <div class="item-txt">转发 {{cardMsg.share_count}}</div>
             </div>
           </div>
         </div>
@@ -45,11 +42,11 @@
           <div class="msg-item border-bottom-1px">
             <div class="left">
               <div class="title">手机</div>
-              <div class="text">456451232121</div>
+              <div class="text">{{cardMsg.employee.business_card_mobile}}</div>
             </div>
             <div class="right">
               <div class="line"></div>
-              <div class="icon-box">
+              <div class="icon-box" @click="callPhone">
                 <img src="./icon-tel@2x.png" class="icon-img">
               </div>
             </div>
@@ -57,11 +54,11 @@
           <div class="msg-item border-bottom-1px">
             <div class="left">
               <div class="title">邮箱</div>
-              <div class="text">45645421565@qq.com</div>
+              <div class="text">{{cardMsg.employee.email}}</div>
             </div>
             <div class="right">
               <div class="line"></div>
-              <div class="icon-box">
+              <div class="icon-box" @click="copyEmail">
                 <img src="./icon-email@2x.png" class="icon-img">
               </div>
             </div>
@@ -69,17 +66,17 @@
           <div class="msg-item border-bottom-1px">
             <div class="left">
               <div class="title">地址</div>
-              <div class="text">交话费卡积分兑换就恢复尽快发货单放机和的京东方金凤凰</div>
+              <div class="text">{{cardMsg.employee.address}}</div>
             </div>
             <div class="right">
               <div class="line"></div>
-              <div class="icon-box">
+              <div class="icon-box" @click="showMap">
                 <img src="./icon-address@2x.png" class="icon-img">
               </div>
             </div>
           </div>
           <div class="last-item">
-            <div class="save-btn">同步到通讯录</div>
+            <div class="save-btn" @click="addContact">同步到通讯录</div>
           </div>
         </div>
       </div>
@@ -89,13 +86,13 @@
         <div class="right"></div>
       </div>
       <div class="goods-list">
-        <div class="goods-item">
+        <div class="goods-item" v-for="(item, index) in goodsList" :key="index">
           <div class="goods-img-box">
-            <img src="https://picsum.photos/800/800/?image=522" class="goods-img" mode="aspectFill">
+            <img :src="item.image_url" class="goods-img" mode="aspectFill">
           </div>
           <div class="goods-detail">
-            <div class="goods-title">较好的较好的复旦复华</div>
-            <div class="goods-desc">还记得附件的防守对方换届大会较好的粉红色接口对接都发火</div>
+            <div class="goods-title">{{item.title}}</div>
+            <div class="goods-desc">{{item.subtitle}}</div>
           </div>
         </div>
       </div>
@@ -107,6 +104,14 @@
       <img src="./icon-news@2x.png" class="msg-icon">
       <span class="msg-count">22</span>
     </div>
+    <div class="cover" v-show="showCover" @click="closeCover">
+    </div>
+    <div class="bottom-box" :class="showCover ? 'show' : ''">
+      <button open-type="share" hover-class="none" class="share-item" @click="behaviorMsg(10009)">发给好友</button>
+      <div class="share-item border-top-1px" @click="qrCordImg">生成图片 保存分享</div>
+      <div class="share-item last" @click="closeCover">取消</div>
+    </div>
+    <canvas canvas-id="target" class="canvas"></canvas>
   </div>
 </template>
 
@@ -114,20 +119,40 @@
   import {Im} from 'api'
   import {mapGetters} from 'vuex'
   import * as wechat from 'common/js/wechat'
+  import {ERR_OK} from 'api/config'
+  import webimHandler from 'common/js/webim_handler'
+
   const shareArr = [1007, 1008, 1036, 1044, 1073, 1074]
   const qrCordArr = [1047, 1048, 1049, 1011, 1012, 1013]
   export default {
     data() {
       return {
+        cardMsg: {},
+        defaultImg: '',
+        goodsList: [],
+        page: 1,
+        noMore: false,
+        isLike: false,
+        lickCount: '',
+        showCover: false
+      }
+    },
+    onShareAppMessage(res) {
+      let title = ` `
+      if (res.from === 'button') {
+        // 来自页面内转发按钮
+      }
+      return {
+        title: title,
+        path: ''
       }
     },
     async onLoad() {
-      console.log(this.scene)
       let isShare = shareArr.indexOf(this.scene * 1)
       let isQrcord = qrCordArr.indexOf(this.scene * 1)
       let source = isShare !== -1 ? 1 : isQrcord !== -1 ? 2 : 0
       let data = {
-        employee_id: this.currentMsg.employeeId,
+        employee_id: this.currentMsg.employeeId ? this.currentMsg.employeeId : 252,
         from_type: this.currentMsg.fromType,
         from_id: this.currentMsg.fromId,
         source
@@ -138,19 +163,139 @@
       ])
       wechat.hideLoading()
     },
+    async onReachBottom() {
+      if (this.noMore) return
+      this.page++
+      let res = await Im.getGoodsList(this.page)
+      wechat.hideLoading()
+      if (res.error === ERR_OK) {
+        let resData = res.data
+        if (!resData.length) {
+          this.noMore = true
+          this.page--
+        }
+        this.goodsList = [...this.goodsList, ...resData]
+      }
+    },
     methods: {
       toChat() {
         let id = 1
         let url = `/pages/chat-msg/chat-msg?id=${id}`
         wx.navigateTo({url})
       },
+      toCards() {
+        wx.reLaunch({
+          url: '/pages/card-list/card-list'
+        })
+      },
       async getCardDetail(data) {
         let res = await Im.getCardDetail(data)
-        console.log(res, 1)
+        if (res.error === ERR_OK) {
+          this.cardMsg = res.data
+          this.isLike = this.cardMsg.is_like
+          this.likeCount = this.cardMsg.like_count
+        }
       },
       async getGoodsList() {
-        let res = await Im.getGoodsList()
-        console.log(res, 2)
+        let res = await Im.getGoodsList(this.page, 3)
+        if (res.error === ERR_OK) {
+          this.goodsList = res.data
+        }
+      },
+      getQrCordImg() {
+        Im.getQrCodeImg(this.currentMsg.id).then((res) => {
+          if (res.error === ERR_OK) {
+            this.qrCordMsg = res.data
+          }
+        })
+      },
+      async dianzan() {
+        let id = this.cardMsg.id
+        let res
+        if (this.isLike) {
+          res = await Im.clearZan(id)
+          if (res.error === ERR_OK) {
+            this.isLike = false
+            this.likeCount--
+            this.behaviorMsg(10002)
+          }
+        } else {
+          res = await Im.lickZan(id)
+          if (res.error === ERR_OK) {
+            this.isLike = true
+            this.likeCount++
+            this.behaviorMsg(10001)
+          }
+        }
+        wechat.hideLoading()
+      },
+      callPhone() {
+        wx.makePhoneCall({
+          phoneNumber: this.cardMsg.employee.business_card_mobile
+        })
+        this.behaviorMsg(10007)
+      },
+      copyEmail() {
+        wx.setClipboardData({
+          data: this.cardMsg.employee.email
+        })
+        this.behaviorMsg(10003)
+      },
+      showMap() {
+        wx.openLocation({name: this.cardMsg.employee.department, address: this.cardMsg.employee.address})
+        this.behaviorMsg(10004)
+      },
+      addContact() {
+        wx.addPhoneContact({
+          firstName: this.cardMsg.employee.name,
+          organization: this.cardMsg.employee.department,
+          title: this.cardMsg.employee.position,
+          mobilePhoneNumber: this.cardMsg.employee.business_card_mobile
+        })
+        this.behaviorMsg(10008)
+      },
+      shareCard() {
+        this.showCover = true
+      },
+      closeCover() {
+        this.showCover = false
+      },
+      qrCordImg() {
+
+      },
+      behaviorMsg(code, product) {
+        let type = code * 1 === 20005 ? 2 : 1
+        /** let descMsg = {
+          'flow_id': this.currentMsg.flow_id,
+          'type': type,
+          'card_holder_id': this.currentMsg.id,
+          'merchant_id': wx.getStorageSync('merchantId'),
+          'employee_id': this.currentMsg.employee.id,
+          'customer_id': wx.getStorageSync('userInfo').id
+        }**/
+        let descMsg = {
+          'flow_id': 1,
+          'type': type,
+          'card_holder_id': 1,
+          'merchant_id': 1,
+          'employee_id': 1,
+          'customer_id': 1
+        }
+        let desc = JSON.stringify(descMsg)
+        let ext = code.toString()
+        let data = ''
+        if (code * 1 === 20005) {
+          data = product
+        }
+        let option = {
+          desc,
+          data,
+          ext
+        }
+        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+        webimHandler.onSendCustomMsg(option, account).then(res => {
+          console.log(res)
+        })
       }
     },
     computed: {
@@ -170,6 +315,7 @@
     width: 100vw
     overflow: hidden
     background: $color-F0F2F5
+    position: relative
     .card-top
       .bc-img-box
         width: 100vw
@@ -194,81 +340,66 @@
       .card-box
         padding: 0 15px
         margin-top: -20vw
-        .card-box-content
-          height: 0
-          padding-bottom: 73.9%
-          position: relative
+        .card-container
           background: $color-white
           border: 0.5px solid rgba(32,32,46,0.10)
           border-radius: 1px
           box-shadow: 0 4px 12px 0 rgba(43,43,145,0.07)
-          .card-box-bc
-            position: absolute
-            left: 0
-            top: 0
-            width: 100%
-            height: 100%
-          .card-container
-            position: absolute
-            left: 0
-            top: 0
-            width: 100%
-            height: 100%
-            padding: 0 8vw
-            display: flex
-            flex-direction: column
-            justify-content: center
-            box-sizing: border-box
-            .name-tel
-              line-height: 28px
-              margin-bottom: 8px
-              .name
-                font-family: $font-family-semibold
-                font-size: 27px
-                letter-spacing: 1.2px
-                margin-right: 28px
-              .tel
-                font-family: $font-family-medium
-                font-size: $font-size-16
-                color: $color-56BA15
-            .job-title
+          width: 100%
+          padding: 25px 8vw
+          display: flex
+          flex-direction: column
+          justify-content: center
+          box-sizing: border-box
+          .name-tel
+            line-height: 28px
+            margin-bottom: 10px
+            .name
+              font-family: $font-family-semibold
+              font-size: 27px
+              letter-spacing: 1.2px
+              margin-right: 28px
+            .tel
               font-family: $font-family-medium
+              font-size: $font-size-16
+              color: $color-56BA15
+          .job-title
+            font-family: $font-family-medium
+            font-size: $font-size-14
+            margin-bottom: 10px
+          .company
+            font-family: $font-family-medium
+            font-size: $font-size-12
+            color: $color-text-88
+          .sig-txt
+            width: 100%
+            padding: 15px 0
+            .sig-text-p
+              padding: 15px 0
               font-size: $font-size-14
-              margin-bottom: 8px
-            .company
               font-family: $font-family-medium
-              font-size: $font-size-12
-              color: $color-text-88
-            .sig-txt
               width: 100%
-              height: 21vw
+              overflow : hidden
+              text-overflow: ellipsis
+              display: -webkit-box
+              -webkit-line-clamp: 2
+              -webkit-box-orient: vertical
+          .btn-box
+            display: flex
+            justify-content: space-between
+            .btn-item
               display: flex
+              flex-direction: column
+              justify-content: center
               align-items: center
-              .sig-text-p
-                font-size: $font-size-14
+              .btn-icon
+                width: 25px
+                height: 25px
+                margin-bottom: 8px
+              .item-txt
+                font-size: $font-size-12
+                color: $color-text-88
                 font-family: $font-family-medium
-                width: 100%
-                overflow : hidden
-                text-overflow: ellipsis
-                display: -webkit-box
-                -webkit-line-clamp: 2
-                -webkit-box-orient: vertical
-            .btn-box
-              display: flex
-              justify-content: space-between
-              .btn-item
-                display: flex
-                flex-direction: column
-                justify-content: center
-                align-items: center
-                .btn-icon
-                  width: 25px
-                  height: 25px
-                  margin-bottom: 8px
-                .item-txt
-                  font-size: $font-size-12
-                  color: $color-text-88
-                  font-family: $font-family-medium
 
 
       .title-box
@@ -438,4 +569,41 @@
         color: $color-white
         font-family: $font-family-medium
         text-align: center
+    .cover
+      width: 100%
+      height: 100%
+      position: absolute
+      left: 0
+      top: 0
+      background: rgba(255, 255, 255, 0)
+    .bottom-box
+      position: fixed
+      z-index: 100
+      left: 0
+      bottom: -100%
+      right: 0
+      background: $color-F0F2F5
+      transition: all .3s
+      box-shadow: 0 -4px 12px 0 rgba(43,43,145,0.07)
+      .share-item
+        width: 100%
+        height: 44px
+        text-align: center
+        line-height: 44px
+        font-size: $font-size-14
+        font-family: $font-family-regular
+        background-color: $color-white
+        border: 0 none
+        padding: 0
+        border-radius: 0
+        &:before, &:after
+          border: 0 none
+      .last
+        margin-top: 10px
+    .bottom-box.show
+      bottom: 0
+    .canvas
+      position: absolute
+      left: 2000px
+      top: 2000px
 </style>
