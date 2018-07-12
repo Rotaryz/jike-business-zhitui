@@ -5,7 +5,9 @@ const state = {
   scene: '',
   descMsg: {},
   productSendMsg: false,
-  cardList: []
+  cardList: [],
+  nowChat: [],
+  imIng: false
 }
 
 export default state
