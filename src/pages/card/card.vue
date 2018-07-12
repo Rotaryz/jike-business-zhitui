@@ -171,7 +171,10 @@
       this.userInfo = wx.getStorageSync('userInfo')
       await Promise.all([
         this.getCardDetail(data),
-        this.getGoodsList(),
+        this.getGoodsList()
+      ])
+      wechat.hideLoading()
+      await Promise.all([
         wx.downloadFile({
           url: this.userInfo.avatar,
           success: (res) => {
@@ -180,7 +183,6 @@
         }),
         this._qrCode()
       ])
-      wechat.hideLoading()
     },
     async onReachBottom () {
       if (this.noMore) return

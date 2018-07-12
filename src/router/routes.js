@@ -67,12 +67,5 @@ module.exports = [
       navigationBarTitleText: '授权',
       backgroundColor: '#F0F2F5'
     }
-  },
-  {
-    path: '/pages/goods-detail/goods-detail', // 产品详情
-    name: 'GoodsDetail',
-    config: {
-      navigationBarTitleText: '产品'
-    }
   }
 ]
