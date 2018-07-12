@@ -48,7 +48,7 @@
         loadMore: true
       }
     },
-    onLoad () {
+    onShow () {
       this._getCardList()
       let { employeeId, fromType, fromId } = this.currentMsg
       this.setCurrentMsg({ employeeId, fromType, fromId })

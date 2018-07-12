@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-top">
       <div class="bc-img-box">
-        <img :src="cardMsg.avatar ? cardMsg.avatar : defaultImg" class="bc-img" mode="aspectFill">
+        <img :src="cardMsg.employee ? cardMsg.employee.avatar ? cardMsg.employee.avatar : defaultImg : defaultImg" class="bc-img" mode="aspectFill">
         <div class="cards-link" @click="toCards">
           <img src="./icon-change@2x.png" class="cards-link-icon">
           <div class="red-dot" v-if="hasElseUnRead"></div>
@@ -206,7 +206,8 @@
       },
       async _qrCode () {
         // this.currentMsg.employeeId
-        let res = await Im.getQrCodeImg(this.currentMsg.id)
+        let cardId = this.currentMsg.id || this.cardMsg.id
+        let res = await Im.getQrCodeImg(cardId)
         wechat.hideLoading()
         if (res.error === ERR_OK) {
           let url = res.data.qrcode
@@ -296,7 +297,9 @@
         })
       },
       async getCardDetail (data) {
+        console.log(data, 'aaaaa')
         let res = await Im.getCardDetail(data)
+        console.log(res, 'bbbbbb')
         if (res.error === ERR_OK) {
           this.cardMsg = res.data
           this.isLike = this.cardMsg.is_like
@@ -372,6 +375,7 @@
 
       },
       behaviorMsg(code, product) {
+        console.log(code)
         let descMsg = Object.assign({}, this.descMsg, {type: 1})
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()

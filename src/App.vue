@@ -15,7 +15,8 @@
       if (!token) {
         wx.reLaunch({url: `/pages/loading/loading`})
       } else {
-        await this.loginIm()
+        this.loginIm().then((res) => {
+        })
       }
       let fromType, fromId, employeeId
       if (options.query.scene) { // 小程序码进来
@@ -42,7 +43,8 @@
         'setScene',
         'setCustomCount',
         'setNowCount',
-        'addNowChat'
+        'addNowChat',
+        'setCardListUnRead'
       ]),
       async loginIm() {
         let userInfo = wx.getStorageSync('userInfo')
@@ -74,6 +76,9 @@
                     this.addNowChat(res)
                   }
                 }
+                let arr = [...this.cardList]
+                let cardList = await webimHandler.initUnread(arr)
+                this.setCardListUnRead(cardList)
               }, // 监听新消息(私聊(包括普通消息和全员推送消息)，普通群(非直播聊天室)消息)事件，必填
               'onGroupSystemNotifys': (msg) => {
               } // 监听（多终端同步）群系统消息事件，必填
@@ -93,7 +98,8 @@
     computed: {
       ...mapGetters([
         'currentMsg',
-        'imIng'
+        'imIng',
+        'cardList'
       ])
     }
   }
