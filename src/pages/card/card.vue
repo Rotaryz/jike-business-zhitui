@@ -91,7 +91,7 @@
       <div class="right"></div>
     </div>
     <div class="goods-list">
-      <div class="goods-item" v-for="(item, index) in goodsList" :key="index">
+      <div class="goods-item" v-for="(item, index) in goodsList" :key="index" @click="_goDetail(item.id)">
         <div class="goods-img-box">
           <img :src="item.image_url" class="goods-img" mode="aspectFill">
         </div>
@@ -122,7 +122,7 @@
 
 <script type="text/ecmascript-6">
   import { Im } from 'api'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import * as wechat from 'common/js/wechat'
   import { ERR_OK } from 'api/config'
   import webimHandler from 'common/js/webim_handler'
@@ -156,8 +156,8 @@
       }
     },
     async onShow () {
+      this.setProductSendMsg(false)
       this.userInfo = wx.getStorageSync('userInfo')
-      console.log(this.userInfo.avatar)
       await Promise.all([
         wx.downloadFile({
           url: this.userInfo.avatar,
@@ -199,6 +199,11 @@
       }
     },
     methods: {
+      ...mapActions(['setProductSendMsg']),
+      _goDetail (id) {
+        let url = `/pages/goods-detail/goods-detail?id=${id}`
+        this.$router.push(url)
+      },
       async _qrCode () {
         // this.currentMsg.employeeId
         let res = await Im.getQrCodeImg(this.currentMsg.id)
@@ -251,7 +256,6 @@
         ctx.fillText(`${this.userInfo.nickname}的推荐，相当靠谱`, 418, 1640)
         // ctx.fillText('产品经理的推荐，相当靠谱', 418, 1640) // 调试
         ctx.draw()
-        console.log(ctx)
       },
       _getLeft (length, size) {
         let left = (1620 - length * size) / 2
