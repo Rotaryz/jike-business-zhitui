@@ -67,7 +67,7 @@
         wx.setStorageSync('EmployeeId', item.employee.id)
         let user = wx.getStorageSync('userInfo')
         let data = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
-        this.setCurrentMsg(item)
+        this.setCurrentMsg(Object.assign({}, item, {employeeId: item.employee.id}))
         this.setDescMsg(data)
       },
       _goCard (item) {
@@ -93,20 +93,21 @@
       _getCardList () {
         Card.cardHolderList({ page: this.page }).then((res) => {
           if (res.error === ERR_OK) {
-            if (res.data.length) {
-              wechat.hideLoading()
-              webimHandler.initUnread(res.data).then((json) => {
-                if (this.page === 1) {
-                  this.cardList = json
-                  return
-                }
-                this.cardList = this.cardList.concat(json)
-              })
-            } else {
+            if (!res.data.length) {
               this.loadMore = false
+              wechat.hideLoading()
+              return
             }
             wechat.hideLoading()
+            webimHandler.initUnread(res.data).then((json) => {
+              if (this.page === 1) {
+                this.cardList = json
+                return
+              }
+              this.cardList = this.cardList.concat(json)
+            })
           }
+          wechat.hideLoading()
         })
       },
       _cardHolderDoClose (id, status) {
