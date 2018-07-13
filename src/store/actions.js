@@ -2,6 +2,7 @@ import * as types from './mutation-types'
 import { Card } from 'api'
 import { ERR_OK } from 'api/config'
 import * as wechat from 'common/js/wechat'
+import webimHandler from 'common/js/webim_handler'
 
 // export const saveTest = function ({commit, state}, test) {
 //   commit(types.TEST_TYPE, test)
@@ -13,11 +14,11 @@ export const setTargetPage = ({ commit, state }, page) => {
 export const setCurrentMsg = ({ commit, state }, info) => {
   commit(types.SET_CURRENT_MSG, info)
 }
-export const setScene = ({ commit, state }, scene) => {
-  commit(types.SET_SCENE, scene)
-}
 export const setDescMsg = ({ commit, state }, scene) => {
   commit(types.DESC_MSG, scene)
+}
+export const setImLogin = ({ commit, state }, boolean) => {
+  commit(types.SET_IM_LOGIN, boolean)
 }
 export const setProductSendMsg = ({ commit, state }, productSendMsg) => {
   commit(types.PRODUCT_SEND_MSG, productSendMsg)
@@ -28,7 +29,6 @@ export const setCardList = ({ commit, state }, cardList) => {
 // 获取名片夹列表
 export const getCardList = ({ commit, state }, page) => {
   Card.cardHolderList({ page: page }).then(async (res) => {
-    console.log(res, 'bbb')
     if (res.error === ERR_OK) {
       if (!res.data.length) {
         wechat.hideLoading()
@@ -39,6 +39,7 @@ export const getCardList = ({ commit, state }, page) => {
         item.show = false
         return item
       })
+      res = await webimHandler.initUnread(res)
       if (page === 1) {
         commit(types.CARD_LIST, res)
         return
@@ -110,7 +111,9 @@ export const addNowChat = ({commit, state}, msg) => {
 export const setNowCount = ({commit, state}, type) => {
   commit(types.SET_NOW_COUNT, type)
 }
-
-export const setCardListUnRead = ({commit, state}, arr) => {
-  commit(types.CARD_LIST, arr)
+export const setBehaviorList = ({commit, state}, opt) => {
+  commit(types.SET_BEHAVIOR_LIST, opt)
+}
+export const clearBehaviorList = ({commit, state}) => {
+  commit(types.CLEAR_BEHAVIOR_LIST)
 }

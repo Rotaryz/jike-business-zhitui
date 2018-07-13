@@ -370,7 +370,6 @@
         this.showCover = false
       },
       behaviorMsg(code, product) {
-        console.log(code)
         let descMsg = Object.assign({}, this.descMsg, {type: 1})
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()
@@ -383,7 +382,8 @@
           data,
           ext
         }
-        let account = this.currentMsg.employee.im_account
+        console.log(this.currentMsg, this.cardMsg)
+        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
         webimHandler.onSendCustomMsg(option, account).then(res => {
         })
       }
