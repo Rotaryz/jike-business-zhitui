@@ -5,10 +5,10 @@
       <span class="goods-small-box goods-small-width"></span>
       <span class="goods-small-text">公司介绍</span>
     </div>
-    <div class="text">
+    <div class="text" v-if="network.introduction">
       {{network.introduction}}
     </div>
-    <div class="img-box">
+    <div class="img-box" v-if="network.merchant_image.length">
       <img v-for="(item, index) in network.merchant_image" :key="index" :src="item.url" class="net-img" mode="widthFix">
     </div>
   </div>
