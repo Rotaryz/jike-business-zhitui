@@ -14,7 +14,7 @@ const COMMON_HEADER = () => {
 fly.interceptors.request.use((request) => {
   request.headers['Authorization'] = wx.getStorageSync('token')
   // request.headers['Authorization'] = 'b20915301b40861e6241d3cb1623789e5e30421d'
-  request.headers['Current-Merchant'] = wx.getStorageSync('merchantId')
+  request.headers['Current-Merchant'] = wx.getStorageSync('merchantId') || 10
   request.headers['Current-Employee'] = wx.getStorageSync('employeeId')
   // request.headers['Current-Employee'] = 113
   return request
