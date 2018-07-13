@@ -52,8 +52,13 @@
     name: 'Chat',
     created() {
     },
-    mounted() {
-      webimHandler.getC2CMsgList(this.currentMsg.employee.im_account) // 消息已读处理
+    onShow() {
+      if (this.imLogin) {
+        webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
+      } else {
+        this.$refs.toast.show('网络连接异常')
+        this.$router.back()
+      }
       // this.setUnreadCount(this.currentMsg.nickName) // vuex
     },
     beforeDestroy() {

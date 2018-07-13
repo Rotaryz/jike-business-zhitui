@@ -27,3 +27,5 @@ export const SET_IM_LOGIN = 'SET_IM_LOGIN'
 export const SET_BEHAVIOR_LIST = 'SET_BEHAVIOR_LIST'
 
 export const CLEAR_BEHAVIOR_LIST = 'CLEAR_BEHAVIOR_LIST'
+
+export const SET_FROM_MSG = 'SET_FROM_MSG' // 设置来源信息

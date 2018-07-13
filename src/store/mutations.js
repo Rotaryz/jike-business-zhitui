@@ -81,6 +81,9 @@ const mutations = {
   },
   [types.CLEAR_BEHAVIOR_LIST](state) {
     state.behaviorList = []
+  },
+  [types.SET_FROM_MSG](state, msg) {
+    state.fromMsg = msg
   }
 }
 

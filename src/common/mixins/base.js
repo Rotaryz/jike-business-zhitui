@@ -8,7 +8,6 @@ const base = {
     ...mapActions([
       'setTargetPage',
       'setCurrentMsg',
-      'setScene',
       'setCustomCount',
       'setNowCount',
       'addNowChat',
@@ -58,8 +57,30 @@ const base = {
           }
 
           let avatar = userInfo.avatar
-          webimHandler.sdkLogin(loginInfo, listeners, options, avatar).then(() => {
+          webimHandler.sdkLogin(loginInfo, listeners, options, avatar).then(async () => {
             this.setImLogin(true)
+            // 建立连接
+            let employeeId = wx.getStorageSync('employeeId')
+            if (employeeId) {
+              let reqData = {
+                customer_id: userInfo.id,
+                employee_id: employeeId,
+                source: this.fromMsg.source,
+                from_type: this.fromMsg.fromType,
+                from_id: this.fromMsg.fromId
+              }
+              let resData = await Im.getConect(reqData, false)
+              if (resData.error === ERR_OK) {
+                let currentMsg = {
+                  employeeId: resData.data.employee_id,
+                  flowId: resData.data.flow_id,
+                  nickName: resData.data.employee_name,
+                  avatar: resData.data.employee_avatar,
+                  account: resData.data.employee_im_account
+                }
+                this.setCurrentMsg(currentMsg)
+              }
+            }
             // 读取名片夹列表
             this.getCardList(1)
             // 执行待完成的行为动作数组
@@ -80,7 +101,8 @@ const base = {
       'currentMsg',
       'imIng',
       'cardList',
-      'behaviorList'
+      'behaviorList',
+      'fromMsg'
     ])
   }
 }

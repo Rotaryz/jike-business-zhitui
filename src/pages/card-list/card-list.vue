@@ -49,8 +49,6 @@
       }
     },
     onShow () {
-      let { employeeId, fromType, fromId } = this.currentMsg
-      this.setCurrentMsg({ employeeId, fromType, fromId })
     },
     // 下拉刷新
     onReachBottom () {
