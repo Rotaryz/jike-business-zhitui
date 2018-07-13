@@ -127,8 +127,6 @@
   import { ERR_OK } from 'api/config'
   import webimHandler from 'common/js/webim_handler'
 
-  const shareArr = [1007, 1008, 1036, 1044, 1073, 1074]
-  const qrCordArr = [1047, 1048, 1049, 1011, 1012, 1013]
   export default {
     data () {
       return {
@@ -159,14 +157,8 @@
     },
     async onShow () {
       this.setProductSendMsg(false)
-      let isShare = shareArr.indexOf(this.scene * 1)
-      let isQrcord = qrCordArr.indexOf(this.scene * 1)
-      let source = isShare !== -1 ? 1 : isQrcord !== -1 ? 2 : 0
       let data = {
-        employee_id: this.currentMsg.employeeId,
-        from_type: this.currentMsg.fromType,
-        from_id: this.currentMsg.fromId,
-        source
+        employee_id: this.currentMsg.employeeId
       }
       this.userInfo = wx.getStorageSync('userInfo')
       await Promise.all([
@@ -391,11 +383,9 @@
     computed: {
       ...mapGetters([
         'currentMsg',
-        'scene',
         'currentUnRead',
         'hasElseUnRead',
-        'descMsg',
-        'scene'
+        'descMsg'
       ]),
       allPic () {
         return this.mineImage.length && this.qrCode.length

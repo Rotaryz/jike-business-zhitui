@@ -9,7 +9,8 @@ const state = {
   imIng: false, // 是否在聊天页面
   currentUnRead: 0, // 当前对象未读信息
   hasElseUnRead: false, // 其他名片的未读消息
-  behaviorList: [] // 行为消息待发送数组，IM不在登录态时把动作加进去，IM登录完成会跑一次并清空数组
+  behaviorList: [], // 行为消息待发送数组，IM不在登录态时把动作加进去，IM登录完成会跑一次并清空数组
+  fromMsg: {} // 来源信息 fromType, fromId, source
 }
 
 export default state

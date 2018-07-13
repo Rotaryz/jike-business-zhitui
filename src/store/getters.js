@@ -20,3 +20,5 @@ export const currentUnRead = state => state.currentUnRead // 当前对象未读�
 export const hasElseUnRead = state => state.hasElseUnRead // 其他名片是否有未读消息
 
 export const behaviorList = state => state.behaviorList
+
+export const fromMsg = state => state.fromMsg

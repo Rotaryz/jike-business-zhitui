@@ -14,6 +14,11 @@ export default {
     }
     return request.post(url, data, loading)
   },
+  // 员工和客户建立连接
+  getConect(data, loading = true) {
+    const url = `/api/customer/build-relationship`
+    return request.post(url, data, loading)
+  },
   // 名片详情
   getCardDetail(data, loading = true) {
     const url = `/api/customer/card-holder-detail`

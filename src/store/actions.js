@@ -117,3 +117,6 @@ export const setBehaviorList = ({commit, state}, opt) => {
 export const clearBehaviorList = ({commit, state}) => {
   commit(types.CLEAR_BEHAVIOR_LIST)
 }
+export const setFromMsg = ({commit, state}, msg) => {
+  commit(types.SET_FROM_MSG, msg)
+}
