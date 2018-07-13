@@ -140,10 +140,12 @@
         showCover: false,
         qrCode: '',
         mineImage: '',
+        likeCount: '',
+        employeeId: null,
         userInfo: wx.getStorageSync('userInfo')
       }
     },
-    onShareAppMessage(res) {
+    onShareAppMessage (res) {
       let title = '我推荐的， 相当靠谱'
       let fromId = wx.getStorageSync('userInfo').id
       if (res.from === 'button') {
@@ -151,14 +153,15 @@
       }
       return {
         title: title,
-        path: `/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.cardMsg.employee.id}`,
+        path: `/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.employeeId}`,
         imageUrl: this.cardMsg.employee.avatar
       }
     },
     async onShow () {
       this.setProductSendMsg(false)
+      this.employeeId = wx.getStorageSync('employeeId')
       let data = {
-        employee_id: this.currentMsg.employeeId
+        employee_id: this.employeeId
       }
       this.userInfo = wx.getStorageSync('userInfo')
       await Promise.all([
@@ -316,7 +319,9 @@
           res = await Im.clearZan(id)
           if (res.error === ERR_OK) {
             this.isLike = false
-            this.likeCount--
+            if (this.likeCount > 0) {
+              this.likeCount--
+            }
             wechat.hideLoading()
             this.behaviorMsg(10002)
           }
@@ -361,11 +366,8 @@
       closeCover () {
         this.showCover = false
       },
-      qrCordImg() {
-
-      },
-      behaviorMsg(code, product) {
-        let descMsg = Object.assign({}, this.descMsg, {type: 1})
+      behaviorMsg (code, product) {
+        let descMsg = Object.assign({}, this.descMsg, { type: 1 })
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()
         let data = ''
@@ -377,6 +379,9 @@
           data,
           ext
         }
+        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+        webimHandler.onSendCustomMsg(option, account).then(res => {
+        })
         let account = this.currentMsg.account
         if (this.imLogin) {
           webimHandler.onSendCustomMsg(option, account).then(res => {})
@@ -690,7 +695,7 @@
       right: 0
       background: $color-F0F2F5
       transition: all .3s
-      box-shadow: 0 -4px 12px 0 rgba(43,43,145,0.07)
+      box-shadow: 0 -4px 12px 0 rgba(43, 43, 145, 0.07)
       .share-item
         width: 100%
         height: 44px

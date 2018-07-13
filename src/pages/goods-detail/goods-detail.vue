@@ -38,7 +38,8 @@
     computed: {
       ...mapGetters([
         'descMsg',
-        'currentMsg'
+        'currentMsg',
+        'imLogin'
       ])
     },
     onLoad () {
@@ -47,15 +48,17 @@
     onShow () {
       this.setProductSendMsg(true)
     },
-    onShareAppMessage() {
+    onShareAppMessage () {
+      let employeeId = wx.getStorageSync('employeeId')
+      let fromId = wx.getStorageSync('userInfo').id
       return {
         title: this.goods.title,
         imageUrl: this.goods.image_url,
-        path: `/pages/goods-detail/goods-detail?id=${this.id}`
+        path: `/pages/goods-detail/goods-detail?id=${this.id}&employeeId=${employeeId}&fromI${fromId}&fromType=3`
       }
     },
     methods: {
-      ...mapActions(['setProductSendMsg']),
+      ...mapActions(['setProductSendMsg', 'setBehaviorList']),
       _goods () {
         this.id = this.$route.query.id
         Website.goodsDetail(this.id).then((res) => {
@@ -65,7 +68,7 @@
           wechat.hideLoading()
         })
       },
-      _send (item) {
+      async _send (item) {
         // 产品点击咨询
         let desc = Object.assign({}, this.descMsg, { type: 1 })
         let data = ''
@@ -75,13 +78,6 @@
           desc,
           ext
         }
-        console.log(this.currentMsg.employee, 'aaa')
-        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
-        // let account = 'philly'
-        webimHandler.onSendCustomMsg(option, account).then(res => {
-          // console.log(res)
-        })
-        // {"flow_id":1,"merchant_id":1,"url":"hao123.com","goods_id":1,"title":"标题"}
         // 发送产品信息
         let descMsg = Object.assign({}, this.descMsg, { type: 2 })
         let dataMsg = { url: item.image_url, goods_id: item.id, title: item.title, flow_id: this.descMsg.flow_id, merchant_id: this.descMsg.merchant_id }
@@ -91,10 +87,16 @@
           desc: descMsg,
           ext: extMsg
         }
-        webimHandler.onSendCustomMsg(optionMsg, account).then(res => {
+        if (!this.imLogin) {
+          this.setBehaviorList(optionMsg)
+          this.setBehaviorList(option)
           this.$router.push('/pages/chat-msg/chat-msg')
-          // console.log(res)
-        })
+          return
+        }
+        let account = this.currentMsg.employee.im_account
+        await webimHandler.onSendCustomMsg(optionMsg, account)
+        await webimHandler.onSendCustomMsg(option, account)
+        this.$router.push('/pages/chat-msg/chat-msg')
       }
     }
   }
