@@ -120,3 +120,9 @@ export const clearBehaviorList = ({commit, state}) => {
 export const setFromMsg = ({commit, state}, msg) => {
   commit(types.SET_FROM_MSG, msg)
 }
+export const setNowCountNum = ({commit, state}, num) => {
+  commit(types.SET_NOW_COUNT_NUM, num)
+}
+export const setListUnreadCount = ({commit, state}, id) => {
+  commit(types.SET_LIST_COUNT_NUM, id)
+}

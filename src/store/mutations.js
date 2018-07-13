@@ -84,6 +84,17 @@ const mutations = {
   },
   [types.SET_FROM_MSG](state, msg) {
     state.fromMsg = msg
+  },
+  [types.SET_NOW_COUNT_NUM](state, num) {
+    state.currentUnRead = num * 1
+  },
+  [types.SET_LIST_COUNT_NUM](state, id) {
+    state.cardList = state.cardList.map((item) => {
+      if (item.employee.im_account === id) {
+        item.unReadMsgCount = 0
+      }
+      return item
+    })
   }
 }
 

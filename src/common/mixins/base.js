@@ -14,7 +14,9 @@ const base = {
       'setCardListUnRead',
       'setImLogin',
       'getCardList',
-      'clearBehaviorList'
+      'clearBehaviorList',
+      'setNowCountNum',
+      'setDescMsg'
     ]),
     async loginIm() {
       let userInfo = wx.getStorageSync('userInfo')
@@ -39,7 +41,7 @@ const base = {
             'onMsgNotify': async (msg) => {
               let res = await webimHandler.onMsgNotify(msg)
               this.setCustomCount(res.fromAccount)
-              if (this.currentMsg.employee && (res.fromAccount === this.currentMsg.employee.im_account)) {
+              if (this.currentMsg.account && (res.fromAccount === this.currentMsg.account)) {
                 if (!this.imIng) {
                   this.setNowCount('add')
                 } else {
@@ -78,18 +80,32 @@ const base = {
                   avatar: resData.data.employee_avatar,
                   account: resData.data.employee_im_account
                 }
+                let descMsg = {
+                  flow_id: resData.data.flow_id,
+                  card_holder_id: resData.data.card_holder_id,
+                  merchant_id: resData.data.merchant_id,
+                  employee_id: resData.data.employee_id,
+                  customer_id: userInfo.id
+                }
+                wx.setStorageSync('merchantId', resData.data.merchant_id)
                 this.setCurrentMsg(currentMsg)
+                this.setDescMsg(descMsg)
               }
             }
             // 读取名片夹列表
             this.getCardList(1)
             // 执行待完成的行为动作数组
-            if (this.behaviorList.length) {
+            if (this.behaviorList.length && employeeId) {
               Promise.all(this.behaviorList.forEach((item) => {
-                webimHandler.onSendCustomMsg(item.opt, item.account)
+                webimHandler.onSendCustomMsg(item, this.currentMsg.account)
               })).then(() => {
                 this.clearBehaviorList()
               })
+            }
+            // 读取当前员工的未读信息
+            if (employeeId) {
+              let count = await webimHandler.getAnyUnread(this.currentMsg.account)
+              this.setNowCountNum(count)
             }
           })
         }

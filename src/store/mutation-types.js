@@ -29,3 +29,7 @@ export const SET_BEHAVIOR_LIST = 'SET_BEHAVIOR_LIST'
 export const CLEAR_BEHAVIOR_LIST = 'CLEAR_BEHAVIOR_LIST'
 
 export const SET_FROM_MSG = 'SET_FROM_MSG' // 设置来源信息
+
+export const SET_NOW_COUNT_NUM = 'SET_NOW_COUNT_NUM'
+
+export const SET_LIST_COUNT_NUM = 'SET_LIST_COUNT_NUM'

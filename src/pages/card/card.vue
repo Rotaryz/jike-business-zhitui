@@ -191,7 +191,7 @@
       }
     },
     methods: {
-      ...mapActions(['setProductSendMsg']),
+      ...mapActions(['setProductSendMsg', 'setBehaviorList']),
       _goDetail (id) {
         let url = `/pages/goods-detail/goods-detail?id=${id}`
         this.$router.push(url)
@@ -377,10 +377,12 @@
           data,
           ext
         }
-        console.log(this.currentMsg, this.cardMsg)
-        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
-        webimHandler.onSendCustomMsg(option, account).then(res => {
-        })
+        let account = this.currentMsg.account
+        if (this.imLogin) {
+          webimHandler.onSendCustomMsg(option, account).then(res => {})
+        } else {
+          this.setBehaviorList(option)
+        }
       }
     },
     computed: {
@@ -388,7 +390,8 @@
         'currentMsg',
         'currentUnRead',
         'hasElseUnRead',
-        'descMsg'
+        'descMsg',
+        'imLogin'
       ]),
       allPic () {
         return this.mineImage.length && this.qrCode.length

@@ -87,7 +87,7 @@ export default class webimHandler {
     data.forEach((item) => {
       let name = 'C2C' + item.employee.im_account
       if (sessMap[name]) {
-        item.unReadMsgCount = sessMap[name].unread() <= 99 ? sessMap[name].unread() : '99+'
+        item.unReadMsgCount = sessMap[name].unread()
       } else {
         item.unReadMsgCount = 0
       }
@@ -95,6 +95,16 @@ export default class webimHandler {
     return new Promise((resolve, reject) => {
       resolve(data)
     })
+  }
+  // 获取当前用户的未读消息数
+  static async getAnyUnread(account) {
+    let sessMap = await this.getUnread()
+    let name = 'C2C' + account
+    if (sessMap[name]) {
+      return sessMap[name].unread()
+    } else {
+      return 0
+    }
   }
 
   // 获取未读会话数据

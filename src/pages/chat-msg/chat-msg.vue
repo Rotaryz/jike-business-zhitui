@@ -55,11 +55,14 @@
     onShow() {
       if (this.imLogin) {
         webimHandler.getC2CMsgList(this.currentMsg.account) // 消息已读处理
+        this.setNowCountNum(0)
+        this.setListUnreadCount(this.currentMsg.account)
       } else {
-        this.$refs.toast.show('网络连接异常')
-        this.$router.back()
+        wx.showToast({title: '网络连接异常', icon: 'none', duration: 1000})
+        setTimeout(() => {
+          this.$router.back()
+        }, 1000)
       }
-      // this.setUnreadCount(this.currentMsg.nickName) // vuex
     },
     beforeDestroy() {
       this.setCurrent({})
@@ -97,7 +100,9 @@
     methods: {
       ...mapActions([
         'setNowChat',
-        'setImIng'
+        'setImIng',
+        'setNowCountNum',
+        'setListUnreadCount'
       ]),
       loadMore() {
         if (this.noMore) return
@@ -168,7 +173,8 @@
     computed: {
       ...mapGetters([
         'currentMsg',
-        'nowChat'
+        'nowChat',
+        'imLogin'
       ])
     }
   }
