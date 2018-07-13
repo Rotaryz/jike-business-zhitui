@@ -30,7 +30,9 @@
       let source = isShare !== -1 ? 1 : isQrcord !== -1 ? 2 : 0
       this.setFromMsg({fromType, fromId, source})
       // 判断如果有员工id则跑建立连接接口
-      wx.setStorageSync('employeeId', employeeId)
+      if (employeeId) {
+        wx.setStorageSync('employeeId', employeeId)
+      }
       let token = wx.getStorageSync('token')
       if (!token) {
         wx.reLaunch({url: `/pages/loading/loading`})
