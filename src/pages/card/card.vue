@@ -379,9 +379,6 @@
           data,
           ext
         }
-        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
-        webimHandler.onSendCustomMsg(option, account).then(res => {
-        })
         let account = this.currentMsg.account
         if (this.imLogin) {
           webimHandler.onSendCustomMsg(option, account).then(res => {})
