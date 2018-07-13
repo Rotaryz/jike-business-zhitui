@@ -3,7 +3,7 @@ export const targetPage = state => state.targetPage
 
 export const currentMsg = state => state.currentMsg
 
-export const scene = state => state.scene
+export const imLogin = state => state.imLogin
 
 export const nowChat = state => state.nowChat
 

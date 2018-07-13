@@ -12,7 +12,9 @@ const base = {
       'setCustomCount',
       'setNowCount',
       'addNowChat',
-      'setCardListUnRead'
+      'setCardListUnRead',
+      'setImLogin',
+      'getCardList'
     ]),
     async loginIm() {
       let userInfo = wx.getStorageSync('userInfo')
@@ -44,9 +46,6 @@ const base = {
                   this.addNowChat(res)
                 }
               }
-              let arr = [...this.cardList]
-              let cardList = await webimHandler.initUnread(arr)
-              this.setCardListUnRead(cardList)
             }, // 监听新消息(私聊(包括普通消息和全员推送消息)，普通群(非直播聊天室)消息)事件，必填
             'onGroupSystemNotifys': (msg) => {
             } // 监听（多终端同步）群系统消息事件，必填
@@ -58,7 +57,11 @@ const base = {
           }
 
           let avatar = userInfo.avatar
-          await webimHandler.sdkLogin(loginInfo, listeners, options, avatar)
+          webimHandler.sdkLogin(loginInfo, listeners, options, avatar).then(() => {
+            this.setImLogin(true)
+            // 读取名片夹列表
+            this.getCardList(1)
+          })
         }
       })
     }

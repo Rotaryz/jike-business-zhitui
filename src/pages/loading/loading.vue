@@ -42,7 +42,8 @@
             let resMsg = resData.data
             wx.setStorageSync('userInfo', resMsg.customer_info)
             wx.setStorageSync('token', resMsg.access_token)
-            await this.loginIm()
+            this.loginIm().then((res) => {
+            })
             if (chackTabPage(this.targetPage)) {
               wx.switchTab({url: this.targetPage})
             } else {

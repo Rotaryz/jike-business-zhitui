@@ -199,7 +199,7 @@
       }
     },
     methods: {
-      ...mapActions(['setProductSendMsg']),
+      ...mapActions(['setProductSendMsg', 'setDescMsg']),
       _goDetail (id) {
         let url = `/pages/goods-detail/goods-detail?id=${id}`
         this.$router.push(url)
@@ -373,8 +373,15 @@
 
       },
       behaviorMsg(code, product) {
-        console.log(code)
-        let descMsg = Object.assign({}, this.descMsg, {type: 1})
+        let descMsgData = {
+          'flow_id': this.cardMsg.flow_id,
+          'card_holder_id': this.cardMsg.id,
+          'merchant_id': 10,
+          'employee_id': this.cardMsg.employee.id,
+          'customer_id': this.userInfo.id
+        }
+        this.setDescMsg(descMsgData)
+        let descMsg = Object.assign({}, descMsgData, {type: 1})
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()
         let data = ''
@@ -386,7 +393,8 @@
           data,
           ext
         }
-        let account = this.currentMsg.employee.im_account
+        console.log(this.currentMsg, this.cardMsg)
+        let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
         webimHandler.onSendCustomMsg(option, account).then(res => {
         })
       }

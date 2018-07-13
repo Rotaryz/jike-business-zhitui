@@ -4,8 +4,6 @@ export const SET_TARGET_PAGE = 'SET_TARGET_PAGE'
 
 export const SET_CURRENT_MSG = 'SET_CURRENT_MSG'
 
-export const SET_SCENE = 'SET_SCENE'
-
 export const SET_NOW_CHAT = 'SET_NOW_CHAT'
 
 export const DESC_MSG = 'DESC_MSG'
@@ -23,3 +21,5 @@ export const SET_CUSTOM_COUNT = 'SET_CUSTOM_COUNT'
 export const ADD_NOW_CHAT = 'ADD_NOW_CHAT'
 
 export const SET_NOW_COUNT = 'SET_NOW_COUNT' // 设置当前对象未读数
+
+export const SET_IM_LOGIN = 'SET_IM_LOGIN'
