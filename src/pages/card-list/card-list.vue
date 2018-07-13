@@ -9,7 +9,7 @@
           <p class="card-buss">{{item.employee.department}}</p>
           <p class="card-name">{{item.employee.name}}</p>
           <p class="card-position">{{item.employee.position}}</p>
-          <p class="card-phone"><img class="icon card-phone-icon" src="./icon-telephone@2x.png">159-2057-1999</p>
+          <p class="card-phone"><img class="icon card-phone-icon" src="./icon-telephone@2x.png">{{item.employee.business_card_mobile}}</p>
           <p class="card-times">浏览 {{item.click_count}}次</p>
         </div>
         <div class="card-right">
