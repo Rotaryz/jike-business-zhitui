@@ -369,9 +369,6 @@
       closeCover () {
         this.showCover = false
       },
-      qrCordImg() {
-
-      },
       behaviorMsg(code, product) {
         console.log(code)
         let descMsg = Object.assign({}, this.descMsg, {type: 1})

@@ -48,10 +48,12 @@
       this.setProductSendMsg(true)
     },
     onShareAppMessage() {
+      let employeeId = wx.getStorageSync('employeeId')
+      let fromId = wx.getStorageSync('userInfo').id
       return {
         title: this.goods.title,
         imageUrl: this.goods.image_url,
-        path: `/pages/goods-detail/goods-detail?id=${this.id}`
+        path: `/pages/goods-detail/goods-detail?id=${this.id}&employeeId=${employeeId}&fromI${fromId}&fromType=3`
       }
     },
     methods: {

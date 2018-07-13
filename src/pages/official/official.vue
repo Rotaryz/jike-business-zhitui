@@ -18,6 +18,8 @@
   import { ERR_OK } from 'api/config'
   import { Website } from 'api'
   import * as wechat from 'common/js/wechat'
+  import webimHandler from 'common/js/webim_handler'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'official-network',
@@ -26,12 +28,36 @@
         network: {}
       }
     },
+    computed: {
+      ...mapGetters([
+        'descMsg',
+        'currentMsg'
+      ])
+    },
     onLoad () {
       this._getWebsite()
     },
-    onShareAppMessage() {
+    onShow() {
+      let desc = Object.assign({}, this.descMsg, { type: 1 })
+      let data = ''
+      let ext = '40001'
+      let option = {
+        data,
+        desc,
+        ext
+      }
+      let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+      // let account = 'philly'
+      webimHandler.onSendCustomMsg(option, account).then(res => {
+        // console.log(res)
+      })
+    },
+    onShareAppMessage () {
+      let employeeId = wx.getStorageSync('employeeId')
+      let fromId = wx.getStorageSync('userInfo').id
       return {
         title: this.network.introduction,
+        path: `/pages/official/official?employeeId=${employeeId}&fromI${fromId}&fromType=3`,
         imageUrl: this.network.merchant_image[0].url
       }
     },

@@ -72,7 +72,7 @@
       ...mapActions(['setCurrentMsg', 'setDescMsg', 'setCardList', 'getCardList', 'showCardUse', 'cardHolderDoClose']),
       _setMsg (item) {
         //  存id
-        wx.setStorageSync('EmployeeId', item.employee.id)
+        wx.setStorageSync('employeeId', item.employee.id)
         let user = wx.getStorageSync('userInfo')
         let data = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
         this.setCurrentMsg(Object.assign({}, item, { employeeId: item.employee.id }))
