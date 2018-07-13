@@ -8,9 +8,9 @@ const mutations = {
     state.targetPage = page
   },
   [types.SET_CURRENT_MSG] (state, info) {
-    state.currentMsg = Object.assign({}, state.currentMsg, info)
+    state.currentMsg = info
     let arr = state.cardList.filter((item) => {
-      return item.employee.im_account === state.currentMsg.employee.im_account
+      return item.employee.im_account === state.currentMsg.account
     })
     if (arr.length) {
       state.currentUnRead = arr[0].unReadMsgCount
@@ -41,8 +41,8 @@ const mutations = {
       return item
     })
     let arr = state.cardList.filter((item) => {
-      if (state.currentMsg.employee) {
-        return (item.employee.im_account !== state.currentMsg.employee.im_account) && item.unReadMsgCount
+      if (state.currentMsg.employeeId) {
+        return (item.employee.im_account !== state.currentMsg.account) && item.unReadMsgCount
       }
       return item.unReadMsgCount
     })
@@ -55,11 +55,11 @@ const mutations = {
   [types.ADD_NOW_CHAT](state, msg) {
     let newMsg = {
       from_account_id: msg.fromAccount,
-      avatar: state.currentMsg.employee.avatar,
+      avatar: state.currentMsg.avatar,
       content: msg.text,
       time: msg.time,
       msgTimeStamp: msg.time,
-      nickName: state.currentMsg.employee.name,
+      nickName: state.currentMsg.nickName,
       sessionId: msg.fromAccount,
       unreadMsgCount: 0,
       type: 1
@@ -72,6 +72,15 @@ const mutations = {
     } else if (type === 'clear') {
       state.currentUnRead = 0
     }
+  },
+  [types.SET_BEHAVIOR_LIST](state, opt) {
+    state.behaviorList.push(opt)
+  },
+  [types.SET_IM_LOGIN](state, boolean) {
+    state.imLogin = boolean
+  },
+  [types.CLEAR_BEHAVIOR_LIST](state) {
+    state.behaviorList = []
   }
 }
 

@@ -111,3 +111,9 @@ export const addNowChat = ({commit, state}, msg) => {
 export const setNowCount = ({commit, state}, type) => {
   commit(types.SET_NOW_COUNT, type)
 }
+export const setBehaviorList = ({commit, state}, opt) => {
+  commit(types.SET_BEHAVIOR_LIST, opt)
+}
+export const clearBehaviorList = ({commit, state}) => {
+  commit(types.CLEAR_BEHAVIOR_LIST)
+}

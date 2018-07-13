@@ -199,7 +199,7 @@
       }
     },
     methods: {
-      ...mapActions(['setProductSendMsg', 'setDescMsg']),
+      ...mapActions(['setProductSendMsg']),
       _goDetail (id) {
         let url = `/pages/goods-detail/goods-detail?id=${id}`
         this.$router.push(url)
@@ -373,15 +373,7 @@
 
       },
       behaviorMsg(code, product) {
-        let descMsgData = {
-          'flow_id': this.cardMsg.flow_id,
-          'card_holder_id': this.cardMsg.id,
-          'merchant_id': 10,
-          'employee_id': this.cardMsg.employee.id,
-          'customer_id': this.userInfo.id
-        }
-        this.setDescMsg(descMsgData)
-        let descMsg = Object.assign({}, descMsgData, {type: 1})
+        let descMsg = Object.assign({}, this.descMsg, {type: 1})
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()
         let data = ''

@@ -23,3 +23,7 @@ export const ADD_NOW_CHAT = 'ADD_NOW_CHAT'
 export const SET_NOW_COUNT = 'SET_NOW_COUNT' // 设置当前对象未读数
 
 export const SET_IM_LOGIN = 'SET_IM_LOGIN'
+
+export const SET_BEHAVIOR_LIST = 'SET_BEHAVIOR_LIST'
+
+export const CLEAR_BEHAVIOR_LIST = 'CLEAR_BEHAVIOR_LIST'

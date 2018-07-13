@@ -18,3 +18,5 @@ export const imIng = state => state.imIng // 是否正在对话(聊天页面)
 export const currentUnRead = state => state.currentUnRead // 当前对象未读数
 
 export const hasElseUnRead = state => state.hasElseUnRead // 其他名片是否有未读消息
+
+export const behaviorList = state => state.behaviorList

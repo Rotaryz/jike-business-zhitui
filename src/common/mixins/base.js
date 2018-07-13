@@ -14,7 +14,8 @@ const base = {
       'addNowChat',
       'setCardListUnRead',
       'setImLogin',
-      'getCardList'
+      'getCardList',
+      'clearBehaviorList'
     ]),
     async loginIm() {
       let userInfo = wx.getStorageSync('userInfo')
@@ -61,6 +62,14 @@ const base = {
             this.setImLogin(true)
             // 读取名片夹列表
             this.getCardList(1)
+            // 执行待完成的行为动作数组
+            if (this.behaviorList.length) {
+              Promise.all(this.behaviorList.forEach((item) => {
+                webimHandler.onSendCustomMsg(item.opt, item.account)
+              })).then(() => {
+                this.clearBehaviorList()
+              })
+            }
           })
         }
       })
@@ -70,7 +79,8 @@ const base = {
     ...mapGetters([
       'currentMsg',
       'imIng',
-      'cardList'
+      'cardList',
+      'behaviorList'
     ])
   }
 }
