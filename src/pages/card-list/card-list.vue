@@ -38,7 +38,7 @@
   // import { ERR_OK } from 'api/config'
   import Toast from 'components/toast/toast'
   import { mapActions, mapGetters } from 'vuex'
-  // import webimHandler from 'common/js/webim_handler'
+  import webimHandler from 'common/js/webim_handler'
 
   export default {
     name: 'card-list',
@@ -61,7 +61,8 @@
     computed: {
       ...mapGetters([
         'cardList',
-        'currentMsg'
+        'currentMsg',
+        'descMsg'
       ])
     },
     methods: {
@@ -78,8 +79,20 @@
         if (item.status !== 0) {
           return
         }
-        this._setMsg(item)
-        this.$router.push({ path: '/pages/card/card', isTab: true })
+        // 点击名片触发推送信息
+        let desc = Object.assign({}, this.descMsg, { type: 1 })
+        let data = ''
+        let ext = '10000'
+        let option = {
+          data,
+          desc,
+          ext
+        }
+        let account = item.employee.im_account
+        webimHandler.onSendCustomMsg(option, account).then((res) => {
+          this._setMsg(item)
+          this.$router.push({ path: '/pages/card/card', isTab: true })
+        })
       },
       _goChat (item) {
         if (item.status !== 0) {

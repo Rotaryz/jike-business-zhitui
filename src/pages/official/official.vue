@@ -19,7 +19,7 @@
   import { Website } from 'api'
   import * as wechat from 'common/js/wechat'
   import webimHandler from 'common/js/webim_handler'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     name: 'official-network',
@@ -31,13 +31,14 @@
     computed: {
       ...mapGetters([
         'descMsg',
-        'currentMsg'
+        'currentMsg',
+        'imLogin'
       ])
     },
     onLoad () {
       this._getWebsite()
     },
-    onShow() {
+    onShow () {
       let desc = Object.assign({}, this.descMsg, { type: 1 })
       let data = ''
       let ext = '40001'
@@ -46,7 +47,11 @@
         desc,
         ext
       }
-      let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+      if (!this.imLogin) {
+        this.setBehaviorList(option)
+        return
+      }
+      let account = this.currentMsg.employee.im_account
       // let account = 'philly'
       webimHandler.onSendCustomMsg(option, account).then(res => {
         // console.log(res)
@@ -55,6 +60,7 @@
     onShareAppMessage () {
       let employeeId = wx.getStorageSync('employeeId')
       let fromId = wx.getStorageSync('userInfo').id
+      console.log(`/pages/official/official?employeeId=${employeeId}&fromI${fromId}&fromType=3`)
       return {
         title: this.network.introduction,
         path: `/pages/official/official?employeeId=${employeeId}&fromI${fromId}&fromType=3`,
@@ -62,6 +68,7 @@
       }
     },
     methods: {
+      ...mapActions(['setBehaviorList']),
       _getWebsite () {
         Website.website().then((res) => {
           if (res.error === ERR_OK) {

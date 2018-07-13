@@ -47,7 +47,7 @@
             <div class="peo-big-box">
               <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
               <div class="like-name">
-                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{idx > 0 ? '，' : ''}}{{items.employee_name || items.customer_name}}</span>
               </div>
             </div>
             <img src="./pic-trends_zan3@2x.png" class="likes-peo-bg" mode="widthFix">
@@ -98,7 +98,7 @@
             <div class="peo-big-box">
               <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
               <div class="like-name">
-                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{idx > 0 ? '，' : ''}}{{items.employee_name || items.customer_name}}</span>
               </div>
             </div>
             <img src="./pic-trends_zan3@2x.png" class="likes-peo-bg" mode="widthFix">
@@ -150,7 +150,7 @@
             <div class="peo-big-box">
               <img src="./icon-spot@2x.png" class="like-icon" mode="widthFix">
               <div class="like-name">
-                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{items.employee_name}}</span>
+                <span v-for="(items,idx) in item.live_log_like" :key="idx">{{idx > 0 ? '，' : ''}}{{items.employee_name || items.customer_name}}</span>
               </div>
             </div>
             <img src="./pic-trends_zan3@2x.png" class="likes-peo-bg" mode="widthFix">
