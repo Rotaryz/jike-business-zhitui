@@ -45,7 +45,8 @@
     data () {
       return {
         page: 1,
-        loadMore: true
+        loadMore: true,
+        desc: {}
       }
     },
     onShow () {
@@ -71,16 +72,17 @@
         //  存id
         wx.setStorageSync('employeeId', item.employee.id)
         let user = wx.getStorageSync('userInfo')
-        let data = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
-        this.setCurrentMsg(Object.assign({}, item, { employeeId: item.employee.id }))
-        this.setDescMsg(data)
+        this.desc = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
+        this.setCurrentMsg({ employeeId: item.employee.id, flowId: item.flow_id, nickName: item.employee.name, avatar: item.employee.avatar, account: item.employee.im_account })
+        this.setDescMsg(this.desc)
       },
       _goCard (item) {
         if (item.status !== 0) {
           return
         }
+        this._setMsg(item)
         // 点击名片触发推送信息
-        let desc = Object.assign({}, this.descMsg, { type: 1 })
+        let desc = Object.assign({}, this.desc, { type: 1 })
         let data = ''
         let ext = '10000'
         let option = {
@@ -90,7 +92,6 @@
         }
         let account = item.employee.im_account
         webimHandler.onSendCustomMsg(option, account).then((res) => {
-          this._setMsg(item)
           this.$router.push({ path: '/pages/card/card', isTab: true })
         })
       },
