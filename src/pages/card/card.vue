@@ -85,12 +85,12 @@
         </div>
       </div>
     </div>
-    <div class="title-box">
+    <div class="title-box" v-if="goodsList.length">
       <div class="left"></div>
       <div class="title-txt">主推产品</div>
       <div class="right"></div>
     </div>
-    <div class="goods-list">
+    <div class="goods-list" v-if="goodsList.length">
       <div class="goods-item" v-for="(item, index) in goodsList" :key="index" @click="_goDetail(item.id)">
         <div class="goods-img-box">
           <img :src="item.image_url" class="goods-img" mode="aspectFill">
@@ -200,8 +200,7 @@
         this.$router.push(url)
       },
       async _qrCode () {
-        // this.currentMsg.employeeId
-        let cardId = this.currentMsg.id || this.cardMsg.id
+        let cardId = this.cardMsg.id
         let res = await Im.getQrCodeImg(cardId)
         wechat.hideLoading()
         if (res.error === ERR_OK) {
@@ -304,13 +303,6 @@
         if (res.error === ERR_OK) {
           this.goodsList = res.data
         }
-      },
-      getQrCordImg () {
-        Im.getQrCodeImg(this.currentMsg.id).then((res) => {
-          if (res.error === ERR_OK) {
-            this.qrCordMsg = res.data
-          }
-        })
       },
       async dianzan () {
         let id = this.cardMsg.id

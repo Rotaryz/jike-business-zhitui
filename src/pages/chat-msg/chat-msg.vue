@@ -4,7 +4,7 @@
       <div class="chat-list">
         <div class="chat-item" v-for="(item, index) in nowChat" :key="index" :id="'item' + index">
           <div class="chat-content" v-if="item.from_account_id !== imAccount">
-            <img :src="currentMsg.employee.avatar" class="avatar">
+            <img :src="currentMsg.avatar" class="avatar">
             <div class="chat-msg-box other" >
               <div class="arrow-box">
                 <div class="gray-arrow">
@@ -110,7 +110,7 @@
           page: this.page++,
           limit: 30,
           customer_id: this.userInfo.id,
-          employee_id: this.currentMsg.employee.im_account
+          employee_id: this.currentMsg.account
         }
         Im.getMsgList(data).then((res) => {
           if (res.error === ERR_OK) {
@@ -200,6 +200,9 @@
       height: 100vh
       padding-bottom: 38px
       box-sizing: border-box
+      display: flex
+      flex-direction: column
+      justify-content: flex-end
       .chat-list
         padding-bottom: 40px
       .chat-item

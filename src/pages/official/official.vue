@@ -51,7 +51,7 @@
         this.setBehaviorList(option)
         return
       }
-      let account = this.currentMsg.employee.im_account
+      let account = this.currentMsg.account
       // let account = 'philly'
       webimHandler.onSendCustomMsg(option, account).then(res => {
         // console.log(res)

@@ -48,7 +48,7 @@
         desc,
         ext
       }
-      let account = this.currentMsg.employee ? this.currentMsg.employee.im_account : 'philly'
+      let account = this.currentMsg.account
       // let account = 'philly'
       webimHandler.onSendCustomMsg(option, account).then(res => {
         // console.log(res)

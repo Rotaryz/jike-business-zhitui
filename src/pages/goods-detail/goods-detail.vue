@@ -93,7 +93,7 @@
           this.$router.push('/pages/chat-msg/chat-msg')
           return
         }
-        let account = this.currentMsg.employee.im_account
+        let account = this.currentMsg.account
         await webimHandler.onSendCustomMsg(optionMsg, account)
         await webimHandler.onSendCustomMsg(option, account)
         this.$router.push('/pages/chat-msg/chat-msg')
