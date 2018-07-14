@@ -171,7 +171,7 @@
       color: $color-888888
       font-size: $font-size-14
     .card-name
-      height: $font-size-14
+      height: $font-size-24
       margin-top: 15px
       color: $color-text
       font-size: $font-size-24
