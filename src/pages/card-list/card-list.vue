@@ -13,9 +13,13 @@
           <p class="card-times">浏览 {{item.click_count}}次</p>
         </div>
         <div class="card-right">
-          <image src="" class="card-header" :src="item.employee.avatar">
-            <span class="content-count" v-if="item.unReadMsgCount" @click.stop="_goChat(item)">{{item.unReadMsgCount}}</span>
-          </image>
+          <form>
+            <button class="card-header">
+              <image class="card-header" :src="item.employee.avatar" @click.stop="_goChat(item)">
+                <span class="content-count" v-if="item.unReadMsgCount">{{item.unReadMsgCount}}</span>
+              </image>
+            </button>
+          </form>
           <div class="card-icon-box" @click.stop="_showLong(index)">
             <img class="card-icon" :src="item.status === 1 ? '/static/icon-more_white@2x.png' : '/static/icon-more@2x.png'">
             <div class="card-use" :class="{'card-use-active': item.show}" @click.stop="_cardHolderDoClose(item.id, item.status)">
@@ -200,7 +204,15 @@
         background: $color-white
         position: relative
         overflow: visible
-        .content-count
+        padding: 0
+        margin: 0
+        bottom: 0
+        border-radius :0
+        &:after
+          border-radius :0
+          border: none
+
+      .content-count
           position: absolute
           right: -7.5px
           top: -7.5px

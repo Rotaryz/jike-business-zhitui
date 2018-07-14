@@ -14,8 +14,12 @@
     </div>
     <img :src="item.image_url" class="goods-img" v-for="(item, index) in goods.goods_images" :key="index" mode="widthFix">
     <div class="btn">
-      <button class="btn-item btn-left" open-type="share">转发给朋友</button>
-      <button class="btn-item btn-right" @click="_send(goods)">咨询</button>
+      <form>
+        <button class="btn-item btn-left" open-type="share">转发给朋友</button>
+      </form>
+      <form>
+        <button class="btn-item btn-right" @click="_send(goods)">咨询</button>
+      </form>
     </div>
   </div>
 </template>
