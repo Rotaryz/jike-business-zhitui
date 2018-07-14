@@ -141,7 +141,7 @@
       font-size: 19px
     .content-reason
       font-family: $font-family-regular
-      font-size: $font-size-medium
+      font-size: $font-size-14
       color: $color-text
       margin-top: 10px
 

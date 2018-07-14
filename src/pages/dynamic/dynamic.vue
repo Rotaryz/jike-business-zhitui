@@ -287,7 +287,7 @@
       .words.special
         height: 21px
       .address
-        font-size: $font-size-small
+        font-size: $font-size-12
         color: $color-del
         margin-top: 8px
         .add-icon
@@ -299,7 +299,7 @@
         height: 20px
         display: flex
         margin: 12px 0 0
-        font-size: $font-size-small
+        font-size: $font-size-12
         justify-content: space-between
         align-items: center
         .del

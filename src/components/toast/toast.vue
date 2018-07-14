@@ -43,6 +43,6 @@
     background-color: rgba(54, 53, 71, .9)
     .content
       line-height: 20px
-      font-size: $font-size-medium
-      color: $color-background-ff
+      font-size: $font-size-14
+      color: $color-white
 </style>
