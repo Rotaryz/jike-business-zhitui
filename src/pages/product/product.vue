@@ -123,7 +123,6 @@
       padding: 0 15px
       box-sizing: border-box
       margin-top: 10px
-      text-indent: 15px
       font-size: $font-size-14
       font-family: $font-family-regular
 </style>
