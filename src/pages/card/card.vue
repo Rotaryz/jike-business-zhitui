@@ -105,10 +105,12 @@
       <img src="./pic-zanbozc@2x.png" class="sponsor">
     </div>
 
-    <div class="msg-fix-box" @click="toChat">
-      <img src="./icon-news@2x.png" class="msg-icon">
+    <form class="msg-fix-box" report-submit @submit="toChat">
+      <button class="msg-icon-box" hover-class="none" formType="submit">
+        <img src="./icon-news@2x.png" class="msg-icon">
+      </button>
       <span class="msg-count" v-if="currentUnRead">{{currentUnRead}}</span>
-    </div>
+    </form>
     <div class="cover" v-show="showCover" @click="closeCover">
     </div>
     <div class="bottom-box" :class="showCover ? 'show' : ''">
@@ -151,6 +153,7 @@
       if (res.from === 'button') {
         // 来自页面内转发按钮
       }
+      console.log(`/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.employeeId}`)
       return {
         title: title,
         path: `/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.employeeId}`,
@@ -201,8 +204,7 @@
       },
       async _qrCode () {
         let cardId = this.cardMsg.id
-        let res = await Im.getQrCodeImg(cardId)
-        wechat.hideLoading()
+        let res = await Im.getQrCodeImg(cardId, false)
         if (res.error === ERR_OK) {
           let url = res.data.qrcode
           wx.downloadFile({
@@ -279,7 +281,11 @@
           })
         }
       },
-      toChat () {
+      toChat (e) {
+        let formId = e.mp.detail.formId
+        if (formId) {
+          Im.getFormId([formId], false)
+        }
         let id = 1
         let url = `/pages/chat-msg/chat-msg?id=${id}`
         wx.navigateTo({ url })
@@ -291,7 +297,9 @@
         })
       },
       async getCardDetail (data) {
+        console.log(data)
         let res = await Im.getCardDetail(data)
+        console.log(res)
         if (res.error === ERR_OK) {
           this.cardMsg = res.data
           this.isLike = this.cardMsg.is_like
@@ -373,7 +381,7 @@
         }
         let account = this.currentMsg.account
         if (this.imLogin) {
-          webimHandler.onSendCustomMsg(option, account).then(res => {})
+          webimHandler.onSendCustomMsg(option, account)
         } else {
           this.setBehaviorList(option)
         }
@@ -652,6 +660,14 @@
       bottom: 100px
       width: 63px
       height: 66px
+      .msg-icon-box
+        width: 100%
+        height: 100%
+        padding: 0
+        margin: 0
+        background-color: transparent
+        &:before, &:after
+          border: 0 none
       .msg-icon
         width: 100%
         height: 100%

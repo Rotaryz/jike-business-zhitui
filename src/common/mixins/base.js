@@ -55,7 +55,7 @@ const base = {
 
           let options = {
             'isAccessFormalEnv': true, // 是否访问正式环境，默认访问正式，选填
-            'isLogOn': true// 是否开启控制台打印日志,默认开启，选填
+            'isLogOn': false// 是否开启控制台打印日志,默认开启，选填
           }
 
           let avatar = userInfo.avatar
@@ -85,7 +85,8 @@ const base = {
                   card_holder_id: resData.data.card_holder_id,
                   merchant_id: resData.data.merchant_id,
                   employee_id: resData.data.employee_id,
-                  customer_id: userInfo.id
+                  customer_id: userInfo.id,
+                  customer_name: userInfo.nickname
                 }
                 wx.setStorageSync('merchantId', resData.data.merchant_id)
                 this.setCurrentMsg(currentMsg)

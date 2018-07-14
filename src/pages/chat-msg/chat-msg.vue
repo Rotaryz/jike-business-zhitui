@@ -2,6 +2,7 @@
   <div class="chat">
     <scroll-view scroll-y class="chat-container" :scroll-into-view="scrollId" @scrolltoupper="loadMore">
       <div class="chat-list">
+        <div class="line-view"></div>
         <div class="chat-item" v-for="(item, index) in nowChat" :key="index" :id="'item' + index">
           <div class="chat-content" v-if="item.from_account_id !== imAccount">
             <img :src="currentMsg.avatar" class="avatar">
@@ -31,8 +32,8 @@
       </div>
     </scroll-view>
     <div class="chat-input border-top-1px">
-      <div class="input-container" :class="system === 'android' ? 'android' : ''" ref="textBox">
-        <textarea auto-height="true" fixed="true" class="textarea" maxlength="-1" @input="textInput" :value="inputMsg"></textarea>
+      <div class="input-container" :class="system === 'android' ? 'android' : ''" ref="textBox" @click="showTextarea">
+        <textarea auto-height="true" fixed="true" class="textarea" maxlength="-1" @input="textInput" :value="inputMsg" :focus="textareaFocus"></textarea>
       </div>
       <div class="submit-btn" @click="sendMsg">发送</div>
     </div>
@@ -64,10 +65,6 @@
         }, 1000)
       }
     },
-    beforeDestroy() {
-      this.setCurrent({})
-      this.setNowChat([])
-    },
     onLoad() {
       this.setImIng(true)
       let phoneInfo = wx.getSystemInfoSync()
@@ -80,10 +77,10 @@
       this.userInfo = wx.getStorageSync('userInfo')
       this.imAccount = this.userInfo.im_account
       let data = {
-        page: this.page,
+        end_date: this.endDate,
         limit: 30,
-        customer_id: this.userInfo.id,
-        employee_id: this.currentMsg.employeeId
+        customer_im_account: this.userInfo.im_account,
+        employee_im_account: this.currentMsg.account
       }
       Im.getMsgList(data).then((res) => {
         if (res.error === ERR_OK) {
@@ -95,7 +92,13 @@
       })
     },
     onUnload() {
+      this.setNowChat([])
       this.setImIng(false)
+      this.scrollId = 'item0'
+      this.inputMsg = ''
+      this.id = ''
+      this.imAccount = ''
+      this.textareaFocus = false
     },
     methods: {
       ...mapActions([
@@ -107,10 +110,10 @@
       loadMore() {
         if (this.noMore) return
         let data = {
-          page: this.page++,
+          end_date: this.endDate,
           limit: 30,
-          customer_id: this.userInfo.id,
-          employee_id: this.currentMsg.account
+          customer_im_account: this.userInfo.im_account,
+          employee_im_account: this.currentMsg.account
         }
         Im.getMsgList(data).then((res) => {
           if (res.error === ERR_OK) {
@@ -120,7 +123,6 @@
               this.setNowChat(list)
             } else {
               this.noMore = true
-              this.page--
             }
           }
           wechat.hideLoading()
@@ -132,7 +134,7 @@
           this.$refs.toast.show('发送消息不能为空')
           return
         }
-        webimHandler.onSendMsg(value, 'philly').then(res => {
+        webimHandler.onSendMsg(value, this.currentMsg.account).then(res => {
           let msg = {
             from_account_id: this.userInfo.im_account,
             avatar: this.userInfo.avatar,
@@ -154,17 +156,19 @@
       },
       textInput(e) {
         this.inputMsg = e.mp.detail.value
+      },
+      showTextarea() {
+        this.textareaFocus = true
       }
     },
     data() {
       return {
         inputMsg: '',
-        list: [1, 2, 3, 4],
         id: '',
-        page: 1,
         userInfo: {},
         imAccount: '',
-        scrollId: 'item0'
+        scrollId: 'item0',
+        textareaFocus: false
       }
     },
     components: {
@@ -175,7 +179,14 @@
         'currentMsg',
         'nowChat',
         'imLogin'
-      ])
+      ]),
+      endDate() {
+        if (this.nowChat.length) {
+          return this.nowChat[0].created_at ? this.nowChat[0].created_at : this.nowChat[0].msgTimeStamp
+        } else {
+          return ''
+        }
+      }
     }
   }
 </script>
@@ -205,6 +216,9 @@
       justify-content: flex-end
       .chat-list
         padding-bottom: 40px
+      .line-view
+        height: 20px
+        width: 100%
       .chat-item
         padding: 0 15px
         margin-top: 15px
@@ -293,7 +307,6 @@
               color: $color-text
         .chat-content.mine
           justify-content: flex-end
-
     .chat-input
       position: fixed
       left: 0
@@ -322,6 +335,8 @@
         background: $color-white
         overflow-y: auto
         padding: 0 10px
+        display: flex
+        align-items: center
         .textarea
           width: 100%
           max-height: 100px

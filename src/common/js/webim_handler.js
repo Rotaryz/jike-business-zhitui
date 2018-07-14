@@ -309,7 +309,6 @@ export default class webimHandler {
   // 发送自定义消息
   static onSendCustomMsg (ops, msgToId) {
     return new Promise((resolve, reject) => {
-      console.log(78686768)
       if (!this.selSess || this.selSess.id !== msgToId) {
         this.selSess = new webim.Session(this.selType, msgToId)
       }
@@ -321,7 +320,6 @@ export default class webimHandler {
       let msg = new webim.Msg(this.selSess, isSend, seq, random, msgTime, this.loginInfo.identifier, subType, this.loginInfo.identifierNick)
       let customObj = new webim.Msg.Elem.Custom(ops.data, ops.desc, ops.ext)
       msg.addCustom(customObj)
-      console.log(msg)
       this.sendMsg(msg).then(res => {
         resolve(res)
       }, err => {

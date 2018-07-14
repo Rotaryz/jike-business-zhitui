@@ -8,7 +8,7 @@
     <div class="text" v-if="network.introduction">
       {{network.introduction}}
     </div>
-    <div class="img-box" v-if="network.merchant_image.length">
+    <div class="img-box" v-if="network.merchant_image && network.merchant_image.length">
       <img v-for="(item, index) in network.merchant_image" :key="index" :src="item.url" class="net-img" mode="widthFix">
     </div>
   </div>
@@ -44,7 +44,7 @@
       let ext = '40001'
       let option = {
         data,
-        desc,
+        desc: JSON.stringify(desc),
         ext
       }
       if (!this.imLogin) {

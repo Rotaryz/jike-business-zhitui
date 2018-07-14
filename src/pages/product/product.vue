@@ -45,7 +45,7 @@
       let ext = '20001'
       let option = {
         data,
-        desc,
+        desc: JSON.stringify(desc),
         ext
       }
       let account = this.currentMsg.account

@@ -13,9 +13,9 @@
           <p class="card-times">浏览 {{item.click_count}}次</p>
         </div>
         <div class="card-right">
-          <form>
-            <button class="card-header">
-              <image class="card-header" :src="item.employee.avatar" @click.stop="_goChat(item)">
+          <form report-submit @click.stop="_goChat(item)" @submit="_getFormId">
+            <button class="card-header" hover-class="none" formType="submit">
+              <image class="card-header" :src="item.employee.avatar">
                 <span class="content-count" v-if="item.unReadMsgCount">{{item.unReadMsgCount}}</span>
               </image>
             </button>
@@ -43,6 +43,8 @@
   import Toast from 'components/toast/toast'
   import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
+  import wx from 'common/js/wx'
+  import { Im } from 'api'
 
   export default {
     name: 'card-list',
@@ -76,7 +78,7 @@
         //  存id
         wx.setStorageSync('employeeId', item.employee.id)
         let user = wx.getStorageSync('userInfo')
-        this.desc = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': 10, 'employee_id': item.employee.id, 'customer_id': user.id }
+        this.desc = { 'flow_id': item.flow_id, 'card_holder_id': item.id, 'merchant_id': wx.getStorageSync('merchantId'), 'employee_id': item.employee.id, 'customer_id': user.id, 'customer_name': user.nickname }
         this.setCurrentMsg({ employeeId: item.employee.id, flowId: item.flow_id, nickName: item.employee.name, avatar: item.employee.avatar, account: item.employee.im_account })
         this.setDescMsg(this.desc)
       },
@@ -91,12 +93,12 @@
         let ext = '10000'
         let option = {
           data,
-          desc,
+          desc: JSON.stringify(desc),
           ext
         }
         let account = item.employee.im_account
-        webimHandler.onSendCustomMsg(option, account).then((res) => {
-          this.$router.push({ path: '/pages/card/card', isTab: true })
+        webimHandler.onSendCustomMsg(option, account).then(() => {
+          wx.switchTab({url: '/pages/card/card'})
         })
       },
       _goChat (item) {
@@ -108,6 +110,12 @@
         }
         this._setMsg(item)
         this.$router.push('/pages/chat-msg/chat-msg')
+      },
+      _getFormId(e) {
+        let formId = e.mp.detail.formId
+        if (formId) {
+          Im.getFormId([formId], false)
+        }
       },
       _showLong (index) {
         this.showCardUse(index)

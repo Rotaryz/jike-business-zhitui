@@ -14,11 +14,11 @@
     </div>
     <img :src="item.image_url" class="goods-img" v-for="(item, index) in goods.goods_images" :key="index" mode="widthFix">
     <div class="btn">
-      <form>
-        <button class="btn-item btn-left" open-type="share">转发给朋友</button>
+      <form report-submit @submit="getFormId">
+        <button class="btn-item btn-left" open-type="share" formType="submit">转发给朋友</button>
       </form>
-      <form>
-        <button class="btn-item btn-right" @click="_send(goods)">咨询</button>
+      <form report-submit @submit="getFormId">
+        <button class="btn-item btn-right" @click="_send(goods)" formType="submit">咨询</button>
       </form>
     </div>
   </div>
@@ -26,7 +26,7 @@
 
 <script>
   import { ERR_OK } from 'api/config'
-  import { Website } from 'api'
+  import { Website, Im } from 'api'
   import * as wechat from 'common/js/wechat'
   import { mapActions, mapGetters } from 'vuex'
   import webimHandler from 'common/js/webim_handler'
@@ -63,6 +63,12 @@
     },
     methods: {
       ...mapActions(['setProductSendMsg', 'setBehaviorList']),
+      getFormId(e) {
+        let formId = e.mp.detail.formId
+        if (formId) {
+          Im.getFormId([formId], false)
+        }
+      },
       _goods () {
         this.id = this.$route.query.id
         Website.goodsDetail(this.id).then((res) => {
@@ -79,7 +85,7 @@
         let ext = '20003'
         let option = {
           data,
-          desc,
+          desc: JSON.stringify(desc),
           ext
         }
         // 发送产品信息
@@ -87,8 +93,8 @@
         let dataMsg = { url: item.image_url, goods_id: item.id, title: item.title, flow_id: this.descMsg.flow_id, merchant_id: this.descMsg.merchant_id }
         let extMsg = '20005'
         let optionMsg = {
-          data: dataMsg,
-          desc: descMsg,
+          data: JSON.stringify(dataMsg),
+          desc: JSON.stringify(descMsg),
           ext: extMsg
         }
         if (!this.imLogin) {

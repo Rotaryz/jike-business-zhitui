@@ -22,9 +22,40 @@
     name: 'Loading',
     data() {
       return {
+        authorizationCount: 1
       }
     },
+    onUnload() {
+      this.authorizationCount = 1
+    },
     methods: {
+      async _authorization() {
+        const wxUser = await wechat.getUserInfo()
+        let resCode = await wechat.login()
+        let code = resCode.code
+        const data = {
+          code,
+          iv: wxUser.iv,
+          encryptedData: wxUser.encryptedData
+        }
+        let Json = await Im.getToken(data)
+        if (Json.error !== ERR_OK && this.authorizationCount <= 5) {
+          this.authorizationCount++
+          await this._authorization()
+          return
+        } else if (Json.error !== ERR_OK && this.authorizationCount > 5) {
+          wx.showToast({title: '登录失败，请重新登录', icon: 'none', duration: 1000})
+          return false
+        }
+        this.authorizationCount = 1
+        const res = Json.data
+        let token = res.access_token
+        let userInfo = res.customer_info
+        return {
+          token,
+          userInfo
+        }
+      },
       async onGotUserInfo(e) {
         let res = e.mp.detail
         if (res.errMsg !== 'getUserInfo:ok') return
@@ -40,8 +71,17 @@
         Im.getToken(data).then(async (resData) => {
           if (resData.error === ERR_OK) {
             let resMsg = resData.data
-            wx.setStorageSync('userInfo', resMsg.customer_info)
-            wx.setStorageSync('token', resMsg.access_token)
+            let userInfo, token
+            if (resMsg.unauthorized) {
+              let resMsgJson = await this._authorization()
+              userInfo = resMsgJson.resMsgJson
+              token = resMsgJson.token
+            } else {
+              userInfo = resMsg.customer_info
+              token = resMsg.access_token
+            }
+            wx.setStorageSync('userInfo', userInfo)
+            wx.setStorageSync('token', token)
             this.loginIm().then((res) => {
             })
             if (chackTabPage(this.targetPage)) {

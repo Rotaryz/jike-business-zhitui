@@ -61,5 +61,10 @@ export default {
   getMsgList(data, loading = true) {
     const url = `/api/customer/message-logs`
     return request.post(url, data, loading)
+  },
+  // 聊天记录
+  getFormId(data, loading = true) {
+    const url = `/api/customer/collect-formid`
+    return request.post(url, data, loading)
   }
 }
