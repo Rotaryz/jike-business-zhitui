@@ -86,7 +86,6 @@
     },
     watch: {
       $route (from, to) {
-        console.log(from, to)
       }
     }
   }

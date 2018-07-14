@@ -190,7 +190,6 @@
         this.dynamicList[index].show = !status
       },
       _seeImage (index, image) {
-        console.log(index, image)
         let imageArr = image.map(item => item.file_url)
         wx.previewImage({
           current: imageArr[index], // 当前显示图片的http链接

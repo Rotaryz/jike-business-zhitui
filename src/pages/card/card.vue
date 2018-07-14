@@ -153,7 +153,6 @@
       if (res.from === 'button') {
         // 来自页面内转发按钮
       }
-      console.log(`/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.employeeId}`)
       return {
         title: title,
         path: `/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.employeeId}`,
@@ -284,7 +283,7 @@
       toChat (e) {
         let formId = e.mp.detail.formId
         if (formId) {
-          Im.getFormId([formId], false)
+          Im.getFormId({form_ids: [formId]}, false)
         }
         let id = 1
         let url = `/pages/chat-msg/chat-msg?id=${id}`
@@ -297,9 +296,7 @@
         })
       },
       async getCardDetail (data) {
-        console.log(data)
         let res = await Im.getCardDetail(data)
-        console.log(res)
         if (res.error === ERR_OK) {
           this.cardMsg = res.data
           this.isLike = this.cardMsg.is_like

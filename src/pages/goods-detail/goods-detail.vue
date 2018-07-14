@@ -66,7 +66,7 @@
       getFormId(e) {
         let formId = e.mp.detail.formId
         if (formId) {
-          Im.getFormId([formId], false)
+          Im.getFormId({form_ids: [formId]}, false)
         }
       },
       _goods () {

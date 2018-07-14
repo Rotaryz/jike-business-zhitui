@@ -63,7 +63,6 @@ export const cardHolderDoClose = ({ commit, state }, obj) => {
   let status = obj.status
   let _this = obj.vue
   let arr = JSON.parse(JSON.stringify(state.cardList))
-  console.log(status)
   switch (status) {
     case 0:
       Card.cardHolderDoClose({ card_holder_id: id }).then((res) => {

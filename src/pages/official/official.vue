@@ -60,7 +60,6 @@
     onShareAppMessage () {
       let employeeId = wx.getStorageSync('employeeId')
       let fromId = wx.getStorageSync('userInfo').id
-      console.log(`/pages/official/official?employeeId=${employeeId}&fromI${fromId}&fromType=3`)
       return {
         title: this.network.introduction,
         path: `/pages/official/official?employeeId=${employeeId}&fromI${fromId}&fromType=3`,
