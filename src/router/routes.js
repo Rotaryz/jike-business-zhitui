@@ -11,7 +11,7 @@ module.exports = [
     name: 'Card',
     config: {
       navigationBarBackgroundColor: '#20202E',
-      navigationBarTextStyle: 'light',
+      navigationBarTextStyle: 'white',
       backgroundTextStyle: 'light',
       navigationBarTitleText: '名片',
       backgroundColor: '#F0F2F5'

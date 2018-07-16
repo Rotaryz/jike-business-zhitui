@@ -12,7 +12,7 @@ export default class webimHandler {
         // identifierNick为登录用户昵称(没有设置时，为帐号)，无登录态时为空
         console.debug(identifierNick)
         this.loginInfo = userInfo
-        await this.setProfilePortrait({
+        this.setProfilePortrait({
           'ProfileItem': [
             { 'Tag': 'Tag_Profile_IM_Nick', 'Value': userInfo.identifierNick },
             { 'Tag': 'Tag_Profile_IM_Image', 'Value': avatar }

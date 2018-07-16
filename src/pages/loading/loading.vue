@@ -74,7 +74,7 @@
             let userInfo, token
             if (resMsg.unauthorized) {
               let resMsgJson = await this._authorization()
-              userInfo = resMsgJson.resMsgJson
+              userInfo = resMsgJson.userInfo
               token = resMsgJson.token
             } else {
               userInfo = resMsg.customer_info

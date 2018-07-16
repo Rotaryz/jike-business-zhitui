@@ -14,11 +14,11 @@
     </div>
     <img :src="item.image_url" class="goods-img" v-for="(item, index) in goods.goods_images" :key="index" mode="widthFix">
     <div class="btn">
-      <form report-submit @submit="getFormId">
-        <button class="btn-item btn-left" open-type="share" formType="submit">转发给朋友</button>
+      <form report-submit @submit="getFormId" class="btn-left">
+        <button class="btn-item" open-type="share" formType="submit">转发给朋友</button>
       </form>
-      <form report-submit @submit="getFormId">
-        <button class="btn-item btn-right" @click="_send(goods)" formType="submit">咨询</button>
+      <form report-submit @submit="getFormId" class="btn-right">
+        <button class="btn-item" @click="_send(goods)" formType="submit">咨询</button>
       </form>
     </div>
   </div>
@@ -173,6 +173,8 @@
     left: 0
     bottom: 0
     .btn-item
+      width: 100%
+      height: 100%
       line-height: 45px
       color: $color-white
       font-family: $font-family-medium
@@ -182,9 +184,11 @@
         border: none
     .btn-left
       flex: 6
+      overflow: hidden
       background: $color-text
 
-  .btn-right
-    flex: 4
-    background: $color-56
+    .btn-right
+      flex: 4
+      overflow: hidden
+      background: $color-56
 </style>

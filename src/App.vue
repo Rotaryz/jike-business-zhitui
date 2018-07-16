@@ -34,11 +34,11 @@
         wx.setStorageSync('employeeId', employeeId)
       }
       let token = wx.getStorageSync('token')
-      if (!token) {
+      let userInfo = wx.getStorageSync('userInfo')
+      if (!token || !userInfo) {
         wx.reLaunch({url: `/pages/loading/loading`})
       } else {
-        this.loginIm().then((res) => {
-        })
+        this.loginIm().then((res) => {})
       }
     },
     onLaunch(option) {
