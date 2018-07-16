@@ -97,9 +97,7 @@
           ext
         }
         let account = item.employee.im_account
-        console.log(option, account)
         webimHandler.onSendCustomMsg(option, account).then(() => {
-          console.log(999999)
           wx.switchTab({url: '/pages/card/card'})
         })
       },
