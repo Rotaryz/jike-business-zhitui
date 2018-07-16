@@ -337,7 +337,7 @@
               display: flex
               align-items: center
               &:first-child
-                border-right: 0.5px solid rgba(255, 255, 255, 0.10)
+                border-right: 0.5px solid rgba(255, 255, 255, 0.1)
               .find-icon
                 width: 14px
               .find-num
@@ -357,16 +357,16 @@
         height: 10.67vw
         box-sizing: border-box
         .likes-peo-bg
-          display :block
+          display: block
           width: 100%
         .peo-big-box
           width: 100%
-          display :flex
-          box-sizing :border-box
-          border-right-1px(rgba(0,0,0,0.10))
-          border-left-1px(rgba(0,0,0,0.10))
+          display: flex
+          box-sizing: border-box
+          border-right-1px(rgba(0, 0, 0, 0.10))
+          border-left-1px(rgba(0, 0, 0, 0.10))
           background: #F9F9F9
-          padding:10px 0
+          padding: 10px 0
         .like-icon
           margin-left: 10px
           position: relative
