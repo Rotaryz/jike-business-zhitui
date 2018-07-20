@@ -129,11 +129,12 @@
     border-radius: 2px
     border-1px($color-col-line, 2px)
     background: $color-white
-    height: 112px
+    height: 120px
     margin: -30px auto 0
     width: 92vw
-    padding: 20px 25px
+    padding: 20px 15px 0 25px
     box-sizing: border-box
+    padding-bottom: 10px
     .goods-content
       line-height: 24px
       color: $color-text
