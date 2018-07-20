@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="down-box">
+    <div class="down-box" v-if="cardList.length">
       <img src="./pic-zanbozc@2x.png" class="sponsor">
     </div>
     <toast ref="toast"></toast>
@@ -55,15 +55,13 @@
         desc: {}
       }
     },
-    onShow () {
-    },
     // 下拉刷新
     onReachBottom () {
       if (!this.loadMore) {
         return
       }
       this.page++
-      this._getCardList()
+      this.getCardList({ page: this.page, loading: true })
     },
     computed: {
       ...mapGetters([
@@ -98,8 +96,8 @@
         }
         let account = item.employee.im_account
         webimHandler.onSendCustomMsg(option, account).then(() => {
-          wx.switchTab({url: '/pages/card/card'})
         })
+        wx.switchTab({ url: '/pages/card/card' })
       },
       _goChat (item) {
         if (item.status !== 0) {
@@ -111,17 +109,14 @@
         this._setMsg(item)
         this.$router.push('/pages/chat-msg/chat-msg')
       },
-      _getFormId(e) {
+      _getFormId (e) {
         let formId = e.mp.detail.formId
         if (formId) {
-          Im.getFormId({form_ids: [formId]}, false)
+          Im.getFormId({ form_ids: [formId] }, false)
         }
       },
       _showLong (index) {
         this.showCardUse(index)
-      },
-      _getCardList () {
-        this.getCardList(this.page)
       },
       _cardHolderDoClose (id, status) {
         this.cardHolderDoClose({ id, status, vue: this })
@@ -215,25 +210,25 @@
         padding: 0
         margin: 0
         bottom: 0
-        border-radius :0
+        border-radius: 0
         &:after
-          border-radius :0
+          border-radius: 0
           border: none
 
       .content-count
-          position: absolute
-          right: -7.5px
-          top: -7.5px
-          min-width: 15px
-          height: 15px
-          border-radius: 50%
-          background: $color-F9543C
-          border: 1px solid $color-white
-          line-height: 15px
-          font-size: $font-size-12
-          color: $color-white
-          font-family: $font-family-medium
-          text-align: center
+        position: absolute
+        right: -7.5px
+        top: -7.5px
+        min-width: 15px
+        height: 15px
+        border-radius: 50%
+        background: $color-F9543C
+        border: 1px solid $color-white
+        line-height: 15px
+        font-size: $font-size-12
+        color: $color-white
+        font-family: $font-family-medium
+        text-align: center
       .card-icon-box
         width: 45px
         height: 40px

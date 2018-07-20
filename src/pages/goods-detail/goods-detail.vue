@@ -15,10 +15,10 @@
     <img :src="item.image_url" class="goods-img" v-for="(item, index) in goods.goods_images" :key="index" mode="widthFix">
     <div class="btn">
       <form report-submit @submit="getFormId" class="btn-left">
-        <button class="btn-item" open-type="share" formType="submit">转发给朋友</button>
+        <button class="btn-item btn-left" open-type="share" formType="submit">转发给朋友</button>
       </form>
       <form report-submit @submit="getFormId" class="btn-right">
-        <button class="btn-item" @click="_send(goods)" formType="submit">咨询</button>
+        <button class="btn-item btn-right" @click="_send(goods)" formType="submit">咨询</button>
       </form>
     </div>
   </div>
@@ -129,11 +129,12 @@
     border-radius: 2px
     border-1px($color-col-line, 2px)
     background: $color-white
-    height: 112px
+    height: 120px
     margin: -30px auto 0
     width: 92vw
-    padding: 20px 25px
+    padding: 20px 15px 0 25px
     box-sizing: border-box
+    padding-bottom: 10px
     .goods-content
       line-height: 24px
       color: $color-text

@@ -3,12 +3,12 @@ import { baseURL } from './config'
 
 export default {
   /**
-   * 官网
+   * 名片夹
    * @returns {*}
    */
-  cardHolderList (data) {
+  cardHolderList (data, load) {
     let url = `${baseURL.api}/api/customer/card-holder-list`
-    return request.get(url, data)
+    return request.get(url, data, load)
   },
   /**
    * 名片屏蔽

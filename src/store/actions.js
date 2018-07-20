@@ -27,8 +27,11 @@ export const setCardList = ({ commit, state }, cardList) => {
   commit(types.CARD_LIST, cardList)
 }
 // 获取名片夹列表
-export const getCardList = ({ commit, state }, page) => {
-  Card.cardHolderList({ page: page }).then(async (res) => {
+export const getCardList = ({ commit, state }, obj) => {
+  console.log(obj)
+  let page = obj.page
+  let load = obj.loading
+  Card.cardHolderList({ page: page }, load).then(async (res) => {
     if (res.error === ERR_OK) {
       if (!res.data.length) {
         wechat.hideLoading()
@@ -93,35 +96,35 @@ export const cardHolderDoClose = ({ commit, state }, obj) => {
   }
 }
 
-export const setNowChat = ({commit, state}, nowChat) => {
+export const setNowChat = ({ commit, state }, nowChat) => {
   commit(types.SET_NOW_CHAT, nowChat)
 }
 
-export const setImIng = ({commit, state}, boolean) => {
+export const setImIng = ({ commit, state }, boolean) => {
   commit(types.SET_IMING, boolean)
 }
 
-export const setCustomCount = ({commit, state}, id) => {
+export const setCustomCount = ({ commit, state }, id) => {
   commit(types.SET_CUSTOM_COUNT, id)
 }
-export const addNowChat = ({commit, state}, msg) => {
+export const addNowChat = ({ commit, state }, msg) => {
   commit(types.ADD_NOW_CHAT, msg)
 }
-export const setNowCount = ({commit, state}, type) => {
+export const setNowCount = ({ commit, state }, type) => {
   commit(types.SET_NOW_COUNT, type)
 }
-export const setBehaviorList = ({commit, state}, opt) => {
+export const setBehaviorList = ({ commit, state }, opt) => {
   commit(types.SET_BEHAVIOR_LIST, opt)
 }
-export const clearBehaviorList = ({commit, state}) => {
+export const clearBehaviorList = ({ commit, state }) => {
   commit(types.CLEAR_BEHAVIOR_LIST)
 }
-export const setFromMsg = ({commit, state}, msg) => {
+export const setFromMsg = ({ commit, state }, msg) => {
   commit(types.SET_FROM_MSG, msg)
 }
-export const setNowCountNum = ({commit, state}, num) => {
+export const setNowCountNum = ({ commit, state }, num) => {
   commit(types.SET_NOW_COUNT_NUM, num)
 }
-export const setListUnreadCount = ({commit, state}, id) => {
+export const setListUnreadCount = ({ commit, state }, id) => {
   commit(types.SET_LIST_COUNT_NUM, id)
 }

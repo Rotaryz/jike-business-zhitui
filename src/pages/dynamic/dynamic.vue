@@ -1,5 +1,5 @@
 <template>
-  <div class="dynamic-list">
+  <div class="dynamic-list" @click="_closeLong">
     <div class="dynamic-item" v-for="(item, index) in dynamicList" :key="index" v-if="item.live_log_detail.length">
       <div class="find-item img-one" v-if="item.live_log_detail[0].type === 1 && item.live_log_detail.length === 1">
         <div class="find-box">
@@ -12,7 +12,7 @@
             <!--{{comment?'':'special'}}-->
             <pre class="words">{{item.content}}</pre>
             <div class="one-box">
-              <img class="img-one-item" mode="aspectFit" v-for="(items, idx) in item.live_log_detail" :key="idx" :src="items.file_url" @click="_seeImage(idx, item.live_log_detail)">
+              <img class="img-one-item" mode="widthFix" v-for="(items, idx) in item.live_log_detail" :key="idx" :src="items.file_url" @click="_seeImage(idx, item.live_log_detail)">
             </div>
           </div>
           <!--<div class="address">-->
@@ -24,7 +24,7 @@
               {{item.created_at}}
             </div>
             <div class="manager">
-              <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click="_showLong(index, item.show)">
+              <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click.stop="_showLong(index, item.show)">
               <div class="share" :class="{'share-active': item.show}">
                 <div class="share-item comment">
                   <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
@@ -63,7 +63,7 @@
             </div>
             <pre class="words">{{item.content}}</pre>
             <div class="img-item-two">
-              <img class="two-item" mode="aspectFit" v-for="(items, idx) in item.live_log_detail" :key="idx" :src="items.file_url" @click="_seeImage(idx, item.live_log_detail)">
+              <img class="two-item" mode="aspectFill" v-for="(items, idx) in item.live_log_detail" :key="idx" :src="items.file_url" @click="_seeImage(idx, item.live_log_detail)">
             </div>
           </div>
           <!--<div class="address">-->
@@ -75,7 +75,7 @@
               {{item.created_at}}
             </div>
             <div class="manager">
-              <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click="_showLong(index, item.show)">
+              <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click.stop="_showLong(index, item.show)">
               <div class="share" :class="{'share-active': item.show}">
                 <div class="share-item comment">
                   <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
@@ -115,7 +115,7 @@
             <!--{{comment?'':'special'}}"-->
             <pre class="words">{{item.content}}</pre>
             <div class="img-item-two">
-              <img class="two-item" mode="aspectFit" v-for="(items, idx) in item.live_log_detail" :key="idx" :src="items.file_url" @click="_seeImage(idx, item.live_log_detail)">
+              <img class="two-item" mode="aspectFill" v-for="(items, idx) in item.live_log_detail" :key="idx" :src="items.file_url" @click="_seeImage(idx, item.live_log_detail)">
             </div>
           </div>
           <!--<div class="address" >-->
@@ -127,7 +127,7 @@
               {{item.created_at}}
             </div>
             <div class="manager">
-              <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click="_showLong(index, item.show)">
+              <img src="./icon-option@2x.png" class="manager-img" mode="widthFix" @click.stop="_showLong(index, item.show)">
               <div class="share" :class="{'share-active': item.show}">
                 <div class="share-item comment">
                   <img class="find-icon" src="./icon-review@2x.png" mode="widthFix">
@@ -179,6 +179,8 @@
       }
     },
     onLoad () {
+      this.loadMoreDy = true
+      this.page = 1
       this._getList()
     },
     onReachBottom () {
@@ -186,7 +188,17 @@
       this._getList()
     },
     methods: {
+      _closeLong () {
+        this.dynamicList = this.dynamicList.map((item) => {
+          item.show = false
+          return item
+        })
+      },
       _showLong (index, status) {
+        let showIdx = this.dynamicList.findIndex(item => item.show)
+        if (showIdx !== -1) {
+          this.dynamicList[showIdx].show = false
+        }
         this.dynamicList[index].show = !status
       },
       _seeImage (index, image) {
@@ -337,7 +349,7 @@
               display: flex
               align-items: center
               &:first-child
-                border-right: 0.5px solid rgba(255, 255, 255, 0.10)
+                border-right: 0.5px solid rgba(255, 255, 255, 0.1)
               .find-icon
                 width: 14px
               .find-num
@@ -357,16 +369,16 @@
         height: 10.67vw
         box-sizing: border-box
         .likes-peo-bg
-          display :block
+          display: block
           width: 100%
         .peo-big-box
           width: 100%
-          display :flex
-          box-sizing :border-box
-          border-right-1px(rgba(0,0,0,0.10))
-          border-left-1px(rgba(0,0,0,0.10))
+          display: flex
+          box-sizing: border-box
+          border-right-1px(rgba(0, 0, 0, 0.10))
+          border-left-1px(rgba(0, 0, 0, 0.10))
           background: #F9F9F9
-          padding:10px 0
+          padding: 10px 0
         .like-icon
           margin-left: 10px
           position: relative
@@ -392,7 +404,6 @@
   .img-one
     .img-one-item
       box-sizing: border-box
-      border: 0.5px solid $color-background
       width: 34.134vw
       height: 46.4vw
     .one-box

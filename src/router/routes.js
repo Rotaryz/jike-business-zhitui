@@ -29,14 +29,14 @@ module.exports = [
     path: '/pages/dynamic/dynamic', // 动态
     name: 'Dynamic',
     config: {
-      navigationBarTextStyle: '动态'
+      navigationBarTitleText: '动态'
     }
   },
   {
     path: '/pages/official/official', // 官网
     name: 'Official',
     config: {
-      navigationBarTextStyle: '官网'
+      navigationBarTitleText: '官网'
     }
   },
   {

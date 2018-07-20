@@ -150,6 +150,7 @@
     onShareAppMessage (res) {
       let title = '我推荐的， 相当靠谱'
       let fromId = wx.getStorageSync('userInfo').id
+      console.log(`/pages/card/card?fromType=3&fromId=${fromId}&employeeId=${this.employeeId}`)
       if (res.from === 'button') {
         // 来自页面内转发按钮
       }
@@ -180,6 +181,9 @@
         }),
         this._qrCode()
       ])
+      wx.setNavigationBarTitle({
+        title: this.cardMsg.employee.name + '的名片'
+      })
     },
     async onReachBottom () {
       if (this.noMore) return
@@ -283,7 +287,7 @@
       toChat (e) {
         let formId = e.mp.detail.formId
         if (formId) {
-          Im.getFormId({form_ids: [formId]}, false)
+          Im.getFormId({ form_ids: [formId] }, false)
         }
         let id = 1
         let url = `/pages/chat-msg/chat-msg?id=${id}`
@@ -487,6 +491,7 @@
             font-size: $font-size-14
             font-family: $font-family-medium
             width: 100%
+            line-height: 22px
             overflow: hidden
             text-overflow: ellipsis
             display: -webkit-box
@@ -625,7 +630,7 @@
             top: 0
         .goods-detail
           height: 85px
-          padding: 0 15px
+          padding: 0 15px 15px
           .goods-title
             overflow: hidden
             text-overflow: ellipsis
@@ -634,9 +639,7 @@
             font-family: $font-family-medium
             padding-top: 15px
           .goods-desc
-            overflow: hidden
-            text-overflow: ellipsis
-            white-space: nowrap
+            line-height: 22px
             font-size: $font-size-14
             font-family: $font-family-regular
             padding-top: 10px
