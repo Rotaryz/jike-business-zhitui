@@ -1,6 +1,6 @@
-import {mapGetters, mapActions} from 'vuex'
-import {Im} from 'api'
-import {ERR_OK} from 'api/config'
+import { mapGetters, mapActions } from 'vuex'
+import { Im } from 'api'
+import { ERR_OK } from 'api/config'
 import webimHandler from 'common/js/webim_handler'
 
 const base = {
@@ -18,7 +18,7 @@ const base = {
       'setNowCountNum',
       'setDescMsg'
     ]),
-    async loginIm() {
+    async loginIm () {
       let userInfo = wx.getStorageSync('userInfo')
       let imAccount = userInfo.im_account
       Im.getImInfo(imAccount, false).then(async (res) => {
@@ -94,7 +94,7 @@ const base = {
               }
             }
             // 读取名片夹列表
-            this.getCardList(1)
+            this.getCardList({ page: 1, loading: false })
             // 执行待完成的行为动作数组
             if (this.behaviorList.length && employeeId) {
               Promise.all(this.behaviorList.forEach((item) => {

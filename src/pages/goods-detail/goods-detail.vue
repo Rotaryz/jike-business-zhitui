@@ -15,10 +15,10 @@
     <img :src="item.image_url" class="goods-img" v-for="(item, index) in goods.goods_images" :key="index" mode="widthFix">
     <div class="btn">
       <form report-submit @submit="getFormId" class="btn-left">
-        <button class="btn-item" open-type="share" formType="submit">转发给朋友</button>
+        <button class="btn-item btn-left" open-type="share" formType="submit">转发给朋友</button>
       </form>
       <form report-submit @submit="getFormId" class="btn-right">
-        <button class="btn-item" @click="_send(goods)" formType="submit">咨询</button>
+        <button class="btn-item btn-right" @click="_send(goods)" formType="submit">咨询</button>
       </form>
     </div>
   </div>

@@ -33,6 +33,8 @@
       ])
     },
     onLoad () {
+      this.loadMore = true
+      this.page = 1
       this._getWebsite()
     },
     onShow () {
@@ -104,7 +106,7 @@
     line-height: 1
     color: $color-text
     border-radius: 2px
-    padding-bottom: 30px
+    padding-bottom: 15px
     box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
     &:last-child
       margin-bottom: 0
@@ -123,6 +125,7 @@
       padding: 0 15px
       box-sizing: border-box
       margin-top: 10px
+      line-height: 22px
       font-size: $font-size-14
       font-family: $font-family-regular
 </style>
