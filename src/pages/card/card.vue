@@ -364,7 +364,7 @@
         this.showCover = false
       },
       behaviorMsg (code, product) {
-        let descMsg = Object.assign({}, this.descMsg, { type: 1 })
+        let descMsg = Object.assign({}, this.descMsg, { log_type: 1 })
         let desc = JSON.stringify(descMsg)
         let ext = code.toString()
         let data = ''
@@ -376,8 +376,8 @@
           data,
           ext
         }
-        let account = this.currentMsg.account
         if (this.imLogin) {
+          let account = this.currentMsg.account
           webimHandler.onSendCustomMsg(option, account)
         } else {
           this.setBehaviorList(option)
@@ -483,6 +483,7 @@
           padding: 15px 0
           .sig-text-p
             padding: 15px 0
+            line-height: 21px
             font-size: $font-size-14
             font-family: $font-family-medium
             width: 100%

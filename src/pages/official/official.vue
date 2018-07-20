@@ -39,7 +39,7 @@
       this._getWebsite()
     },
     onShow () {
-      let desc = Object.assign({}, this.descMsg, { type: 1 })
+      let desc = Object.assign({}, this.descMsg, { log_type: 1 })
       let data = ''
       let ext = '40001'
       let option = {

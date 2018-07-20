@@ -88,7 +88,7 @@
         }
         this._setMsg(item)
         // 点击名片触发推送信息
-        let desc = Object.assign({}, this.desc, { type: 1 })
+        let desc = Object.assign({}, this.desc, { log_type: 1 })
         let data = ''
         let ext = '10000'
         let option = {

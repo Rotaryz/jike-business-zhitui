@@ -12,12 +12,16 @@
                   <div class="white-arrow"></div>
                 </div>
               </div>
-              <div class="chat-msg-content other">{{item.content}}</div>
+              <div class="chat-msg-content-max-box">
+                <div class="chat-msg-content other">{{item.content}}</div>
+              </div>
             </div>
           </div>
           <div class="chat-content mine" v-if="item.from_account_id === imAccount">
             <div class="chat-msg-box mine" v-if="item.type * 1 === 1">
-              <div class="chat-msg-content mine">{{item.content}}</div>
+              <div class="chat-msg-content-max-box">
+                <div class="chat-msg-content mine">{{item.content}}</div>
+              </div>
               <div class="arrow-box">
                 <div class="green-arrow"></div>
               </div>
@@ -32,8 +36,8 @@
       </div>
     </scroll-view>
     <div class="chat-input border-top-1px">
-      <div class="input-container" :class="system === 'android' ? 'android' : ''" ref="textBox" @click="showTextarea">
-        <textarea auto-height="true" fixed="true" class="textarea" maxlength="-1" @input="textInput" :value="inputMsg" :focus="textareaFocus"></textarea>
+      <div class="input-container" :class="system === 'android' ? 'android' : ''" ref="textBox">
+        <textarea auto-height="true" fixed="true" class="textarea" maxlength="-1" @input="textInput" :value="inputMsg" cursor-spacing="15"></textarea>
       </div>
       <div class="submit-btn" @click="sendMsg">发送</div>
     </div>
@@ -98,7 +102,6 @@
       this.inputMsg = ''
       this.id = ''
       this.imAccount = ''
-      this.textareaFocus = false
     },
     methods: {
       ...mapActions([
@@ -134,31 +137,29 @@
           this.$refs.toast.show('发送消息不能为空')
           return
         }
+        let timeStamp = parseInt(Date.parse(new Date()) / 1000)
+        let msg = {
+          from_account_id: this.userInfo.im_account,
+          avatar: this.userInfo.avatar,
+          content: value,
+          time: timeStamp,
+          msgTimeStamp: timeStamp,
+          nickName: this.userInfo.nickname,
+          sessionId: this.userInfo.im_account,
+          unreadMsgCount: 0,
+          type: 1
+        }
+        let list = [...this.nowChat, msg]
+        this.setNowChat(list)
+        this.inputMsg = ''
+        this.scrollId = 'item' + (list.length - 1)
         webimHandler.onSendMsg(value, this.currentMsg.account).then(res => {
-          let msg = {
-            from_account_id: this.userInfo.im_account,
-            avatar: this.userInfo.avatar,
-            content: value,
-            time: res.MsgTime,
-            msgTimeStamp: res.MsgTime,
-            nickName: this.userInfo.nickname,
-            sessionId: this.userInfo.im_account,
-            unreadMsgCount: 0,
-            type: 1
-          }
-          let list = [...this.nowChat, msg]
-          this.setNowChat(list)
-          this.inputMsg = ''
-          this.scrollId = 'item' + (list.length - 1)
         }, err => {
           this.$refs.toast.show(err)
         })
       },
       textInput(e) {
         this.inputMsg = e.mp.detail.value
-      },
-      showTextarea() {
-        this.textareaFocus = true
       }
     },
     data() {
@@ -167,8 +168,7 @@
         id: '',
         userInfo: {},
         imAccount: '',
-        scrollId: 'item0',
-        textareaFocus: false
+        scrollId: 'item0'
       }
     },
     components: {
@@ -231,6 +231,9 @@
             flex: 1
             overflow: hidden
             display: flex
+            .chat-msg-content-max-box
+              flex: 1
+              overflow: hidden
             .chat-msg-content
               padding: 13px 15px
               border-radius: 8px
@@ -270,7 +273,8 @@
                   top: -5px
           .mine.chat-msg-box
             margin-left: 50px
-            justify-content: flex-end
+            .chat-msg-content-max-box
+              justify-content: flex-end
             .arrow-box
               width: 10px
               height: 45px

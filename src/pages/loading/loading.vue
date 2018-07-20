@@ -82,13 +82,13 @@
             }
             wx.setStorageSync('userInfo', userInfo)
             wx.setStorageSync('token', token)
-            this.loginIm().then((res) => {
+            this.loginIm().then(() => {
+              if (chackTabPage(this.targetPage)) {
+                wx.switchTab({url: this.targetPage})
+              } else {
+                wx.redirectTo({url: this.targetPage})
+              }
             })
-            if (chackTabPage(this.targetPage)) {
-              wx.switchTab({url: this.targetPage})
-            } else {
-              wx.redirectTo({url: this.targetPage})
-            }
           }
           wechat.hideLoading()
         })

@@ -80,7 +80,7 @@
       },
       async _send (item) {
         // 产品点击咨询
-        let desc = Object.assign({}, this.descMsg, { type: 1 })
+        let desc = Object.assign({}, this.descMsg, { log_type: 1 })
         let data = ''
         let ext = '20003'
         let option = {
@@ -89,7 +89,7 @@
           ext
         }
         // 发送产品信息
-        let descMsg = Object.assign({}, this.descMsg, { type: 2 })
+        let descMsg = Object.assign({}, this.descMsg, { log_type: 2 })
         let dataMsg = { url: item.image_url, goods_id: item.id, title: item.title, flow_id: this.descMsg.flow_id, merchant_id: this.descMsg.merchant_id }
         let extMsg = '20005'
         let optionMsg = {

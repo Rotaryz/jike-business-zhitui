@@ -40,7 +40,7 @@
         this.setProductSendMsg(false)
         return false
       }
-      let desc = Object.assign({}, this.descMsg, { type: 1 })
+      let desc = Object.assign({}, this.descMsg, { log_type: 1 })
       let data = ''
       let ext = '20001'
       let option = {
