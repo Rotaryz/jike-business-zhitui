@@ -128,6 +128,7 @@
   import * as wechat from 'common/js/wechat'
   import { ERR_OK } from 'api/config'
   import webimHandler from 'common/js/webim_handler'
+  import {getParams} from 'common/js/util'
 
   export default {
     data () {
@@ -161,6 +162,22 @@
       }
     },
     async onShow () {
+      // 分享进来的
+      let entryId = this.$root.$mp.appOptions.query.employeeId
+      if (entryId) {
+        wx.setStorageSync('employeeId', entryId)
+        this.$root.$mp.appOptions.query.employeeId = null
+      }
+      // 二维码扫描进入 - 永久
+      let scene = this.$root.$mp.appOptions.query.scene
+      if (scene) {
+        let sceneMsg = decodeURIComponent(scene)
+        const params = getParams(sceneMsg)
+        if (params.e) {
+          wx.setStorageSync('employeeId', params.e)
+          this.$root.$mp.appOptions.query.scene = null
+        }
+      }
       this.setProductSendMsg(false)
       this.employeeId = wx.getStorageSync('employeeId')
       let data = {

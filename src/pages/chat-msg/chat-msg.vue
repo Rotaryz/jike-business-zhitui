@@ -154,8 +154,8 @@
         this.inputMsg = ''
         this.scrollId = 'item' + (list.length - 1)
         webimHandler.onSendMsg(value, this.currentMsg.account).then(res => {
-        }, err => {
-          this.$refs.toast.show(err)
+        }, () => {
+          this.$refs.toast.show('网络异常, 请稍后重试')
         })
       },
       textInput(e) {

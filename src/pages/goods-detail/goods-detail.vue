@@ -104,8 +104,8 @@
           return
         }
         let account = this.currentMsg.account
-        await webimHandler.onSendCustomMsg(optionMsg, account)
-        await webimHandler.onSendCustomMsg(option, account)
+        webimHandler.onSendCustomMsg(optionMsg, account)
+        webimHandler.onSendCustomMsg(option, account)
         this.$router.push('/pages/chat-msg/chat-msg')
       }
     }
